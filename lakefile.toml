@@ -1,0 +1,10 @@
+name = "theoremb"
+defaultTargets = ["TheoremB"]
+
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4"
+rev = "15a89b2468bc"
+
+[[lean_lib]]
+name = "TheoremB"
