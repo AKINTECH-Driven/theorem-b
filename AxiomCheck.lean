@@ -1,5 +1,6 @@
 import TheoremB.RiccatiTrap
 import TheoremB.SpectralNorms
+import TheoremB.ConditionalTheoremB
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -9,3 +10,5 @@ import TheoremB.SpectralNorms
 #print axioms TheoremB.exists_spec1_pow_four_le_ens_mul_dis
 #print axioms TheoremB.triMaj_le
 #print axioms TheoremB.master_inequality
+#print axioms TheoremB.conditional_trap
+#print axioms TheoremB.conditional_safety_window

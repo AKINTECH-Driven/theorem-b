@@ -165,3 +165,32 @@ M2 complete = W1-W4 + M2.5 + M2.6 GREEN. Tier-2 hook recorded for M3: with W2
 `riccati_window` (with `a := K/ν³`) is M3 work on a time-parametrized
 trajectory with the enstrophy-balance inequality as the standing conditional
 hypothesis.
+
+## M3 (Tier 2) — the conditional Theorem B (same session, sealed with proof)
+
+`TheoremB/ConditionalTheoremB.lean`, both audited:
+
+- `conditional_trap`: ∃κ (uniform in c, ν, T — it is the master constant),
+  such that for any trajectory `c : ℝ → (Fin 3 → ℤ) → V` that is mean-zero
+  and D-summable on `[0,T)`, with E, Z continuous/differentiable as scalar
+  histories, `E' ≤ 0`, and the BALANCE hypothesis
+  `Z' ≤ -2ν·D + 2·triMaj(‖c‖,‖c‖,freq²‖c‖)`:
+  small data `κ·E₀·Z₀ < ν⁴` gives, for all t: the smallness persists AND
+  `Z t ≤ Z 0` AND `E t ≤ E 0`.  (Discharge of M1's `hZ'cond`: master
+  inequality + W2 via the product chain `K·Z³ = (K·Z)·Z² ≤ (K·Z)·(E·D) =
+  (K·E·Z)·D ≤ ν⁴·D`.)
+- `conditional_safety_window`: same balance hypothesis plus positive
+  enstrophy: the exact Riccati-orbit bound
+  `Z t² ≤ Z 0² / (1 - 2(K/ν³)Z 0² t)` inside the window — the quantitative
+  safety time, via M1's `riccati_window` at `a := K/ν³`.
+
+The conditional layer's SOLE outstanding obligation (Tier 3): discharge the
+balance hypothesis from the PDE — pointwise domination of the concrete
+convection pairing by `triMaj` AND its summability (nested tsums return 0 on
+non-summable inner sums), plus the enstrophy-balance identity for smooth
+solutions (the dim>1 derivative↔frequency layer flagged at recon).
+
+Campaign state after this session: M0 ✅ M1 ✅ M2 ✅ M3 ✅ (conditional; per
+the rung-2 map, "already a publishable, announceable first at this tier" —
+announcement is the architect's call, not the machine's). Tier 3 is the
+months-scale layer and a fresh brief.
