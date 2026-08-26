@@ -126,3 +126,42 @@ leray-hopf's `galerkinConvection` slot conventions (derivative on middle slot).
 
 Smallest next move: probe the bridge APIs, then prove W1 → W2 → W3; W4 may
 carry a sorry into the first M2 commit (kept OUT of AxiomCheck until proven).
+
+## FROZEN — M2 wave 2 (trilinear majorant + master inequality; 27 Aug 2026, full-auto session)
+
+Design decision: M2.5 is stated for the **convention-free majorant** — real
+nonneg sequences, no convection form defined in Tier 1. Any concrete pairing
+(leray-hopf's `galerkinConvection`, the PDE's `∫(u·∇)v·w`) is pointwise
+dominated by it via the triangle inequality, with its (2π)-factors absorbed
+into constants at the Tier-2 bridge. This keeps Tier 1 free of slot/sign
+conventions while remaining exactly the classical ℓ¹×ℓ²×ℓ² estimate.
+
+- **M2.5** `triMaj (a v w : (Fin 3 → ℤ) → ℝ) : ℝ :=
+    ∑' k, a k * ∑' l, ‖freq l‖ * v l * w (-(k + l))`
+  `triMaj_le : (∀k, 0 ≤ a k) → (∀l, 0 ≤ v l) → (∀m, 0 ≤ w m) →
+    Summable a → Summable (fun l => ‖freq l‖^2 * v l^2) → Summable (fun m => w m^2) →
+    triMaj a v w ≤ (∑' k, a k) * Real.sqrt (∑' l, ‖freq l‖^2 * v l^2) * Real.sqrt (∑' m, w m^2)`
+  Proof: inner Cauchy–Schwarz in `l` (the w-factor reindexed along the
+  involution `l ↦ -(k+l)` of ℤ³, `Equiv.tsum_eq`), then the outer sum against
+  the constant bound.
+- **M2.6** `master_inequality : ∃ K, 0 < K ∧ ∀ c, c 0 = 0 → (D-summable) →
+    ∀ ν, 0 < ν →
+    2 * triMaj (‖c ·‖) (‖c ·‖) (fun m => ‖freq m‖^2 * ‖c m‖) ≤
+      ν * dis c + K / ν^3 * ens c^3`
+  — the spectral majorant form of `Ż ≤ -ν‖Δu‖² + (C/ν³)Z³` (the -2νD term and
+  the Tier-2 sign conventions live on the Tier-2 side of the interface).
+  Proof: instantiate M2.5 (the w-slot's square-sum is exactly `dis c`), apply
+  W4 on fourth powers to get `B⁴ ≤ C·(ens c)³·(dis c)³`, then close with the
+  PURE-POLYNOMIAL Young step via the SOS certificate
+  `27(p+q)⁴ − 256·p³q = (p−3q)²·(27p² + 14pq + 3q²) ≥ 0`
+  (p := ν·D, q := K·Z³/ν³): it yields `(p+q)⁴ ≥ (256/27)p³q ≥ 16·B⁴` for
+  `K ≥ 27C/16`, and the order-reflecting fourth power finishes without any
+  real root ever appearing in a statement. Verified by hand-division; nlinarith
+  hint: `mul_nonneg (sq_nonneg (p - 3*q)) (positivity : 0 ≤ 27p²+14pq+3q²)`.
+
+M2 complete = W1-W4 + M2.5 + M2.6 GREEN. Tier-2 hook recorded for M3: with W2
+(`D ≥ Z²/E`), the master inequality's RHS is ≤ 0 on the region
+`K·E·Z ≤ ν⁴` — the composition into M1's `trap_forward_invariance` and
+`riccati_window` (with `a := K/ν³`) is M3 work on a time-parametrized
+trajectory with the enstrophy-balance inequality as the standing conditional
+hypothesis.
