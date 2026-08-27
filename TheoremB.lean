@@ -5,3 +5,4 @@ import TheoremB.FourierDeriv
 import TheoremB.GalerkinTrap
 import TheoremB.NSGalerkin
 import TheoremB.RealityProp
+import TheoremB.GalerkinLocal
