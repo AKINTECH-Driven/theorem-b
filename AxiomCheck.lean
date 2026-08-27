@@ -4,6 +4,7 @@ import TheoremB.ConditionalTheoremB
 import TheoremB.FourierDeriv
 import TheoremB.GalerkinTrap
 import TheoremB.NSGalerkin
+import TheoremB.RealityProp
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -25,3 +26,5 @@ import TheoremB.NSGalerkin
 #print axioms TheoremB.divFree_propagates
 #print axioms TheoremB.ns_galerkin_trap_leray
 #print axioms TheoremB.ns_galerkin_trap_leray'
+#print axioms TheoremB.realField_propagates
+#print axioms TheoremB.ns_galerkin_trap_zero_data
