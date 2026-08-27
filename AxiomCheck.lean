@@ -3,6 +3,7 @@ import TheoremB.SpectralNorms
 import TheoremB.ConditionalTheoremB
 import TheoremB.FourierDeriv
 import TheoremB.GalerkinTrap
+import TheoremB.NSGalerkin
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -18,3 +19,9 @@ import TheoremB.GalerkinTrap
 #print axioms TheoremB.mFourierCoeff_deriv
 #print axioms TheoremB.galerkin_conditional_trap
 #print axioms TheoremB.galerkin_safety_window
+#print axioms TheoremB.convGal_energy_pairing
+#print axioms TheoremB.convGal_enstrophy_pairing
+#print axioms TheoremB.ns_galerkin_trap
+#print axioms TheoremB.divFree_propagates
+#print axioms TheoremB.ns_galerkin_trap_leray
+#print axioms TheoremB.ns_galerkin_trap_leray'

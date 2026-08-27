@@ -245,3 +245,56 @@ measure is a file-LOCAL `MeasureSpace UnitAddCircle := ⟨haarAddCircle⟩`
 instance — re-declare it (plus its probability-measure instances) verbatim,
 or every hand-written integral lands on a propositionally-equal-but-
 syntactically-different measure and nothing unifies.
+
+## FROZEN — M4 wave 3 (the concrete convection; TheoremB/NSGalerkin.lean)
+
+Value space `Vel := EuclideanSpace ℂ (Fin 3)` (the ℝ-inner-product instance
+needed by wave 2 exists at the pin; `real_inner_eq_re_inner` converts).
+Definitions: `conjVel` (componentwise conjugation), `dotR v r = Σⱼ vⱼ·rⱼ`
+(bilinear, no conj), `RealField c := ∀ k, c (-k) = conjVel (c k)`,
+`DivFree c := ∀ k, dotR (c k) (freq k) = 0`, and the PROJECTED convection
+
+  `convGal S c k := if k ∈ S then -Σ_{l∈S} (I·dotR (c l) (freq (k-l))) • c (k-l) else 0`
+
+(prefactor -I: the 2π is a positive scalar absorbed by nondimensionalization;
+the I must stay — with an I-free normalization the energy pairing vanishes
+WITHOUT div-freeness, i.e., it is a different, unphysical trilinear form.
+Recorded derivation: with the hermitian pairing and reality, the I-free
+double sum T₀ satisfies conj T₀ = -T₀ by the (l,m)↦(-l,-m) reindex alone;
+the physical cancellation is T₀ = 0 itself, via the bilinear reduction
+E/B, the shear (l,m)↦(-m, m-l), symmetrization p↔q, additivity of dotR in
+the frequency slot, and div-freeness at -(p+q).)
+
+- W3a `convGal_energy_pairing`: support ⊆ S + RealField + DivFree ⟹
+  `Σ_{k∈S} 2·⟪convGal S c k, c k⟫_ℝ = 0` (equality, not just ≤).
+- W3b `convGal_enstrophy_pairing`: support ⊆ S + RealField ⟹
+  `Σ_{k∈S} ‖freq k‖²·2·⟪convGal S c k, c k⟫_ℝ ≤ 2·triMaj(‖c‖,‖c‖,freq²‖c‖)`
+  — constant EXACTLY 2: re ≤ norm, CS twice (norm_dotR_le), then the
+  (k,l)↦(l,k-l) bijection matches triMaj termwise (reality gives
+  ‖c(-(a+b))‖ = ‖c(a+b)‖).
+- W3-capstone `ns_galerkin_trap`: for flows with support in S (0 ∉ S),
+  RealField and DivFree at every time, and the finite-mode NS ODE
+  `c' = -ν‖k‖²c + convGal S (c t)`: ∃κ uniform, small data κE₀Z₀ < ν⁴ traps
+  the orbit. THE small-data enstrophy trap for honest finite-mode
+  Navier-Stokes dynamics — no conditional hypotheses at the Galerkin level.
+  (Physical units, audit-verified: verbatim Galerkin-NS on the side-2π
+  torus in the e^{ik·x} convention, no rescaling; equivalently unit-torus
+  NS after τ = 2πt with ν̃ = 2πν — legal since κ is uniform in ν.)
+
+AUDIT-DRIVEN AMENDMENT (same wave): the modeling audit correctly found the
+pressureless ODE restricts to zero-Galerkin-pressure trajectories (div-free
+does not propagate without the Leray projector). Wave 3 therefore also
+ships, pre-emptively built during the audit itself:
+- `lerayProj` (mode-wise Leray projection) + `inner_lerayProj_of_divFree`
+  (paired against a div-free mode, the projection is invisible — so both
+  pairing theorems transfer verbatim);
+- `divFree_propagates`: under the Leray ODE each mode's divergence
+  component obeys y' = -ν‖k‖²y, killed by the exponential integrating
+  factor — div-freeness at t = 0 propagates;
+- `ns_galerkin_trap_leray` (Leray ODE, div-free hypothesized along flow)
+  and **`ns_galerkin_trap_leray'`** (THE physically honest capstone:
+  standard divergence-free spectral Galerkin ODE, div-freeness assumed only
+  at t = 0). Twenty audited theorems, all on the kernel three.
+Existence of the flows remains quantified-over (Picard-Lindelöf is out of
+scope this wave); reality along the flow remains a hypothesis (its
+propagation under the Leray ODE is a natural wave-4 polish).

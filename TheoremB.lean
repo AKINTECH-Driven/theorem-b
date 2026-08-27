@@ -3,3 +3,4 @@ import TheoremB.SpectralNorms
 import TheoremB.ConditionalTheoremB
 import TheoremB.FourierDeriv
 import TheoremB.GalerkinTrap
+import TheoremB.NSGalerkin
