@@ -194,3 +194,54 @@ Campaign state after this session: M0 ✅ M1 ✅ M2 ✅ M3 ✅ (conditional; per
 the rung-2 map, "already a publishable, announceable first at this tier" —
 announcement is the architect's call, not the machine's). Tier 3 is the
 months-scale layer and a fresh brief.
+
+## Rung 4: Tier 3 route decision + M4 wave-1 freeze (27 Aug 2026, morning)
+
+Two-sweep recon (Mathlib pin + leray-hopf source, both read in full):
+
+**Route decision — Galerkin-first (leray-hopf's own pattern), with the
+derivative↔frequency bridge built NOW as the interpretation layer.**
+Verified fact driving it: leray-hopf's entire capstone cone never
+differentiates under an infinite sum — the convection form bakes `2πi·lₐ`
+into its definition, div-free is the spectral identity `Σₐ kₐûₐ(k) = 0`,
+and every d/dt lives on finite-dimensional Galerkin curves via
+`HasDerivAt.inner` + FTC-2. So Tier 3's discharge plan is:
+- **M4 wave 2+** (multi-session): enstrophy-derivative lemma for finite
+  fourierBox sums along the Galerkin flow (their `energy_hasDerivAt_of_solution`
+  pattern, new for the H¹-weighted form), the vortex-stretching estimate on
+  finite boxes (no cancellation, feeds our master inequality), then apply
+  `conditional_trap` PER GALERKIN LEVEL (balance is an identity there) and
+  pass the CONCLUSIONS (not the balance) to the limit (Aubin-Lions / lsc, as
+  in their tree). Coefficient-keying bridge needed: their `mFourierCoeff3` is
+  the HilbertBasis repr; Mathlib's `mFourierCoeff` is the integral —
+  `mFourierBasis_repr` should bridge them (verify on-machine).
+- **M4 wave 1** (NOW, frozen below): the derivative↔frequency bridge — absent
+  from BOTH Mathlib and leray-hopf (their only multiplier identity is
+  whole-space Schwartz `fourier_schwartzC_lineDeriv_apply`), upstreamable,
+  and the glue tying any spectral statement to the classical PDE.
+
+**FROZEN — M4 wave 1 (TheoremB/FourierDeriv.lean):**
+- `fourierCoeff_hasDerivAt` (1-D, ALL n : ℤ including 0 — the torus forces
+  nᵢ = 0 for nonzero multi-indices): for f, f' : AddCircle T → ℂ with the
+  ℝ-lift of f differentiable with derivative the lift of f', f' continuous:
+  `fourierCoeff f' n = (2π·I·n/T) * fourierCoeff f n`.
+  (n = 0 via FTC-2 + `coe_add_period`; n ≠ 0 via `fourierCoeffOn_of_hasDerivAt`
+  with the boundary term killed by periodicity, bridged by the ~5-line
+  `fourierCoeffOn_comp_coe` at a = 0, b = T.)
+- `integral_insertNth` (the peel, y-OUTER nesting as assembly needs):
+  `∫ x : UnitAddTorus (Fin (m+1)), g x =
+     ∫ y : UnitAddTorus (Fin m), ∫ t : UnitAddCircle, g (i.insertNth t y)`
+  for continuous g, via `measurePreserving_piFinSuccAbove` +
+  `MeasurePreserving.integral_comp'` + `integral_prod_symm`.
+- `mFourier_insertNth`: `mFourier n (i.insertNth t y) =
+     fourier (n i) t * mFourier (n ∘ i.succAbove) y` (via
+  `Fin.prod_univ_succAbove`, `insertNth_apply_same/succAbove`).
+- CAPSTONE `mFourierCoeff_deriv (i : Fin 3)`: with fiber-differentiability
+  along coordinate i (hderiv in insertNth form) and continuity of f, f':
+  `mFourierCoeff f' n = (2π·I·(n i)) * mFourierCoeff f n`.
+
+Systemic trap (recon-verified, MANDATORY first line of the file): AddCircleMulti's
+measure is a file-LOCAL `MeasureSpace UnitAddCircle := ⟨haarAddCircle⟩`
+instance — re-declare it (plus its probability-measure instances) verbatim,
+or every hand-written integral lands on a propositionally-equal-but-
+syntactically-different measure and nothing unifies.

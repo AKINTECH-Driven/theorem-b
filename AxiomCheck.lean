@@ -1,6 +1,7 @@
 import TheoremB.RiccatiTrap
 import TheoremB.SpectralNorms
 import TheoremB.ConditionalTheoremB
+import TheoremB.FourierDeriv
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -12,3 +13,5 @@ import TheoremB.ConditionalTheoremB
 #print axioms TheoremB.master_inequality
 #print axioms TheoremB.conditional_trap
 #print axioms TheoremB.conditional_safety_window
+#print axioms TheoremB.fourierCoeff_hasDerivAt
+#print axioms TheoremB.mFourierCoeff_deriv
