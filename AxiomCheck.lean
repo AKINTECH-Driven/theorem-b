@@ -6,6 +6,7 @@ import TheoremB.GalerkinTrap
 import TheoremB.NSGalerkin
 import TheoremB.RealityProp
 import TheoremB.GalerkinLocal
+import TheoremB.GalerkinFlow
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -36,3 +37,10 @@ import TheoremB.GalerkinLocal
 #print axioms TheoremB.two_flow_forcing_bound
 #print axioms TheoremB.ns_galerkin_unique_on
 #print axioms TheoremB.ns_galerkin_trap_zero_data_on
+#print axioms TheoremB.gflow_local_exists
+#print axioms TheoremB.gflow_to_coeff
+#print axioms TheoremB.coeff_le_sqrt_en
+#print axioms TheoremB.ns_galerkin_local_existence
+#print axioms TheoremB.ns_galerkin_unique_around
+#print axioms TheoremB.ns_galerkin_trap_zero_data_icc
+#print axioms TheoremB.ns_galerkin_global_wellposed

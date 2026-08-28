@@ -6,3 +6,4 @@ import TheoremB.GalerkinTrap
 import TheoremB.NSGalerkin
 import TheoremB.RealityProp
 import TheoremB.GalerkinLocal
+import TheoremB.GalerkinFlow
