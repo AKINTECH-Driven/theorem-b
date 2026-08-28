@@ -19,3 +19,8 @@ import TheoremB.DefectCalculus
 import TheoremB.PairingBound
 import TheoremB.TailBounds
 import TheoremB.FullUnique
+import TheoremB.TorusSynthesis
+import TheoremB.TorusStructure
+import TheoremB.SpectralWeak
+import TheoremB.CoeffExtract
+import TheoremB.TheoremBTorus

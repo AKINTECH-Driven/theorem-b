@@ -22,12 +22,12 @@ open scoped lp ComplexConjugate ENNReal
 
 noncomputable section
 
-local instance : MeasureSpace UnitAddCircle := ⟨AddCircle.haarAddCircle⟩
+local instance tsyn_ms : MeasureSpace UnitAddCircle := ⟨AddCircle.haarAddCircle⟩
 
-local instance : Measure.IsAddHaarMeasure (volume : Measure UnitAddCircle) :=
+local instance tsyn_haar : Measure.IsAddHaarMeasure (volume : Measure UnitAddCircle) :=
   inferInstanceAs (Measure.IsAddHaarMeasure AddCircle.haarAddCircle)
 
-local instance : IsProbabilityMeasure (volume : Measure UnitAddCircle) :=
+local instance tsyn_prob : IsProbabilityMeasure (volume : Measure UnitAddCircle) :=
   inferInstanceAs (IsProbabilityMeasure AddCircle.haarAddCircle)
 
 /-- The unit 3-torus. -/
@@ -117,6 +117,36 @@ lemma sum_norm_synth_sq (c : (Fin 3 → ℤ) → Vel)
     have h4 := EuclideanSpace.norm_eq (c k)
     rw [h4, Real.sq_sqrt (Finset.sum_nonneg fun j _ => sq_nonneg _)]
   rw [h3]
+
+open Classical in
+/-- The TOTAL synthesis operator: junk-zero off the square-summable class
+(the campaign's junk-convention style — every lemma below carries its
+`Summable` certificate). -/
+def synthT (j : Fin 3) (c : (Fin 3 → ℤ) → Vel) : L2T3 :=
+  if hc : Summable (fun k => ‖c k‖ ^ 2) then synth j c hc else 0
+
+lemma synthT_eq (j : Fin 3) {c : (Fin 3 → ℤ) → Vel}
+    (hc : Summable fun k => ‖c k‖ ^ 2) : synthT j c = synth j c hc := by
+  unfold synthT
+  exact dif_pos hc
+
+lemma mFourierCoeff_synthT (j : Fin 3) {c : (Fin 3 → ℤ) → Vel}
+    (hc : Summable fun k => ‖c k‖ ^ 2) (k : Fin 3 → ℤ) :
+    mFourierCoeff (synthT j c : T3 → ℂ) k = c k j := by
+  rw [synthT_eq j hc]
+  exact mFourierCoeff_synth j c hc k
+
+lemma norm_synthT_sq (j : Fin 3) {c : (Fin 3 → ℤ) → Vel}
+    (hc : Summable fun k => ‖c k‖ ^ 2) :
+    ‖synthT j c‖ ^ (2:ℝ) = ∑' k, ‖c k j‖ ^ (2:ℝ) := by
+  rw [synthT_eq j hc]
+  exact norm_synth_sq j c hc
+
+lemma sum_norm_synthT_sq {c : (Fin 3 → ℤ) → Vel}
+    (hc : Summable fun k => ‖c k‖ ^ 2) :
+    (∑ j : Fin 3, ‖synthT j c‖ ^ (2:ℝ)) = en c := by
+  refine (Finset.sum_congr rfl fun j _ => by rw [synthT_eq j hc]).trans
+    (sum_norm_synth_sq c hc)
 
 end
 

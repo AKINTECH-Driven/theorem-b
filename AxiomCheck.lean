@@ -19,6 +19,11 @@ import TheoremB.DefectCalculus
 import TheoremB.PairingBound
 import TheoremB.TailBounds
 import TheoremB.FullUnique
+import TheoremB.TorusSynthesis
+import TheoremB.TorusStructure
+import TheoremB.SpectralWeak
+import TheoremB.CoeffExtract
+import TheoremB.TheoremBTorus
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -104,3 +109,20 @@ import TheoremB.FullUnique
 #print axioms TheoremB.theorem_B_cont
 #print axioms TheoremB.theorem_B_unique
 #print axioms TheoremB.ns_full_global_flow
+#print axioms TheoremB.mFourierCoeff_synth
+#print axioms TheoremB.sum_norm_synthT_sq
+#print axioms TheoremB.continuousOn_synthT
+#print axioms TheoremB.calibrated_integral_equation
+#print axioms TheoremB.mFourierCoeff_star
+#print axioms TheoremB.synthT_real
+#print axioms TheoremB.synthT_divFree_spectral
+#print axioms TheoremB.pairing_transfer
+#print axioms TheoremB.spectral_weak_equation
+#print axioms TheoremB.mode_equation_of_weak
+#print axioms TheoremB.extractCoeff_synthT
+#print axioms TheoremB.en_extractCoeff
+#print axioms TheoremB.convFull_pairing_physical
+#print axioms TheoremB.L2_ext_of_coeff
+#print axioms TheoremB.synthT_extractCoeff
+#print axioms TheoremB.theorem_B_torus
+#print axioms TheoremB.theorem_B_torus_unique
