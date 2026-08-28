@@ -7,6 +7,13 @@ import TheoremB.NSGalerkin
 import TheoremB.RealityProp
 import TheoremB.GalerkinLocal
 import TheoremB.GalerkinFlow
+import TheoremB.NSFull
+import TheoremB.ModeExtraction
+import TheoremB.FlowBounds
+import TheoremB.LimitPassage
+import TheoremB.LimitHelpers
+import TheoremB.ConvContinuity
+import TheoremB.TheoremBGlobal
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -45,3 +52,34 @@ import TheoremB.GalerkinFlow
 #print axioms TheoremB.ns_galerkin_trap_zero_data_icc
 #print axioms TheoremB.ns_galerkin_global_wellposed
 #print axioms TheoremB.ns_galerkin_global_flow
+#print axioms TheoremB.convFull_eq_convGal
+#print axioms TheoremB.norm_convFull_le_sqrt
+#print axioms TheoremB.norm_lerayProj_le
+#print axioms TheoremB.tail_en_le_ens
+#print axioms TheoremB.finite_freq_le
+#print axioms TheoremB.en_truncate_le
+#print axioms TheoremB.ens_truncate_le
+#print axioms TheoremB.realField_truncate
+#print axioms TheoremB.divFree_truncate
+#print axioms TheoremB.boxS_symm
+#print axioms TheoremB.exists_boxS
+#print axioms TheoremB.isCompact_modeSet
+#print axioms TheoremB.mode_extraction
+#print axioms TheoremB.galRHS_norm_le
+#print axioms TheoremB.flow_mode_lipschitzOnWith
+#print axioms TheoremB.flow_mode_mem_modeSet
+#print axioms TheoremB.tendsto_convFull_of_modes
+#print axioms TheoremB.integral_eq_of_hasDerivAt_Icc
+#print axioms TheoremB.hasDerivAt_of_integral_eq
+#print axioms TheoremB.tendsto_intervalIntegral_of_tendstoUniformlyOn
+#print axioms TheoremB.convFull_zero_of_divFree
+#print axioms TheoremB.continuousOn_convGal
+#print axioms TheoremB.en_limit_le
+#print axioms TheoremB.ens_limit_le
+#print axioms TheoremB.divFree_limit
+#print axioms TheoremB.realField_limit
+#print axioms TheoremB.tendsto_convFull_uniformlyOn
+#print axioms TheoremB.continuousOn_convFull
+#print axioms TheoremB.integral_equation_limit
+#print axioms TheoremB.galerkin_family
+#print axioms TheoremB.theorem_B

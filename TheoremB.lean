@@ -7,3 +7,10 @@ import TheoremB.NSGalerkin
 import TheoremB.RealityProp
 import TheoremB.GalerkinLocal
 import TheoremB.GalerkinFlow
+import TheoremB.NSFull
+import TheoremB.ModeExtraction
+import TheoremB.FlowBounds
+import TheoremB.LimitPassage
+import TheoremB.LimitHelpers
+import TheoremB.ConvContinuity
+import TheoremB.TheoremBGlobal
