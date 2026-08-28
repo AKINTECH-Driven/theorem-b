@@ -44,3 +44,4 @@ import TheoremB.GalerkinFlow
 #print axioms TheoremB.ns_galerkin_unique_around
 #print axioms TheoremB.ns_galerkin_trap_zero_data_icc
 #print axioms TheoremB.ns_galerkin_global_wellposed
+#print axioms TheoremB.ns_galerkin_global_flow

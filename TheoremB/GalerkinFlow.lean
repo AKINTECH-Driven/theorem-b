@@ -916,4 +916,164 @@ theorem ns_galerkin_global_wellposed :
     · intro c' _ _ _ t ht
       exact absurd (ht.1.trans ht.2) hT
 
+
+/-- **The eternal Galerkin flow** — the single-flow strengthening of the
+grand capstone: ONE flow serves EVERY horizon at once. It solves the
+Galerkin Navier-Stokes ODE two-sidedly at every `t ≥ 0` (as a total
+function on `ℝ`, constrained by the statement only on the half-line),
+stays trapped forever, and on every window `[0, T]` it is the flow — any
+competitor with the same datum agrees with it there. Built by splicing
+the per-horizon flows of `ns_galerkin_global_wellposed` along integer
+segments; the uniqueness clause makes the splice seamless. -/
+theorem ns_galerkin_global_flow :
+    ∃ κ, 0 < κ ∧ ∀ {ν : ℝ}, 0 < ν → ∀ {S : Finset (Fin 3 → ℤ)},
+      (0 : Fin 3 → ℤ) ∉ S → (∀ k ∈ S, -k ∈ S) →
+      ∀ {c₀ : (Fin 3 → ℤ) → Vel}, (∀ k, k ∉ S → c₀ k = 0) →
+      RealField c₀ → DivFree c₀ → κ * en c₀ * ens c₀ < ν ^ 4 →
+      ∃ c : ℝ → (Fin 3 → ℤ) → Vel,
+        c 0 = c₀ ∧ (∀ (t : ℝ) k, k ∉ S → c t k = 0) ∧
+        (∀ t ∈ Ici (0:ℝ), ∀ k, HasDerivAt (fun s => c s k)
+          ((-(ν * ‖freq k‖ ^ 2)) • c t k + lerayProj k (convGal S (c t) k)) t) ∧
+        (∀ t ∈ Ici (0:ℝ), en (c t) ≤ en c₀ ∧ ens (c t) ≤ ens c₀ ∧
+          κ * en (c t) * ens (c t) < ν ^ 4) ∧
+        (∀ T : ℝ, ∀ c' : ℝ → (Fin 3 → ℤ) → Vel,
+          (∀ (t : ℝ) k, k ∉ S → c' t k = 0) →
+          (∀ t ∈ Icc (0:ℝ) T, ∀ k, HasDerivAt (fun s => c' s k)
+            ((-(ν * ‖freq k‖ ^ 2)) • c' t k + lerayProj k (convGal S (c' t) k)) t) →
+          c' 0 = c₀ → ∀ t ∈ Icc (0:ℝ) T, ∀ k, c' t k = c t k) := by
+  obtain ⟨κ, hκ, hwp⟩ := ns_galerkin_global_wellposed
+  refine ⟨κ, hκ, ?_⟩
+  intro ν hν S hS0 hSsym c₀ hsupp₀ hreal₀ hdiv₀ h0
+  have hinst := hwp hν hS0 hSsym hsupp₀ hreal₀ hdiv₀ h0
+  -- one chosen flow per natural horizon
+  have hex : ∀ n : ℕ, ∃ c : ℝ → (Fin 3 → ℤ) → Vel,
+      c 0 = c₀ ∧ (∀ (t : ℝ) k, k ∉ S → c t k = 0) ∧
+      (∀ t ∈ Icc (0:ℝ) (n:ℝ), ∀ k, HasDerivAt (fun s => c s k)
+        ((-(ν * ‖freq k‖ ^ 2)) • c t k + lerayProj k (convGal S (c t) k)) t) ∧
+      (∀ t ∈ Icc (0:ℝ) (n:ℝ), en (c t) ≤ en c₀ ∧ ens (c t) ≤ ens c₀ ∧
+        κ * en (c t) * ens (c t) < ν ^ 4) ∧
+      (∀ c' : ℝ → (Fin 3 → ℤ) → Vel, (∀ (t : ℝ) k, k ∉ S → c' t k = 0) →
+        (∀ t ∈ Icc (0:ℝ) (n:ℝ), ∀ k, HasDerivAt (fun s => c' s k)
+          ((-(ν * ‖freq k‖ ^ 2)) • c' t k + lerayProj k (convGal S (c' t) k)) t) →
+        c' 0 = c₀ → ∀ t ∈ Icc (0:ℝ) (n:ℝ), ∀ k, c' t k = c t k) :=
+    fun n => hinst (n : ℝ)
+  choose F hF0 hFsupp hFODE hFtrap hFuniq using hex
+  -- pairwise agreement of the chosen flows on overlapping horizons
+  have hA : ∀ m n : ℕ, ∀ s : ℝ, 0 ≤ s → s ≤ (m:ℝ) → s ≤ (n:ℝ) →
+      ∀ k, F m s k = F n s k := by
+    intro m n s hs0 hsm hsn k
+    have hmin_m : ((min m n : ℕ) : ℝ) ≤ (m:ℝ) := by
+      exact_mod_cast min_le_left m n
+    have hmin_n : ((min m n : ℕ) : ℝ) ≤ (n:ℝ) := by
+      exact_mod_cast min_le_right m n
+    have hsmin : s ≤ ((min m n : ℕ) : ℝ) := by
+      rw [Nat.cast_min]
+      exact le_min hsm hsn
+    have hm := hFuniq (min m n) (F m) (hFsupp m)
+      (fun t ht j => hFODE m t ⟨ht.1, ht.2.trans hmin_m⟩ j) (hF0 m)
+      s ⟨hs0, hsmin⟩ k
+    have hn := hFuniq (min m n) (F n) (hFsupp n)
+      (fun t ht j => hFODE n t ⟨ht.1, ht.2.trans hmin_n⟩ j) (hF0 n)
+      s ⟨hs0, hsmin⟩ k
+    rw [hm, hn]
+  -- the eternal flow: spliced along integer segments
+  set nseg : ℝ → ℕ := fun s => if s ≤ 1 then 2 else Nat.floor s + 2 with hnseg
+  set c : ℝ → (Fin 3 → ℤ) → Vel := fun s => F (nseg s) s with hcdef
+  -- basic segment facts
+  have hseg_ge : ∀ s : ℝ, 0 ≤ s → s ≤ (nseg s : ℝ) := by
+    intro s hs
+    rw [hnseg]
+    by_cases h1 : s ≤ 1
+    · simp only [if_pos h1]
+      norm_num
+      linarith
+    · simp only [if_neg h1]
+      push_cast
+      have := Nat.lt_floor_add_one s
+      linarith
+  have hcval : ∀ s : ℝ, c s = F (nseg s) s := fun s => rfl
+  -- the ODE on the half line
+  have hODE : ∀ t ∈ Ici (0:ℝ), ∀ k, HasDerivAt (fun s => c s k)
+      ((-(ν * ‖freq k‖ ^ 2)) • c t k + lerayProj k (convGal S (c t) k)) t := by
+    intro t ht k
+    by_cases htc : t < 1/2
+    · -- near the origin the splice is uniformly the horizon-2 flow
+      have hev : (fun s => c s k) =ᶠ[nhds t] (fun s => F 2 s k) := by
+        refine Filter.eventuallyEq_of_mem
+          (Ioo_mem_nhds (show t - 1/2 < t by linarith)
+            (show t < t + 1/2 by linarith)) (fun s hs => ?_)
+        have hs1 : s ≤ 1 := by
+          have := hs.2
+          linarith
+        show F (nseg s) s k = F 2 s k
+        rw [hnseg]
+        simp only [if_pos hs1]
+      have hval : c t = F 2 t := by
+        rw [hcval, hnseg]
+        have ht1 : t ≤ 1 := by linarith
+        simp only [if_pos ht1]
+      rw [hval]
+      have hODE2 := hFODE 2 t ⟨ht, by push_cast; linarith⟩ k
+      exact hODE2.congr_of_eventuallyEq hev
+    · -- away from the origin: everything near t agrees with one big horizon
+      rw [not_lt] at htc
+      set N : ℕ := Nat.floor t + 3 with hN
+      have htN : t + 2 < (N:ℝ) + 1 := by
+        rw [hN]
+        push_cast
+        have := Nat.lt_floor_add_one t
+        linarith
+      have hagree : ∀ s ∈ Ioo (t - 1/2) (t + 1/2), ∀ j, c s j = F N s j := by
+        intro s hs j
+        have hs0 : (0:ℝ) ≤ s := by
+          have := hs.1
+          linarith
+        have hsseg : s ≤ (nseg s : ℝ) := hseg_ge s hs0
+        have hsN : s ≤ (N:ℝ) := by
+          have := hs.2
+          linarith
+        exact hA (nseg s) N s hs0 hsseg hsN j
+      have hev : (fun s => c s k) =ᶠ[nhds t] (fun s => F N s k) :=
+        Filter.eventuallyEq_of_mem
+          (Ioo_mem_nhds (show t - 1/2 < t by linarith)
+            (show t < t + 1/2 by linarith))
+          (fun s hs => hagree s hs k)
+      have hval : c t = F N t := by
+        funext j
+        exact hagree t ⟨by linarith, by linarith⟩ j
+      rw [hval]
+      have hODEN := hFODE N t ⟨ht, by linarith⟩ k
+      exact hODEN.congr_of_eventuallyEq hev
+  refine ⟨c, ?_, ?_, hODE, ?_, ?_⟩
+  · -- initial value
+    show F (nseg 0) 0 = c₀
+    rw [hnseg]
+    simp only [if_pos (by norm_num : (0:ℝ) ≤ 1)]
+    exact hF0 2
+  · -- support
+    intro t k hk
+    exact hFsupp (nseg t) t k hk
+  · -- the trap on the half line
+    intro t ht
+    have := hFtrap (nseg t) t ⟨ht, hseg_ge t ht⟩
+    rw [hcval]
+    exact this
+  · -- uniqueness against every horizon
+    intro T c' hsupp' hODE' h0'
+    by_cases hT : (0:ℝ) ≤ T
+    · obtain ⟨cT, hcT0, hcTsupp, hcTODE, _, hcTuniq⟩ := hinst T
+      have h1 : ∀ t ∈ Icc (0:ℝ) T, ∀ k, c' t k = cT t k :=
+        hcTuniq c' hsupp' hODE' h0'
+      have h2 : ∀ t ∈ Icc (0:ℝ) T, ∀ k, c t k = cT t k :=
+        hcTuniq c (fun t k hk => hFsupp (nseg t) t k hk)
+          (fun t ht k => hODE t ht.1 k)
+          (by show F (nseg 0) 0 = c₀
+              rw [hnseg]
+              simp only [if_pos (by norm_num : (0:ℝ) ≤ 1)]
+              exact hF0 2)
+      intro t ht k
+      rw [h1 t ht k, ← h2 t ht k]
+    · intro t ht
+      exact absurd (ht.1.trans ht.2) hT
+
 end TheoremB
