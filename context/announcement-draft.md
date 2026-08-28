@@ -57,12 +57,33 @@ The proof stack, each layer independently gated and adversarially audited:
    fiat: divergence-freeness survives the limit and annihilates the
    zero-mode convection.
 
-What is NOT claimed, precisely:
-- **Uniqueness for the full system** — and consequently the theorem is
-  per-horizon: the witness flow may depend on `T`, and nothing in the
-  statement glues horizons into one eternal solution. (At the Galerkin
-  level both uniqueness and the eternal flow ARE proved; lifting them
-  through the limit is the campaign's open Tier 4.)
+UPDATE (Tier 4, same day): both former non-claims are now CLAIMED and
+kernel-checked — 84 audited theorems total:
+- **`theorem_B_unique`** — uniqueness for the full system, UNCONDITIONAL
+  in the enstrophy-bounded class: any two mode-continuous, divergence-free
+  flows with summable energy/enstrophy series bounded by any budgets,
+  satisfying the infinite-convolution integral equation from the same
+  datum, agree at every time and every mode. No smallness, no dissipation
+  hypothesis, no reality assumption. The proof is a finite-section energy
+  method (the infinite sum is never differentiated): a box-free pairing
+  bound through the lattice kernel at exponent `7/4` (summable because
+  `7/2 > 3` in three dimensions), interpolation at `(1/8, 7/8)`, exact
+  Young absorption into the dissipation, a Grönwall on the primitive, and
+  tail sources that vanish along the box exhaustion precisely because of
+  the summability certificates exported in `theorem_B`'s statement.
+- **`ns_full_global_flow`** — ONE eternal solution on `[0, ∞)`: real,
+  divergence-free, mode-continuous, honestly summable, satisfying the
+  integral equation at every `t ≥ 0` and the ODE at every `t > 0`,
+  trapped forever; per-horizon witnesses spliced with uniqueness erasing
+  the seams. The exported continuity places every restriction of this
+  flow back inside the uniqueness class, so the eternal flow is unique
+  among its kind on every horizon.
+As of our reconnaissance (28 Aug 2026, including a full sweep of the
+leray-hopf repository, which proves existence but no uniqueness of any
+kind), we found no prior machine-checked uniqueness theorem for 3D
+Navier-Stokes in any proof assistant; corrections welcome.
+
+What is STILL not claimed, precisely:
 - **Function-space solutions**: the theorem lives in coefficient space.
   The Fourier synthesis to an actual vector field on the torus, and the
   identification with any classical or weak solution concept, are not
@@ -85,9 +106,10 @@ junk-tsum-proof.
 
 Repository tags: `m1-green` → `m2-complete` → `m3-conditional-green` →
 `m4-wave1..4-green` → `m5-wave1/2-green`, `m5-complete` →
-`t3-theorem-b-green`. As of our 26 Aug 2026 reconnaissance we found no
-prior machine-checked small-data global(-in-horizon) existence result for
-3D Navier-Stokes in any proof assistant; corrections welcome.
+`t3-theorem-b-green` → `t4-wellposedness-green`. As of our 26-28 Aug 2026
+reconnaissance we found no prior machine-checked small-data existence OR
+uniqueness result for 3D Navier-Stokes in any proof assistant;
+corrections welcome.
 
 ## Notes for the long form (not yet written)
 
