@@ -83,15 +83,39 @@ leray-hopf repository, which proves existence but no uniqueness of any
 kind), we found no prior machine-checked uniqueness theorem for 3D
 Navier-Stokes in any proof assistant; corrections welcome.
 
+UPDATE (Tier 5, next day): the function-space non-claim is now largely
+CLAIMED — 101 audited theorems total:
+- **`theorem_B_torus`** — the coefficient flow synthesized (via Mathlib's
+  `mFourierBasis`) into a genuine velocity field on the UNIT 3-TORUS:
+  global in time, L²-continuous components, a.e. real, spectrally
+  divergence-free, mean-zero, with honestly summable enstrophy at every
+  time (exported), satisfying the calibrated Navier-Stokes equation in
+  band-limited weak form with the honest physical constants
+  (`−ν(2π)²‖k‖²` dissipation, `2π`-weighted convection — independently
+  re-derived from the PDE by the audit), trapped forever; the smallness
+  constant transfers as `κ_torus = κ/(2π)⁶`.
+- **`theorem_B_torus_unique`** — uniqueness in the torus class, pulled
+  back through coefficient extraction; the existence witness inhabits
+  the uniqueness class by the exported statement alone. A highlight of
+  the proof: the weak-to-mode recovery tests the weak identity against
+  the defect vector ITSELF (admissible because its divergence vanishes),
+  collapsing uniqueness to `⟪D, D⟫ = 0`.
+- Also proven (available, deliberately unwired from the capstone):
+  the product-coefficient identity — the Fourier coefficient of a
+  pointwise product of synthesized fields is the coefficient
+  convolution — closed entirely inside L² by a twist trick.
+
 What is STILL not claimed, precisely:
-- **Function-space solutions**: the theorem lives in coefficient space.
-  The Fourier synthesis to an actual vector field on the torus, and the
-  identification with any classical or weak solution concept, are not
-  formalized here (the leray-hopf project provides the function-space
-  existence side on the same pin; interop is future work).
-- Endpoint derivatives: at `t = 0` and `t = T` the flow satisfies the
-  integral equation; two-sided derivatives are claimed only at interior
-  times.
+- The weak form is quantified over band-limited (trigonometric
+  polynomial) divergence-free test fields, not arbitrary smooth tests
+  (their density in L² is standard and cited, not formalized into the
+  statement); no classical/pointwise solution concept is claimed.
+- Identification with the leray-hopf weak solution classes (same
+  Mathlib pin, interop mechanical up to conventions) remains future
+  work; notably their scope excludes uniqueness entirely, so the
+  uniqueness clauses here appear to be beyond any prior formalization.
+- Endpoint derivatives: the flow satisfies the integral equation at all
+  times; two-sided derivatives only at interior times.
 
 Verification discipline: a deterministic gate accepts the build only if
 `#print axioms` for all 68 capstones reports at most
@@ -106,7 +130,7 @@ junk-tsum-proof.
 
 Repository tags: `m1-green` → `m2-complete` → `m3-conditional-green` →
 `m4-wave1..4-green` → `m5-wave1/2-green`, `m5-complete` →
-`t3-theorem-b-green` → `t4-wellposedness-green`. As of our 26-28 Aug 2026
+`t3-theorem-b-green` → `t4-wellposedness-green` → `t5-torus-green`. As of our 26-29 Aug 2026
 reconnaissance we found no prior machine-checked small-data existence OR
 uniqueness result for 3D Navier-Stokes in any proof assistant;
 corrections welcome.
