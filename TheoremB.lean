@@ -24,3 +24,6 @@ import TheoremB.TorusStructure
 import TheoremB.SpectralWeak
 import TheoremB.CoeffExtract
 import TheoremB.TheoremBTorus
+import TheoremB.PhysicalPairing
+import TheoremB.TestSeparation
+import TheoremB.LerayHopfVocab

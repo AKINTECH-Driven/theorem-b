@@ -24,6 +24,9 @@ import TheoremB.TorusStructure
 import TheoremB.SpectralWeak
 import TheoremB.CoeffExtract
 import TheoremB.TheoremBTorus
+import TheoremB.PhysicalPairing
+import TheoremB.TestSeparation
+import TheoremB.LerayHopfVocab
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -126,3 +129,8 @@ import TheoremB.TheoremBTorus
 #print axioms TheoremB.synthT_extractCoeff
 #print axioms TheoremB.theorem_B_torus
 #print axioms TheoremB.theorem_B_torus_unique
+#print axioms TheoremB.linear_pairing_physical
+#print axioms TheoremB.convection_pairing_physical
+#print axioms TheoremB.band_tests_separate
+#print axioms TheoremB.mFourier_span_dense
+#print axioms LHRestate.mem_L2Sigma_iff
