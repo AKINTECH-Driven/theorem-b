@@ -14,3 +14,8 @@ import TheoremB.LimitPassage
 import TheoremB.LimitHelpers
 import TheoremB.ConvContinuity
 import TheoremB.TheoremBGlobal
+import TheoremB.LatticeKernel
+import TheoremB.DefectCalculus
+import TheoremB.PairingBound
+import TheoremB.TailBounds
+import TheoremB.FullUnique

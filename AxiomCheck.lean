@@ -14,6 +14,11 @@ import TheoremB.LimitPassage
 import TheoremB.LimitHelpers
 import TheoremB.ConvContinuity
 import TheoremB.TheoremBGlobal
+import TheoremB.LatticeKernel
+import TheoremB.DefectCalculus
+import TheoremB.PairingBound
+import TheoremB.TailBounds
+import TheoremB.FullUnique
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -83,3 +88,19 @@ import TheoremB.TheoremBGlobal
 #print axioms TheoremB.integral_equation_limit
 #print axioms TheoremB.galerkin_family
 #print axioms TheoremB.theorem_B
+#print axioms TheoremB.summable_freq_rpow_neg
+#print axioms TheoremB.kernel_sum_le
+#print axioms TheoremB.weighted_interp
+#print axioms TheoremB.mixed_convMaj_le
+#print axioms TheoremB.convFull_sub
+#print axioms TheoremB.inner_lerayProj_left
+#print axioms TheoremB.hasDerivAt_finset_sum_sq
+#print axioms TheoremB.conv_corr_sq_le
+#print axioms TheoremB.pairing_absorbed
+#print axioms TheoremB.en_sub_le
+#print axioms TheoremB.tail_en_lt
+#print axioms TheoremB.tail_source
+#print axioms TheoremB.gronwall_const_source
+#print axioms TheoremB.theorem_B_cont
+#print axioms TheoremB.theorem_B_unique
+#print axioms TheoremB.ns_full_global_flow
