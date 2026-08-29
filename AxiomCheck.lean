@@ -41,6 +41,8 @@ import TheoremB.EnergyDecay
 import TheoremB.Bandwidth
 import TheoremB.WindowDecay
 import TheoremB.EnergyIntegrable
+import TheoremB.ModesWindow
+import TheoremB.DeterminingModes
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -214,3 +216,6 @@ import TheoremB.EnergyIntegrable
 #print axioms TheoremB.en_sec_tendsto
 #print axioms TheoremB.aestronglyMeasurable_en
 #print axioms TheoremB.intervalIntegrable_en
+#print axioms TheoremB.box_subset
+#print axioms TheoremB.modes_window_ineq
+#print axioms TheoremB.theorem_B_modes
