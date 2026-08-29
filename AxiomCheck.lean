@@ -44,6 +44,8 @@ import TheoremB.EnergyIntegrable
 import TheoremB.ModesWindow
 import TheoremB.DeterminingModes
 import TheoremB.ModesProbe
+import TheoremB.GalerkinDecay
+import TheoremB.DecayFlow
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -221,3 +223,7 @@ import TheoremB.ModesProbe
 #print axioms TheoremB.modes_window_ineq
 #print axioms TheoremB.theorem_B_modes
 #print axioms TheoremB.modes_hypotheses_consistent
+#print axioms TheoremB.ns_galerkin_decay_leray
+#print axioms TheoremB.galerkin_family_decay
+#print axioms TheoremB.theorem_B_decay_cont
+#print axioms TheoremB.ns_full_global_flow_decay

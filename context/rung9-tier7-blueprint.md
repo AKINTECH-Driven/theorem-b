@@ -150,67 +150,58 @@ machinery the campaign does not have.
   energy-side ones, so every existing consumer discharges them
   unchanged; the conclusion strengthens its `en (c t) ≤ en (c 0)`
   clause to a rate. Risk was LOW and proved LOW.
-- **W-R0b — the transfer to the eternal flow. NOT LANDED; BLOCKED at
-  trap level, and the block is measured, not guessed (29 Aug 2026).**
-  Recon correction: this blueprint's first draft graded all of W-R0 LOW,
-  which was wrong, and its route (β) is now known to be unavailable in
-  the class the capstone lives in.
-  Why the transfer cannot be a corollary: `en_limit_le` needs a uniform
-  finite-subsum bound AT the extraction, and `theorem_B` does not export
-  one, so the decay clause cannot be read off the exported clauses.
-  Why route (β) is blocked: proving `convFull_energy_pairing` (the
-  full-level twin of `convGal_energy_pairing`) by limit from the
-  Galerkin identity needs absolute summability of
-  `k ↦ ⟪convFull c k, c k⟫`, and EVERY available route to it wants ℓ¹:
-  `summable_norm_convFull` (TimeLayer.lean:184) takes
-  `Summable (‖c k‖)` and `Summable (‖freq k‖·‖c k‖)` as hypotheses, and
-  `triMaj_le` (SpectralNorms.lean:933) takes `hSa : Summable a` with
-  `a = ‖c‖`. The trap gives ℓ² and weighted ℓ², never ℓ¹: `spec1` is
-  controlled ONLY through the sharp Agmon bound
+- **W-R0b — the transfer to the eternal flow. LANDED, gate-green
+  (29 Aug 2026), by route (α).** `TheoremB/GalerkinDecay.lean` +
+  `TheoremB/DecayFlow.lean`. Capstone `ns_full_global_flow_decay`: the
+  eternal flow satisfies `en (c t) ≤ en c₀ · exp(−2νt)` for every
+  `t ≥ 0`, in the TRAP class, at the sharp rate. Correction 1 is now
+  proved where it is claimed, not merely at the Galerkin level.
+  Route history, recorded because two of the three were wrong:
+  (β) — prove `convFull_energy_pairing` — is genuinely BLOCKED at trap
+  level, and the block is measured: absolute summability of
+  `k ↦ ⟪convFull c k, c k⟫` needs ℓ¹, wanted by both
+  `summable_norm_convFull` (TimeLayer.lean:184) and `triMaj_le`
+  (SpectralNorms.lean:933), and the trap gives only ℓ² and weighted ℓ²
+  — `spec1` is controlled solely through
   `exists_spec1_pow_four_le_ens_mul_dis` (SpectralNorms.lean:824),
-  `spec1 c ^ 4 ≤ C·(ens c · dis c)`, which needs the DISSIPATION `dis`
-  — and `dis` is not bounded pointwise in time by `(E, Z)`.
-  Why the weaker fallback is not worth taking: running the section
-  argument with `pairing_absorbed` at `b := 0` instead of the vanishing
-  identity replaces the exact rate `2ν` by `ν − K`, positive only when
-  `K < ν`. Since `K ≥ 1` and carries `ν^(−15)`, that is a
-  large-viscosity/small-budget subregime — precisely the v2 item the
-  Tier-6 audit register already recorded. It would weaken W-R0a's
-  Galerkin-level `2ν`, not extend it.
-  **Route (γ) — superseded, see below.** Doing the transfer in the
-  SMOOTH class would work (`theorem_B_smooth` exports weighted ℓ¹ at
-  every order, TheoremBSmooth.lean:137/239/400), but it buys a
-  scoping clause that is not needed.
-  **Route (α) IS THE ROUTE, and routes (β)/(γ) were solving the wrong
-  problem (correction, 29 Aug 2026).** The transfer never needed the
-  full-level pairing identity at all. The decay is proved at the
-  GALERKIN level — where `convGal_energy_pairing` already gives the
-  energy pairing EXACTLY zero over a finite sum, with no summability
-  question — and Fatou (`en_limit_le`) carries a per-time bound through
-  the extraction like any other trap clause. No ℓ¹ enters anywhere. So
-  W-R0b is achievable in the TRAP class at the sharp rate `2ν`,
-  strictly better than route (γ)'s smooth-class scoping. The ℓ¹
-  obstruction recorded above is real, but it blocks a lemma the
-  transfer does not use.
-  Remaining work, MED and mechanical: replay `theorem_B_cont`'s
-  assembly (FullUnique.lean:100-312, ~210 lines) carrying the extra
-  per-time clause `en (c t) ≤ en c₀ · exp(−2νt)`, exactly as Tier 6's
-  W4 replayed it for the Sobolev clause, then identify the witness with
-  `ns_full_global_flow`'s flow via `theorem_B_unique`.
+  which needs the DISSIPATION.
+  (γ) — do it in the smooth class, where ℓ¹ is exported — would work but
+  buys an unnecessary scoping clause.
+  **(α) is the route, and (β)/(γ) were solving a problem the transfer
+  does not have.** The energy pairing vanishes EXACTLY at the Galerkin
+  level over a finite sum (`convGal_energy_pairing`), so no ℓ¹ arises
+  anywhere. The decay is a per-time energy budget UNIFORM in the box
+  radius, which is exactly what `en_limit_le` already carries through
+  the Tier-3 extraction alongside the trap.
+  Delivered: `ns_galerkin_decay_leray` (the Leray sibling of
+  `ns_galerkin_trap_leray`, its `en (c t) ≤ en (c 0)` clause
+  strengthened to a rate; the projection is invisible to the pairing by
+  `inner_lerayProj_of_divFree`); `galerkin_family_decay` (THE COMPOSITION
+  PROBE — see the self-audit below — with reality and divergence-freeness
+  re-derived along the flow via `realField_propagates_on` /
+  `divFree_propagates_on` from `realField_truncate` / `divFree_truncate`
+  on the data); `theorem_B_decay_cont` (a replay of
+  FullUnique.lean:100-312 with one extra Fatou step at the decaying
+  budget — compiled first try); and `ns_full_global_flow_decay`
+  (identification with the eternal flow by `theorem_B_unique` at horizon
+  `T := t`). The two tiers' smallness constants are combined by `max`,
+  and the `κ`-smallness clause is deliberately NOT restated in the
+  capstone so that no constant is silently strengthened.
 
   **Self-audit finding (W-R0a), fixed 29 Aug 2026.** `galerkin_energy_decay`
   was frozen with `hODE : ∀ t k, HasDerivAt …` — on ALL of `ℝ`, copied
   from `galerkin_conditional_trap`. No producer in this campaign exports
   that: `galerkin_family` gives the ODE on `Icc 0 T`,
-  `ns_galerkin_global_flow` on `Ici 0`. As frozen, the lemma could not
-  be composed with anything. Hypothesis weakened to `Icc 0 T`, which
-  strengthens the theorem and breaks no consumer (there were none).
+  `ns_galerkin_global_flow` on `Ici 0`. As frozen, the lemma was
+  type-correct and composable with NOTHING. Hypothesis weakened to
+  `Icc 0 T`, which strengthens the theorem and broke no consumer.
   This is the campaign's recurring composition-gap failure mode, the one
-  the register says to catch with a compiled probe at every tier — and
-  W-R0a shipped without such a probe. It surfaced only when the
-  composition was attempted for W-R0b. **Rule for the next rung: no wave
-  ships without a compiled composition probe against a real producer,
-  not merely a type-correct statement.**
+  the Tier-6 register says to catch with a compiled probe at every tier
+  — and W-R0a shipped without one. It surfaced only when the composition
+  was finally attempted, two waves later. **Rule for the next rung: no
+  wave ships without a compiled composition probe against a real
+  producer, not merely a type-correct statement.** `galerkin_family_decay`
+  is that probe for this tier.
 - **W-R1 — `theorem_B_bandwidth`.** `tail_en_lt` at `Z := ens c₀`
   composed with `ns_full_global_flow`'s summability and trap clauses.
   Risk LOW. Tag `t7-bandwidth-green` here; this rung is independently
@@ -422,15 +413,13 @@ Acting on it is outward-facing and therefore the user's call.
 | Cited, not ours | Foias-Prodi determining modes (2D unconditional, 3D conditional); Azouani-Olson-Titi nudging. Our contribution is explicitness, the unconditional 3D small-data regime, and machine-checking. Not novel in principle |
 | Refused | Nothing this rung required refusing |
 
-SUMMIT REACHED 29 Aug 2026, tag `t7-modes-green`. W-R0a, W-R1, W-R2a,
-W-R2b, W-R3, W-R4 all landed and gate-green; 176 audited theorems. The
-one wave NOT done is W-R0b, the transfer of ambient decay from the
-Galerkin flows to the eternal flow — a scoping result for Correction 1,
-not a dependency of the capstone; route (β) stays the way in.
+TIER 7 COMPLETE, 29 Aug 2026, tag `t7-complete`. EVERY wave landed and
+gate-green — W-R0a, W-R0b, W-R1, W-R2a, W-R2b, W-R3, W-R4 — at 180
+audited theorems. `t7-bandwidth-green` (v1) and `t7-modes-green` (v3)
+mark the ladder's rungs; `t7-complete` closes the tier.
 
-Smallest next move: W-R0b by route (α) — replay `theorem_B_cont`'s
-assembly carrying `en (c t) ≤ en c₀·exp(−2νt)`, then identify via
-`theorem_B_unique`. Trap class, sharp rate, no ℓ¹. Routes (β) and (γ)
-are recorded above as closed and superseded respectively. The Mathlib PR
-for `WindowDecay.lean` is drafted and compile-verified at
-`context/upstream/`, awaiting the user's call on submission.
+Smallest next move: nothing inside Tier 7 — it is closed. The open
+items are outward-facing and the user's call: submit the Mathlib PR
+drafted at `context/upstream/` (compile-verified, sharper than the
+campaign's own version), and decide whether the determining-modes result
+goes into the announcement draft.

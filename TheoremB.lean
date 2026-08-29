@@ -44,3 +44,5 @@ import TheoremB.EnergyIntegrable
 import TheoremB.ModesWindow
 import TheoremB.DeterminingModes
 import TheoremB.ModesProbe
+import TheoremB.GalerkinDecay
+import TheoremB.DecayFlow
