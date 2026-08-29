@@ -28,6 +28,8 @@ import TheoremB.PhysicalPairing
 import TheoremB.TestSeparation
 import TheoremB.LerayHopfVocab
 import TheoremB.SobolevNorms
+import TheoremB.SobolevPairing
+import TheoremB.SobolevTrap
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -145,3 +147,7 @@ import TheoremB.SobolevNorms
 #print axioms TheoremB.norm_freq_pow_split
 #print axioms TheoremB.sob_summable_of_le
 #print axioms TheoremB.summable_weighted_norm
+#print axioms TheoremB.sobolev_pairing_absorbed
+#print axioms TheoremB.sob_zero_bound
+#print axioms TheoremB.galerkin_sobolev_bound_of_pairing
+#print axioms TheoremB.galerkin_sobolev_bound

@@ -28,3 +28,5 @@ import TheoremB.PhysicalPairing
 import TheoremB.TestSeparation
 import TheoremB.LerayHopfVocab
 import TheoremB.SobolevNorms
+import TheoremB.SobolevPairing
+import TheoremB.SobolevTrap
