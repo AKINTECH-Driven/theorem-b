@@ -150,27 +150,47 @@ machinery the campaign does not have.
   energy-side ones, so every existing consumer discharges them
   unchanged; the conclusion strengthens its `en (c t) ≤ en (c 0)`
   clause to a rate. Risk was LOW and proved LOW.
-- **W-R0b — the transfer to the eternal flow. NOT LANDED, risk MED
-  (recon correction: this blueprint's first draft graded all of W-R0
-  LOW, which was wrong — the Galerkin half is LOW, the transfer is
-  assembly-scale).** `en_limit_le` needs a uniform finite-subsum bound
-  at the extraction, which `theorem_B`'s statement does not export, so
-  the decay clause cannot be a corollary of the exported clauses. Two
-  routes:
-  (α) replay the Tier-3 assembly with the W-R0a bound inserted, then
-  identify with `ns_full_global_flow`'s flow via `theorem_B_unique` —
-  the `ns_full_global_flow_sobolev` template, Tier 6 W4, graded MED
-  there for the same reason;
-  (β) prove `convFull_energy_pairing` (`∑' k, ⟪c k, P_k convFull c k⟫
-  = 0` for real div-free summable `c`, the full-level twin of
-  `convGal_energy_pairing`), then run §4's own limit-then-iterate
-  technique with the pairing vanishing instead of absorbed.
-  **(β) is preferred**: it is smaller, it SHARES the W-R2b engine
-  rather than duplicating the extraction, and `convFull_energy_pairing`
-  is a structural fact of independent value that the campaign does not
-  yet own. Its cost is a tsum rearrangement (shear reindex + reality,
-  as in NSGalerkin.lean:288) against the existing
-  `summable_norm_convFull` / `mixed_summable_convMaj` certificates.
+- **W-R0b — the transfer to the eternal flow. NOT LANDED; BLOCKED at
+  trap level, and the block is measured, not guessed (29 Aug 2026).**
+  Recon correction: this blueprint's first draft graded all of W-R0 LOW,
+  which was wrong, and its route (β) is now known to be unavailable in
+  the class the capstone lives in.
+  Why the transfer cannot be a corollary: `en_limit_le` needs a uniform
+  finite-subsum bound AT the extraction, and `theorem_B` does not export
+  one, so the decay clause cannot be read off the exported clauses.
+  Why route (β) is blocked: proving `convFull_energy_pairing` (the
+  full-level twin of `convGal_energy_pairing`) by limit from the
+  Galerkin identity needs absolute summability of
+  `k ↦ ⟪convFull c k, c k⟫`, and EVERY available route to it wants ℓ¹:
+  `summable_norm_convFull` (TimeLayer.lean:184) takes
+  `Summable (‖c k‖)` and `Summable (‖freq k‖·‖c k‖)` as hypotheses, and
+  `triMaj_le` (SpectralNorms.lean:933) takes `hSa : Summable a` with
+  `a = ‖c‖`. The trap gives ℓ² and weighted ℓ², never ℓ¹: `spec1` is
+  controlled ONLY through the sharp Agmon bound
+  `exists_spec1_pow_four_le_ens_mul_dis` (SpectralNorms.lean:824),
+  `spec1 c ^ 4 ≤ C·(ens c · dis c)`, which needs the DISSIPATION `dis`
+  — and `dis` is not bounded pointwise in time by `(E, Z)`.
+  Why the weaker fallback is not worth taking: running the section
+  argument with `pairing_absorbed` at `b := 0` instead of the vanishing
+  identity replaces the exact rate `2ν` by `ν − K`, positive only when
+  `K < ν`. Since `K ≥ 1` and carries `ν^(−15)`, that is a
+  large-viscosity/small-budget subregime — precisely the v2 item the
+  Tier-6 audit register already recorded. It would weaken W-R0a's
+  Galerkin-level `2ν`, not extend it.
+  **Route (γ), the one that works, for a later rung:** do the transfer
+  in the SMOOTH class, not the trap class. `theorem_B_smooth` exports
+  weighted ℓ¹ at every order (TheoremBSmooth.lean:137, 239, 400 — "from
+  two extra Sobolev levels"), which is exactly the hypothesis
+  `summable_norm_convFull` and `triMaj_le` are missing. So
+  `convFull_energy_pairing` and the eternal-flow decay at the sharp rate
+  `2ν` are provable for smooth-class data. The cost is a scoping
+  clause, not a weaker theorem, and it is honest: state the eternal-flow
+  decay for the class where ℓ¹ is available and leave the trap class at
+  the Galerkin statement W-R0a already proves.
+  Consequence for Correction 1: unaffected. The scoping claim is that
+  decay is ambient, and W-R0a establishes that on the Galerkin flows the
+  whole campaign is built from. No outward text should say the eternal
+  flow's decay is proved.
 - **W-R1 — `theorem_B_bandwidth`.** `tail_en_lt` at `Z := ens c₀`
   composed with `ns_full_global_flow`'s summability and trap clauses.
   Risk LOW. Tag `t7-bandwidth-green` here; this rung is independently
@@ -388,5 +408,9 @@ one wave NOT done is W-R0b, the transfer of ambient decay from the
 Galerkin flows to the eternal flow — a scoping result for Correction 1,
 not a dependency of the capstone; route (β) stays the way in.
 
-Smallest next move: W-R0b by route (β), or upstream `WindowDecay.lean`
-per §8.
+Smallest next move: W-R0b by route (γ) — the transfer in the SMOOTH
+class, where the ℓ¹ that routes (β) and the trap class both lack is
+already exported. Route (β) as originally written is closed; see the
+W-R0b entry for the measured reason. The Mathlib PR for
+`WindowDecay.lean` is drafted and compile-verified at
+`context/upstream/`, awaiting the user's call on submission.
