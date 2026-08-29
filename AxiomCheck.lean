@@ -34,6 +34,7 @@ import TheoremB.TheoremBSobolev
 import TheoremB.ContinuousRep
 import TheoremB.PeriodicLift
 import TheoremB.TimeLayer
+import TheoremB.Calibration
 import TheoremB.TheoremBSmooth
 
 #print axioms TheoremB.trap_forward_invariance
@@ -183,4 +184,12 @@ import TheoremB.TheoremBSmooth
 #print axioms TheoremB.exists_summable_nsRHS_maj
 #print axioms TheoremB.sob_le_sob
 #print axioms TheoremB.norm_mFourier_apply
+#print axioms TheoremB.twistFreq_apply
+#print axioms TheoremB.norm_twistFreq_le
+#print axioms TheoremB.summable_twistFreq
+#print axioms TheoremB.laplacian_symbol
+#print axioms TheoremB.hasDerivAt_charSum_insertNth_second
+#print axioms TheoremB.laplacian_charSum
+#print axioms TheoremB.viscous_eq_laplacian
+#print axioms TheoremB.theorem_B_smooth_classical
 #print axioms TheoremB.theorem_B_smooth

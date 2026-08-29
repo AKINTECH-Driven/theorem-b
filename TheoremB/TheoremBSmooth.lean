@@ -45,6 +45,7 @@ import TheoremB.TheoremBSobolev
 import TheoremB.ContinuousRep
 import TheoremB.PeriodicLift
 import TheoremB.TimeLayer
+import TheoremB.Calibration
 
 namespace TheoremB
 
@@ -98,10 +99,11 @@ regular in space — its `ℤ³`-periodic lift is `C^p` for every `p` — and wh
 value at every point of the torus is differentiable in time for `t > 0`,
 with derivative the synthesized Navier-Stokes right-hand side.
 
-See the file header for the honest scope: the time clause carries the
-equation's right-hand side in synthesized spectral form, not yet rewritten
-in classical Laplacian-plus-nonlinearity notation. -/
-theorem theorem_B_smooth :
+See the file header for the honest scope.  This is the FULL form: it adds
+to `theorem_B_smooth` the `C¹`-in-time clause (continuity of the time
+derivative), the existence of the second spatial fiber derivatives, and the
+calibration identifying the viscous term with `(ν/(2π)²)·Δu`. -/
+theorem theorem_B_smooth_classical :
     ∃ κ, 0 < κ ∧ ∀ {ν : ℝ}, 0 < ν → ∀ {c₀ : (Fin 3 → ℤ) → Vel},
       (∀ m : ℕ, Summable fun l => ‖freq l‖ ^ (2 * m) * ‖c₀ l‖ ^ 2) →
       c₀ 0 = 0 → RealField c₀ → DivFree c₀ → κ * en c₀ * ens c₀ < ν ^ 4 →
@@ -134,7 +136,24 @@ theorem theorem_B_smooth :
         (∀ (j : Fin 3) (x : UnitAddTorus (Fin 3)), ∀ t ∈ Ioi (0:ℝ),
           HasDerivAt (fun s => ∑' k, c s k j * mFourier k x)
             (∑' k, ((-(ν * ‖freq k‖ ^ 2)) • c t k
-              + lerayProj k (convFull (c t) k)) j * mFourier k x) t) := by
+              + lerayProj k (convFull (c t) k)) j * mFourier k x) t) ∧
+        -- C¹ IN TIME: that derivative is itself continuous on `t > 0`
+        (∀ (j : Fin 3) (x : UnitAddTorus (Fin 3)),
+          ContinuousOn (fun s => ∑' k, ((-(ν * ‖freq k‖ ^ 2)) • c s k
+            + lerayProj k (convFull (c s) k)) j * mFourier k x) (Ioi (0:ℝ))) ∧
+        -- the SECOND spatial fiber derivatives exist, with symbol (2πi·kᵢ)²
+        (∀ t ∈ Ici (0:ℝ), ∀ (i j : Fin 3) (y : UnitAddTorus (Fin 2)) (s : ℝ),
+          HasDerivAt
+            (fun r : ℝ => ∑' k, ((2 * Real.pi * Complex.I * (k i : ℂ)) * c t k j) •
+              mFourier k (i.insertNth (↑r : UnitAddCircle) y))
+            (∑' k, ((2 * Real.pi * Complex.I * (k i : ℂ)) ^ 2 * c t k j) •
+              mFourier k (i.insertNth (↑s : UnitAddCircle) y)) s) ∧
+        -- CALIBRATION: the viscous term IS the Laplacian, scaled by ν/(2π)²
+        (∀ t ∈ Ici (0:ℝ), ∀ (j : Fin 3) (z : UnitAddTorus (Fin 3)),
+          (∑' k, (((-(ν * ‖freq k‖ ^ 2) : ℝ) : ℂ) * c t k j) • mFourier k z)
+            = ((ν / (2 * Real.pi) ^ 2 : ℝ) : ℂ) *
+              (∑ i : Fin 3, ∑' k,
+                ((2 * Real.pi * Complex.I * (k i : ℂ)) ^ 2 * c t k j) • mFourier k z)) := by
   obtain ⟨κ, hκ, hflow⟩ := ns_full_global_flow_sobolev
   refine ⟨κ, hκ, ?_⟩
   intro ν hν c₀ hall hmean0 hreal hdiv hsmall
@@ -200,62 +219,158 @@ theorem theorem_B_smooth :
   have hspace : ∀ t ∈ Ici (0:ℝ), ∀ (j : Fin 3) (p : ℕ),
       ContDiff ℝ (p : ℕ∞) (uLift j (c t)) := fun t ht j p =>
     contDiff_uLift j (c t) p (fun q _ => hl1 t ht q)
+  -- THE WINDOW MAJORANT, shared by the derivative and its continuity: around
+  -- every t > 0 there is a bounded slab carrying a summable time-uniform
+  -- majorant for the mode derivatives.
+  have hwindow : ∀ t : ℝ, 0 < t → ∃ a b : ℝ, 0 < a ∧ t ∈ Ioo a b ∧
+      ∃ u : (Fin 3 → ℤ) → ℝ, Summable u ∧
+        ∀ s ∈ Ioo a b, ∀ k, ‖(-(ν * ‖freq k‖ ^ 2)) • c s k
+          + lerayProj k (convFull (c s) k)‖ ≤ u k := by
+    intro t htpos
+    obtain ⟨K, hK, hgrow⟩ := hsob8
+    refine ⟨t / 2, t + 1, by positivity, ⟨by linarith, by linarith⟩, ?_⟩
+    have hwin : ∀ s ∈ Ioo (t / 2) (t + 1), s ∈ Ici (0:ℝ) := fun s hs =>
+      le_of_lt (lt_trans (by positivity) hs.1)
+    -- the window constant, uniform in time by the level-8 growth bound
+    set B : ℝ := (quarticKernel + sob 8 c₀ * (1 + Real.exp (K * (t + 1)))) / 2 with hBdef
+    have hs8nn : 0 ≤ sob 8 c₀ := sob_nonneg 8 c₀
+    have hBnn : 0 ≤ B := by
+      have := quarticKernel_nonneg
+      have hx : 0 ≤ sob 8 c₀ * (1 + Real.exp (K * (t + 1))) := by positivity
+      rw [hBdef]; linarith
+    have hWB : ∀ s ∈ Ioo (t / 2) (t + 1), ∀ q : ℕ, q ≤ 6 →
+        (∑' l, ‖freq l‖ ^ q * ‖c s l‖) ≤ B := by
+      intro s hs q hq
+      have hsI := hwin s hs
+      -- the level-(q+2) mass is capped by the level-8 mass, which grows at
+      -- most by (1 + e^{K(t+1)}) on the window
+      have hqle : sob (q + 2) (c s) ≤ sob 8 (c s) :=
+        sob_le_sob (by omega) (hmean s hsI) (hlevel 8 s hsI)
+      have hgs : sob 8 (c s) ≤ sob 8 c₀ * (1 + Real.exp (K * (t + 1))) := by
+        refine (hgrow s hsI).trans ?_
+        have hmono : Real.exp (K * s) ≤ Real.exp (K * (t + 1)) :=
+          Real.exp_le_exp.mpr (by nlinarith [hs.2, hK, hs.1, htpos])
+        nlinarith [Real.exp_pos (K * s), Real.exp_pos (K * (t + 1))]
+      have hmass : (∑' l, ‖freq l‖ ^ (2 * (q + 2)) * ‖c s l‖ ^ 2)
+          ≤ sob 8 c₀ * (1 + Real.exp (K * (t + 1))) := by
+        have e : sob (q + 2) (c s) = ∑' l, ‖freq l‖ ^ (2 * (q + 2)) * ‖c s l‖ ^ 2 := rfl
+        rw [← e]
+        exact hqle.trans hgs
+      exact tsum_weighted_norm_le_of_bound (hmean s hsI) (hlevel (q + 2) s hsI) hmass
+    exact exists_summable_nsRHS_maj (ν := ν) hν.le (B := B) hBnn
+      (fun s hs => hmean s (hwin s hs))
+      (fun s hs => convFull_zero_of_divFree (hcdiv s (hwin s hs)))
+      (fun s hs => (hsum s (hwin s hs)).1) (fun s hs => (hsum s (hwin s hs)).2)
+      (fun s hs q _ => hl1 s (hwin s hs) q) hWB
   -- TIME
   have htime : ∀ (j : Fin 3) (x : UnitAddTorus (Fin 3)), ∀ t ∈ Ioi (0:ℝ),
       HasDerivAt (fun s => ∑' k, c s k j * mFourier k x)
         (∑' k, ((-(ν * ‖freq k‖ ^ 2)) • c t k
           + lerayProj k (convFull (c t) k)) j * mFourier k x) t := by
     intro j x t ht
-    obtain ⟨K, hK, hgrow⟩ := hsob8
     have htpos : (0:ℝ) < t := ht
-    -- a window around t, inside the open half-line
-    set a : ℝ := t / 2 with ha
-    set b : ℝ := t + 1 with hb
-    have hwin : ∀ s ∈ Ioo a b, s ∈ Ici (0:ℝ) := by
-      intro s hs
-      exact le_of_lt (lt_trans (by positivity) hs.1)
-    have hwinI : ∀ s ∈ Ioo a b, s ∈ Ioi (0:ℝ) := by
-      intro s hs
-      exact lt_trans (by positivity) hs.1
-    -- the window constant, uniform in time by the level-8 growth bound
-    set B : ℝ := (quarticKernel + sob 8 c₀ * (1 + Real.exp (K * b))) / 2 with hBdef
-    have hs8nn : 0 ≤ sob 8 c₀ := sob_nonneg 8 c₀
-    have hBnn : 0 ≤ B := by
-      have := quarticKernel_nonneg
-      have hx : 0 ≤ sob 8 c₀ * (1 + Real.exp (K * b)) := by positivity
-      rw [hBdef]; linarith
-    have hWB : ∀ s ∈ Ioo a b, ∀ q : ℕ, q ≤ 6 →
-        (∑' l, ‖freq l‖ ^ q * ‖c s l‖) ≤ B := by
-      intro s hs q hq
-      have hsI := hwin s hs
-      -- the level-(q+2) mass is capped by the level-8 mass, which grows at
-      -- most by (1 + e^{K b}) on the window
-      have hqle : sob (q + 2) (c s) ≤ sob 8 (c s) :=
-        sob_le_sob (by omega) (hmean s hsI) (hlevel 8 s hsI)
-      have hgs : sob 8 (c s) ≤ sob 8 c₀ * (1 + Real.exp (K * b)) := by
-        refine (hgrow s hsI).trans ?_
-        have hmono : Real.exp (K * s) ≤ Real.exp (K * b) :=
-          Real.exp_le_exp.mpr (by nlinarith [hs.2, hK, hs.1, htpos])
-        nlinarith [Real.exp_pos (K * s), Real.exp_pos (K * b)]
-      have hmass : (∑' l, ‖freq l‖ ^ (2 * (q + 2)) * ‖c s l‖ ^ 2)
-          ≤ sob 8 c₀ * (1 + Real.exp (K * b)) := by
-        have e : sob (q + 2) (c s) = ∑' l, ‖freq l‖ ^ (2 * (q + 2)) * ‖c s l‖ ^ 2 := rfl
-        rw [← e]
-        exact hqle.trans hgs
-      exact tsum_weighted_norm_le_of_bound (hmean s hsI) (hlevel (q + 2) s hsI) hmass
-    -- the summable time-uniform majorant
-    obtain ⟨u, hu, hmaj⟩ := exists_summable_nsRHS_maj (ν := ν) hν.le (B := B) hBnn
-      (fun s hs => hmean s (hwin s hs))
-      (fun s hs => convFull_zero_of_divFree (hcdiv s (hwin s hs)))
-      (fun s hs => (hsum s (hwin s hs)).1) (fun s hs => (hsum s (hwin s hs)).2)
-      (fun s hs q _ => hl1 s (hwin s hs) q) hWB
-    have htmem : t ∈ Ioo a b := ⟨by rw [ha]; linarith, by rw [hb]; linarith⟩
+    obtain ⟨a, b, hapos, htmem, u, hu, hmaj⟩ := hwindow t htpos
+    have hwinI : ∀ s ∈ Ioo a b, s ∈ Ioi (0:ℝ) := fun s hs => lt_trans hapos hs.1
     exact hasDerivAt_weighted_tsum_flow
       (fun k => le_of_eq (norm_mFourier_apply k x))
       (fun s hs k => hode s (hwinI s hs) k) hu
       (fun s hs k => hmaj s hs k) htmem
       (by simpa using hl1 t (le_of_lt htpos) 0) t htmem
+  -- C¹ IN TIME: the derivative sum is continuous on the open half-line
+  have hE0 : (0:ℝ) ≤ en c₀ := tsum_nonneg fun l => sq_nonneg _
+  have hZ0 : (0:ℝ) ≤ ens c₀ := tsum_nonneg fun l => by positivity
+  have htimecont : ∀ (j : Fin 3) (x : UnitAddTorus (Fin 3)),
+      ContinuousOn (fun s => ∑' k, ((-(ν * ‖freq k‖ ^ 2)) • c s k
+        + lerayProj k (convFull (c s) k)) j * mFourier k x) (Ioi (0:ℝ)) := by
+    intro j x t ht
+    have htpos : (0:ℝ) < t := ht
+    obtain ⟨a, b, hapos, htmem, u, hu, hmaj⟩ := hwindow t htpos
+    have hsubIcc : Ioo a b ⊆ Icc (0:ℝ) b := fun s hs =>
+      ⟨le_of_lt (lt_trans hapos hs.1), le_of_lt hs.2⟩
+    have hsubIci : Icc (0:ℝ) b ⊆ Ici (0:ℝ) := Icc_subset_Ici_self
+    have hEF : ∀ s ∈ Icc (0:ℝ) b, ∀ F : Finset (Fin 3 → ℤ),
+        ∑ l ∈ F, ‖c s l‖ ^ 2 ≤ en c₀ := fun s hs F =>
+      ((hsum s (hsubIci hs)).1.sum_le_tsum F (fun l _ => sq_nonneg _)).trans
+        (htrap s (hsubIci hs)).1
+    have hZF : ∀ s ∈ Icc (0:ℝ) b, ∀ F : Finset (Fin 3 → ℤ),
+        ∑ l ∈ F, ‖freq l‖ ^ 2 * ‖c s l‖ ^ 2 ≤ ens c₀ := fun s hs F =>
+      ((hsum s (hsubIci hs)).2.sum_le_tsum F (fun l _ => by positivity)).trans
+        (htrap s (hsubIci hs)).2.1
+    -- mode continuity of the right-hand side (theorem_B_unique's incantation)
+    have hRHScont : ∀ k, ContinuousOn (fun s => (-(ν * ‖freq k‖ ^ 2)) • c s k
+        + lerayProj k (convFull (c s) k)) (Ioo a b) := by
+      intro k
+      refine (continuousOn_const.smul (((hcont k).mono hsubIci).mono hsubIcc)).add ?_
+      exact (lerayProj_continuous k).comp_continuousOn
+        ((continuousOn_convFull hE0 hZ0 hEF hZF
+          (fun l => (hcont l).mono hsubIci) k).mono hsubIcc)
+    have hcw := continuousOn_weighted_tsum (j := j)
+      (fun k => le_of_eq (norm_mFourier_apply k x)) hRHScont hu
+      (fun s hs k => hmaj s hs k)
+    exact (hcw.continuousAt (isOpen_Ioo.mem_nhds htmem)).continuousWithinAt
+  -- the second spatial fiber derivatives
+  have hsecond : ∀ t ∈ Ici (0:ℝ), ∀ (i j : Fin 3) (y : UnitAddTorus (Fin 2)) (s : ℝ),
+      HasDerivAt
+        (fun r : ℝ => ∑' k, ((2 * Real.pi * Complex.I * (k i : ℂ)) * c t k j) •
+          mFourier k (i.insertNth (↑r : UnitAddCircle) y))
+        (∑' k, ((2 * Real.pi * Complex.I * (k i : ℂ)) ^ 2 * c t k j) •
+          mFourier k (i.insertNth (↑s : UnitAddCircle) y)) s := fun t ht i j y s =>
+    hasDerivAt_charSum_insertNth_second i j (c t)
+      (by simpa using hl1 t ht 1) (by simpa using hl1 t ht 2) y s
+  -- the calibration of the viscous term
+  have hcalib : ∀ t ∈ Ici (0:ℝ), ∀ (j : Fin 3) (z : UnitAddTorus (Fin 3)),
+      (∑' k, (((-(ν * ‖freq k‖ ^ 2) : ℝ) : ℂ) * c t k j) • mFourier k z)
+        = ((ν / (2 * Real.pi) ^ 2 : ℝ) : ℂ) *
+          (∑ i : Fin 3, ∑' k,
+            ((2 * Real.pi * Complex.I * (k i : ℂ)) ^ 2 * c t k j) • mFourier k z) :=
+    fun t ht j z => viscous_eq_laplacian ν j (c t) (by simpa using hl1 t ht 2) z
   exact ⟨c, hc0, hstruct, hsum, hcont, hinteq, hode, htrap, hlevel, hmean, hl1,
-    hspace, fun t _ j g x => uLift_periodic j (c t) g x, htime⟩
+    hspace, fun t _ j g x => uLift_periodic j (c t) g x, htime, htimecont,
+    hsecond, hcalib⟩
+
+/-- **Theorem B, smooth form** (the tagged statement, unchanged): the
+classically-regular eternal flow, without the `C¹` / second-derivative /
+calibration clauses of `theorem_B_smooth_classical`, which is strictly
+stronger and supplies them. -/
+theorem theorem_B_smooth :
+    ∃ κ, 0 < κ ∧ ∀ {ν : ℝ}, 0 < ν → ∀ {c₀ : (Fin 3 → ℤ) → Vel},
+      (∀ m : ℕ, Summable fun l => ‖freq l‖ ^ (2 * m) * ‖c₀ l‖ ^ 2) →
+      c₀ 0 = 0 → RealField c₀ → DivFree c₀ → κ * en c₀ * ens c₀ < ν ^ 4 →
+      ∃ c : ℝ → (Fin 3 → ℤ) → Vel,
+        c 0 = c₀ ∧
+        (∀ t ∈ Ici (0:ℝ), RealField (c t) ∧ DivFree (c t)) ∧
+        (∀ t ∈ Ici (0:ℝ), Summable (fun l => ‖c t l‖ ^ 2) ∧
+          Summable (fun l => ‖freq l‖ ^ 2 * ‖c t l‖ ^ 2)) ∧
+        (∀ k, ContinuousOn (fun s => c s k) (Ici (0:ℝ))) ∧
+        (∀ t ∈ Ici (0:ℝ), ∀ k, c t k = c₀ k + ∫ s in (0:ℝ)..t,
+          ((-(ν * ‖freq k‖ ^ 2)) • c s k + lerayProj k (convFull (c s) k))) ∧
+        (∀ t ∈ Ioi (0:ℝ), ∀ k, HasDerivAt (fun s => c s k)
+          ((-(ν * ‖freq k‖ ^ 2)) • c t k + lerayProj k (convFull (c t) k)) t) ∧
+        (∀ t ∈ Ici (0:ℝ), en (c t) ≤ en c₀ ∧ ens (c t) ≤ ens c₀ ∧
+          κ * en (c t) * ens (c t) < ν ^ 4) ∧
+        -- every Sobolev level survives, for THIS one flow
+        (∀ (m : ℕ), ∀ t ∈ Ici (0:ℝ),
+          Summable fun l => ‖freq l‖ ^ (2 * m) * ‖c t l‖ ^ 2) ∧
+        -- the flow stays mean-zero
+        (∀ t ∈ Ici (0:ℝ), c t 0 = 0) ∧
+        -- weighted ℓ¹ at every order
+        (∀ t ∈ Ici (0:ℝ), ∀ p : ℕ, Summable fun l => ‖freq l‖ ^ p * ‖c t l‖) ∧
+        -- SPACE: the periodic lift is C^p for every p, and ℤ³-periodic
+        (∀ t ∈ Ici (0:ℝ), ∀ (j : Fin 3) (p : ℕ),
+          ContDiff ℝ (p : ℕ∞) (uLift j (c t))) ∧
+        (∀ t ∈ Ici (0:ℝ), ∀ (j : Fin 3) (g : Fin 3 → ℤ)
+            (x : EuclideanSpace ℝ (Fin 3)),
+          uLift j (c t) (x + freq g) = uLift j (c t) x) ∧
+        -- TIME: the spectral Navier-Stokes equation, pointwise on the torus
+        (∀ (j : Fin 3) (x : UnitAddTorus (Fin 3)), ∀ t ∈ Ioi (0:ℝ),
+          HasDerivAt (fun s => ∑' k, c s k j * mFourier k x)
+            (∑' k, ((-(ν * ‖freq k‖ ^ 2)) • c t k
+              + lerayProj k (convFull (c t) k)) j * mFourier k x) t) := by
+  obtain ⟨κ, hκ, h⟩ := theorem_B_smooth_classical
+  refine ⟨κ, hκ, ?_⟩
+  intro ν hν c₀ hall hmean0 hreal hdiv hsmall
+  obtain ⟨c, h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12, h13, -, -, -⟩ :=
+    h hν hall hmean0 hreal hdiv hsmall
+  exact ⟨c, h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12, h13⟩
 
 end TheoremB
