@@ -44,15 +44,19 @@ lemma en_le_ens {c : (Fin 3 → ℤ) → Vel} (hc0 : c 0 = 0)
 A finitely supported flow off the zero mode, solving the mode ODE with a
 forcing whose energy pairing is nonpositive on the window, has energy
 decaying at rate `2ν`. The hypotheses are exactly
-`galerkin_conditional_trap`'s energy-side hypotheses; the conclusion
-strengthens its `en (c t) ≤ en (c 0)` clause to an explicit rate.
+`galerkin_conditional_trap`'s energy-side hypotheses WEAKENED to the
+window (`hODE` on `Icc 0 T`, not on all of `ℝ`), which is the form every
+producer in this campaign actually exports - `galerkin_family` gives the
+ODE on `Icc 0 T` and `ns_galerkin_global_flow` on `Ici 0`, neither on
+`ℝ`. The conclusion strengthens the trap's `en (c t) ≤ en (c 0)` clause
+to an explicit rate.
 
 The zero mode is excluded by `hS0`, which is what makes the field
 mean-zero and hence what makes `en_le_ens` available. -/
 theorem galerkin_energy_decay {ν T : ℝ} (hν : 0 < ν) {S : Finset (Fin 3 → ℤ)}
     (hS0 : (0 : Fin 3 → ℤ) ∉ S) {c F : ℝ → (Fin 3 → ℤ) → Vel}
     (hsupp : ∀ t k, k ∉ S → c t k = 0)
-    (hODE : ∀ t k, HasDerivAt (fun s => c s k)
+    (hODE : ∀ t ∈ Icc (0:ℝ) T, ∀ k, HasDerivAt (fun s => c s k)
       ((-(ν * ‖freq k‖ ^ 2)) • c t k + F t k) t)
     (hEpair : ∀ t ∈ Ioo (0:ℝ) T, (∑ k ∈ S, 2 * inner ℝ (F t k) (c t k)) ≤ 0) :
     ∀ t ∈ Icc (0:ℝ) T, en (c t) ≤ en (c 0) * Real.exp (-(2 * ν * t)) := by
@@ -67,11 +71,11 @@ theorem galerkin_energy_decay {ν T : ℝ} (hν : 0 < ν) {S : Finset (Fin 3 →
   set cd : ℝ → (Fin 3 → ℤ) → Vel :=
     fun s k => (-(ν * ‖freq k‖ ^ 2)) • c s k + F s k with hcd
   -- the energy derivative, through the finite collapse first
-  have hen_deriv : ∀ s, HasDerivAt (fun r => en (c r))
+  have hen_deriv : ∀ s ∈ Icc (0:ℝ) T, HasDerivAt (fun r => en (c r))
       (∑ k ∈ S, 2 * inner ℝ (cd s k) (c s k)) s := by
-    intro s
+    intro s hs
     have h := hasDerivAt_weighted_finset_sum_sq (fun _ => (1:ℝ)) S (c' := cd)
-      (fun k => hODE s k)
+      (fun k => hODE s hs k)
     have heq : (fun r => ∑ k ∈ S, (1:ℝ) * ‖c r k‖ ^ 2) = fun r => en (c r) := by
       funext r
       rw [hen_eq r]
@@ -106,11 +110,11 @@ theorem galerkin_energy_decay {ν T : ℝ} (hν : 0 < ν) {S : Finset (Fin 3 →
     linarith
   -- the exponential factor g s = en (c s) * exp (2ν s)
   set g : ℝ → ℝ := fun s => en (c s) * Real.exp (2 * ν * s) with hg
-  have hgd : ∀ s, HasDerivAt g
+  have hgd : ∀ s ∈ Icc (0:ℝ) T, HasDerivAt g
       (((∑ k ∈ S, 2 * inner ℝ (cd s k) (c s k)) + 2 * ν * en (c s)) *
         Real.exp (2 * ν * s)) s := by
-    intro s
-    have h1 := hen_deriv s
+    intro s hs
+    have h1 := hen_deriv s hs
     have h2 : HasDerivAt (fun r : ℝ => Real.exp (2 * ν * r))
         (Real.exp (2 * ν * s) * (2 * ν)) s := by
       have h3 : HasDerivAt (fun r : ℝ => 2 * ν * r) (2 * ν) s := by
@@ -123,14 +127,15 @@ theorem galerkin_energy_decay {ν T : ℝ} (hν : 0 < ν) {S : Finset (Fin 3 →
           en (c s) * (Real.exp (2 * ν * s) * (2 * ν)) := by ring
     rw [hg, heq]
     exact h4
-  have hgc : ContinuousOn g (Icc 0 t) :=
-    (continuous_iff_continuousAt.mpr fun s => (hgd s).continuousAt).continuousOn
-  have hgdiff : DifferentiableOn ℝ g (Ioo 0 t) := fun s _ =>
-    (hgd s).differentiableAt.differentiableWithinAt
+  have hsubT : Icc (0:ℝ) t ⊆ Icc (0:ℝ) T := Icc_subset_Icc le_rfl ht.2
+  have hgc : ContinuousOn g (Icc 0 t) := fun s hs =>
+    (hgd s (hsubT hs)).continuousAt.continuousWithinAt
+  have hgdiff : DifferentiableOn ℝ g (Ioo 0 t) := fun s hs =>
+    (hgd s (hsubT (Ioo_subset_Icc_self hs))).differentiableAt.differentiableWithinAt
   have hgderiv : ∀ s ∈ Ioo (0:ℝ) t, deriv g s ≤ 0 := by
     intro s hs
     have hsT : s ∈ Ioo (0:ℝ) T := ⟨hs.1, lt_of_lt_of_le hs.2 ht.2⟩
-    rw [(hgd s).deriv]
+    rw [(hgd s (hsubT (Ioo_subset_Icc_self hs))).deriv]
     have hexp : 0 < Real.exp (2 * ν * s) := Real.exp_pos _
     have h := hderiv_le s hsT
     have hsum : (∑ k ∈ S, 2 * inner ℝ (cd s k) (c s k)) + 2 * ν * en (c s) ≤ 0 := by

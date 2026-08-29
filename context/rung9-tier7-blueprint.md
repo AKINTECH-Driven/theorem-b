@@ -177,20 +177,40 @@ machinery the campaign does not have.
   large-viscosity/small-budget subregime — precisely the v2 item the
   Tier-6 audit register already recorded. It would weaken W-R0a's
   Galerkin-level `2ν`, not extend it.
-  **Route (γ), the one that works, for a later rung:** do the transfer
-  in the SMOOTH class, not the trap class. `theorem_B_smooth` exports
-  weighted ℓ¹ at every order (TheoremBSmooth.lean:137, 239, 400 — "from
-  two extra Sobolev levels"), which is exactly the hypothesis
-  `summable_norm_convFull` and `triMaj_le` are missing. So
-  `convFull_energy_pairing` and the eternal-flow decay at the sharp rate
-  `2ν` are provable for smooth-class data. The cost is a scoping
-  clause, not a weaker theorem, and it is honest: state the eternal-flow
-  decay for the class where ℓ¹ is available and leave the trap class at
-  the Galerkin statement W-R0a already proves.
-  Consequence for Correction 1: unaffected. The scoping claim is that
-  decay is ambient, and W-R0a establishes that on the Galerkin flows the
-  whole campaign is built from. No outward text should say the eternal
-  flow's decay is proved.
+  **Route (γ) — superseded, see below.** Doing the transfer in the
+  SMOOTH class would work (`theorem_B_smooth` exports weighted ℓ¹ at
+  every order, TheoremBSmooth.lean:137/239/400), but it buys a
+  scoping clause that is not needed.
+  **Route (α) IS THE ROUTE, and routes (β)/(γ) were solving the wrong
+  problem (correction, 29 Aug 2026).** The transfer never needed the
+  full-level pairing identity at all. The decay is proved at the
+  GALERKIN level — where `convGal_energy_pairing` already gives the
+  energy pairing EXACTLY zero over a finite sum, with no summability
+  question — and Fatou (`en_limit_le`) carries a per-time bound through
+  the extraction like any other trap clause. No ℓ¹ enters anywhere. So
+  W-R0b is achievable in the TRAP class at the sharp rate `2ν`,
+  strictly better than route (γ)'s smooth-class scoping. The ℓ¹
+  obstruction recorded above is real, but it blocks a lemma the
+  transfer does not use.
+  Remaining work, MED and mechanical: replay `theorem_B_cont`'s
+  assembly (FullUnique.lean:100-312, ~210 lines) carrying the extra
+  per-time clause `en (c t) ≤ en c₀ · exp(−2νt)`, exactly as Tier 6's
+  W4 replayed it for the Sobolev clause, then identify the witness with
+  `ns_full_global_flow`'s flow via `theorem_B_unique`.
+
+  **Self-audit finding (W-R0a), fixed 29 Aug 2026.** `galerkin_energy_decay`
+  was frozen with `hODE : ∀ t k, HasDerivAt …` — on ALL of `ℝ`, copied
+  from `galerkin_conditional_trap`. No producer in this campaign exports
+  that: `galerkin_family` gives the ODE on `Icc 0 T`,
+  `ns_galerkin_global_flow` on `Ici 0`. As frozen, the lemma could not
+  be composed with anything. Hypothesis weakened to `Icc 0 T`, which
+  strengthens the theorem and breaks no consumer (there were none).
+  This is the campaign's recurring composition-gap failure mode, the one
+  the register says to catch with a compiled probe at every tier — and
+  W-R0a shipped without such a probe. It surfaced only when the
+  composition was attempted for W-R0b. **Rule for the next rung: no wave
+  ships without a compiled composition probe against a real producer,
+  not merely a type-correct statement.**
 - **W-R1 — `theorem_B_bandwidth`.** `tail_en_lt` at `Z := ens c₀`
   composed with `ns_full_global_flow`'s summability and trap clauses.
   Risk LOW. Tag `t7-bandwidth-green` here; this rung is independently
@@ -408,9 +428,9 @@ one wave NOT done is W-R0b, the transfer of ambient decay from the
 Galerkin flows to the eternal flow — a scoping result for Correction 1,
 not a dependency of the capstone; route (β) stays the way in.
 
-Smallest next move: W-R0b by route (γ) — the transfer in the SMOOTH
-class, where the ℓ¹ that routes (β) and the trap class both lack is
-already exported. Route (β) as originally written is closed; see the
-W-R0b entry for the measured reason. The Mathlib PR for
-`WindowDecay.lean` is drafted and compile-verified at
+Smallest next move: W-R0b by route (α) — replay `theorem_B_cont`'s
+assembly carrying `en (c t) ≤ en c₀·exp(−2νt)`, then identify via
+`theorem_B_unique`. Trap class, sharp rate, no ℓ¹. Routes (β) and (γ)
+are recorded above as closed and superseded respectively. The Mathlib PR
+for `WindowDecay.lean` is drafted and compile-verified at
 `context/upstream/`, awaiting the user's call on submission.
