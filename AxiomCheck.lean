@@ -40,6 +40,7 @@ import TheoremB.TheoremBSmooth
 import TheoremB.EnergyDecay
 import TheoremB.Bandwidth
 import TheoremB.WindowDecay
+import TheoremB.EnergyIntegrable
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -209,3 +210,7 @@ import TheoremB.WindowDecay
 #print axioms TheoremB.galerkin_energy_decay
 #print axioms TheoremB.theorem_B_bandwidth
 #print axioms TheoremB.decay_of_window_integral_ineq
+#print axioms TheoremB.box_tendsto_atTop
+#print axioms TheoremB.en_sec_tendsto
+#print axioms TheoremB.aestronglyMeasurable_en
+#print axioms TheoremB.intervalIntegrable_en

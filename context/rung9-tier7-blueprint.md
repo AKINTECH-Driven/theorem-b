@@ -175,13 +175,25 @@ machinery the campaign does not have.
   composed with `ns_full_global_flow`'s summability and trap clauses.
   Risk LOW. Tag `t7-bandwidth-green` here; this rung is independently
   publishable and independently honest.
-- **W-R2a — `continuousOn_en_defect`.** `ContinuousOn (fun s => en (d s))`
-  on the window, by the epsilon/3 tail method: mode continuity plus the
-  uniform tail `4Z/R²` from `tail_en_lt`. This is the pattern rung7's
-  W-synth already names as "the Tier-4 defect pattern verbatim". Needed
-  only for integrability of `en(d ·)` in step 3; if it resists, the
-  fallback is measurability as a pointwise limit of the continuous `φ_R`
-  plus the `4E` bound. Risk LOW-MED.
+- **W-R2a — integrability of the energy history. LANDED, gate-green
+  (29 Aug 2026), VIA THE FALLBACK.** `TheoremB/EnergyIntegrable.lean`.
+  The wave was specified as `continuousOn_en_defect` with measurability
+  as a fallback; the fallback is what shipped, and on inspection it is
+  the RIGHT statement, not a concession:
+  `decay_of_window_integral_ineq` consumes `IntervalIntegrable` and
+  nothing stronger, so continuity was never needed. Continuity is also
+  not cheaply available - the Weierstrass route (`continuousOn_tsum`)
+  wants a summable uniform majorant, and the only candidate here is
+  `‖d s k‖² ≤ Z/‖freq k‖²`, whose sum `Σ‖k‖^(−2)` DIVERGES over ℤ³.
+  That is the campaign's standing obstruction (announcement draft,
+  long-form note on the ε/3 tail method), and it would have cost the
+  whole `TendstoUniformlyOn` apparatus to route around.
+  Delivered: `box_tendsto_atTop` (public re-derivation of TailBounds'
+  private `b4_box_tendsto`, from the public `exists_boxS`),
+  `en_sec_tendsto`, `en_sec_contOn`, `aestronglyMeasurable_en`,
+  `intervalIntegrable_en` - the `en` twins of the private `b4_*`
+  machinery `tail_integrable` already runs for `ens`. Risk was LOW-MED;
+  landed first try.
 - **W-R2b — `decay_of_window_integral_ineq`. LANDED, gate-green
   (29 Aug 2026).** `TheoremB/WindowDecay.lean`. Risk was LOW-MED and
   proved LOW-MED: two iterations to green. Name corrections against the

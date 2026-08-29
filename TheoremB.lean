@@ -40,3 +40,4 @@ import TheoremB.TheoremBSmooth
 import TheoremB.EnergyDecay
 import TheoremB.Bandwidth
 import TheoremB.WindowDecay
+import TheoremB.EnergyIntegrable
