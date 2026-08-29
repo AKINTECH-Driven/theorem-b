@@ -239,6 +239,27 @@ the weighted ℓ¹ export). Remaining bricks:
   per m (the per-m/one-flow wording rule from the audit register
   applies).
 
+### W5 build status (29 Aug 2026)
+
+LANDED, gate-green: **W5a complete** (ContinuousRep.lean — uCont, uniform
+and everywhere-pointwise expansion, the synthT identification,
+coefficient recovery, the ℓ¹ sup-norm bound, and pointwise reality);
+**W5b complete** (PeriodicLift.lean — uLift, ℤ³-periodicity, term C^∞,
+the insertNth first-derivative brick in exactly mFourierCoeff_deriv's
+input format, both continuity hypotheses it needs, the descent identity,
+and ContDiff ℝ p for every fixed p via a FACTORIAL-FREE
+(2π‖freq k‖)^q‖c k‖ majorant — better than the recon's m!·D^m route);
+**W5c part 1** (TimeLayer.lean — quarticKernel and the quantitative
+weighted ℓ¹ bound with its window form, which is what converts the
+per-time sob bounds into t-uniform ℓ¹ majorants).
+
+PENDING (the W5c builder was interrupted by a process exit before
+finishing; its file header lists the same): the discrete-Young ℓ¹
+convolution majorant on ℤ³ and its convFull corollary; term-wise time
+differentiation of weighted mode sums on open slabs
+(hasDerivAt_tsum_of_isPreconnected); continuity of the derivative sum;
+the canonical-flow package. Then W5-cap `theorem_B_smooth`.
+
 Fallback ladder v1/v2/v3 — each rung independently taggable and honest:
 v1 = t6-sobolev-green (W1-W4, LANDED); v2 = + continuous space-time
 representative; v3 = full classical statement (t6-smooth-green).

@@ -31,3 +31,6 @@ import TheoremB.SobolevNorms
 import TheoremB.SobolevPairing
 import TheoremB.SobolevTrap
 import TheoremB.TheoremBSobolev
+import TheoremB.ContinuousRep
+import TheoremB.PeriodicLift
+import TheoremB.TimeLayer

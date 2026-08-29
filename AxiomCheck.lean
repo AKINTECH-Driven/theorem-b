@@ -31,6 +31,9 @@ import TheoremB.SobolevNorms
 import TheoremB.SobolevPairing
 import TheoremB.SobolevTrap
 import TheoremB.TheoremBSobolev
+import TheoremB.ContinuousRep
+import TheoremB.PeriodicLift
+import TheoremB.TimeLayer
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -154,3 +157,18 @@ import TheoremB.TheoremBSobolev
 #print axioms TheoremB.galerkin_sobolev_bound
 #print axioms TheoremB.theorem_B_sobolev
 #print axioms TheoremB.ns_full_global_flow_sobolev
+#print axioms TheoremB.hasSum_uCont
+#print axioms TheoremB.uCont_apply
+#print axioms TheoremB.toLp_uCont
+#print axioms TheoremB.mFourierCoeff_uCont
+#print axioms TheoremB.norm_uCont_le
+#print axioms TheoremB.uCont_real_apply
+#print axioms TheoremB.uLift_periodic
+#print axioms TheoremB.contDiff_uLift_term
+#print axioms TheoremB.hasDerivAt_charSum_insertNth
+#print axioms TheoremB.continuous_charSum
+#print axioms TheoremB.continuous_charSum_deriv
+#print axioms TheoremB.uLift_eq_charSum
+#print axioms TheoremB.contDiff_uLift
+#print axioms TheoremB.tsum_weighted_norm_le
+#print axioms TheoremB.tsum_weighted_norm_le_of_bound
