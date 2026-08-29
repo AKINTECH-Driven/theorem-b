@@ -324,13 +324,38 @@ C¹, the second derivatives, and the calibration; the TAGGED
 BYTE-IDENTICAL to t6-smooth-green (`git diff` of the statement block).
 `sob_le_sob` added, closing the W1 audit's last finding.
 
-STILL NOT CLAIMED, and this is now the only remaining gap: the
-NONLINEARITY in classical form. The Leray projection is nonlocal;
-writing it classically requires constructing the pressure `p` (spectrally
-`p̂_k` from the divergence part of the convection) and proving the
-synthesized convection equals `−(u·∇)u` pointwise. Also still excluded:
-analyticity (contDiff_tsum caps at ℕ∞) and C^∞-in-time (needs d/dt of
-convFull).
+**W7 LANDED (commit 1209575) — THE TIER GOAL IS MET.** The nonlinearity
+is now classical too, via the route physics uses: the Leray projection is
+nonlocal, so split it into the convection minus a pressure gradient.
+- `pressureCoeff` + `lerayProj_convFull_apply`: `P(B)ⱼ = Bⱼ − (2πi·kⱼ)p̂ₖ`.
+- `summable_pressureCoeff` (p is ℓ¹, hence continuous) and
+  `summable_freq_pressureCoeff` (one weighted order — so **∇p is a genuine
+  object**, not a formal symbol; that bound needs no ‖k‖ ≥ 1, since
+  ‖k‖‖p̂ₖ‖ ≤ ‖Bₖ‖/2π exactly).
+- `tsum_char_mul`: the Cauchy product for absolutely convergent character
+  series — the TimeLayer shear reused. ⚠️ TWO ℂ INSTANCE TRAPS here:
+  `Summable.mul_norm` and `tsum_mul_right` both hit an additive-monoid
+  diamond on ℂ and LOOP AT WHNF (raising maxHeartbeats does not help —
+  it is a defeq loop, not slowness). Fixes: `Summable.mul_of_nonneg`
+  over ℝ, and `tsum_mul_left` respectively.
+- `convection_classical`: `∑ᵢ uᵢ∂ᵢuⱼ = −2π·∑ₖ (convFull c k)ⱼ eₖ`.
+- `exists_fiber`: every torus point IS a coordinate-fiber point, so the
+  twisted series really is `∂ᵢuⱼ` at every point, not just along a fiber.
+
+The capstone's right-hand side is therefore classical throughout:
+**∂ₜu = ν_phys·Δu − (1/2π)(u·∇)u − ∇p**, with ν_phys = ν/(2π)², every
+constant explicit, holding POINTWISE.
+
+W7 audit (compiled probes, all pass): the pressure decomposition is an
+identity against lerayProj's own definition, not a definition-by-fiat;
+the twist in `convection_classical` is the SAME twist the derivative
+brick produces; every point is a fiber point; and NON-TRIVIALITY — a
+concrete field with `convFull cw ![2,0,0] 0 = −i ≠ 0`, so the identity
+is not a relation between two zeros.
+
+STILL EXCLUDED (unchanged): analyticity (contDiff_tsum caps at ℕ∞) and
+C^∞-in-time (needs d/dt of convFull). Constants carry the campaign's own
+normalisation and are NOT Tier 5's weak-form numbers.
 
 Fallback ladder v1/v2/v3 — each rung independently taggable and honest:
 v1 = t6-sobolev-green (W1-W4, LANDED); v2 = + continuous space-time
