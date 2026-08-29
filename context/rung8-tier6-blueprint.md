@@ -193,6 +193,35 @@ periodic lift, spatial C^p, time C¹, pointwise calibrated NS;
 `theorem_B_smooth`. Fallback ladder v1/v2/v3 — each rung independently
 taggable and honest.
 
+## Audit register (W1-W3 fleet, 29 Aug 2026 — 0 BLOCKER, 0 statement
+MAJOR; all findings prose/docstring, fixed pre-tag)
+
+Claim-wording rules for every outward description of this tier:
+1. Never claim bare "explicit constants". The honest register: per-level
+   constants OF EXPLICIT FORM — a closed formula in (ν, m) and the
+   energy/enstrophy budgets, up to a single convergent lattice-kernel
+   sum Σ‖k‖^(−7/2) — exported formally as compiled existence statements
+   (∃ K, 0 < K).
+2. Never claim a single compiled all-m flow statement. The honest form:
+   for every m ≥ 1, the (unique — theorem_B_unique) eternal flow
+   additionally satisfies the level-m clause; m = 0 is the trap clause
+   itself (sob 0 = en). The one-flow-all-levels sentence is a
+   meta-corollary through uniqueness, not a compiled theorem.
+Prose amendments (delivered ≠ wave-bullet prose; frozen interfaces all
+landed verbatim): W1's ladder is SUMMABILITY-monotone-in-m (no sob-mass
+monotonicity lemma exists — add `sob_le_sob` only if W5 wants it); the
+young clones are PRIVATE (sp_young8/16), publicize only on demand; the
+"∀m package" is per-level theorems + the sob_zero_bound relabel, not a
+∀m-quantified statement. sob_zero_bound is junk-symmetric by design
+(summability comes from the trap at every use site).
+Audit-recorded v2 item (future work, no frozen statement changes): the
+dropped −ν·sob(m+1) margin + sob(m+1) ≥ sob m on mean-zero fields give
+(sob m)' ≤ −(ν − K_m)·sob m, i.e. per-level EXPONENTIAL DECAY at rate
+ν − K_m whenever K_m ≤ ν (a large-viscosity/small-budget subregime —
+K_m ≥ 1 and scales like ν^(−7), ν^(−15)). Also recorded: K_m grows like
+2^(16m) — harmless per fixed level and for spatial C^p, but any future
+sum over m (C^∞-in-time analytics) must not treat K_m as tame.
+
 ## Traps carried forward
 
 `add_pow_le` IS at the pin (Algebra/Order/Ring/Basic:119) — one recon
