@@ -187,11 +187,63 @@ the eternal clause `∀ t, 0 ≤ t → sob m (c t) ≤ sob m c₀ *
 (1 + Real.exp (K * t))` with per-t summability, by taking horizon T := t
 and identifying via theorem_B_unique (budgets exactly (en c₀, ens c₀)).
 
-W5 + cap (after W4's statement freezes): the ℓ¹ weighted majorant
-∑'‖freq k‖^p‖c_k(t)‖ < ∞ by CS against summable_freq_rpow_neg, the
-periodic lift, spatial C^p, time C¹, pointwise calibrated NS;
-`theorem_B_smooth`. Fallback ladder v1/v2/v3 — each rung independently
-taggable and honest.
+W5 spec (mission C's verdict, statements freeze at first declaration
+guided by this prose; W4 is landed so the chain is live). Steps (i)-(ii)
+of C's sequence are DONE (sob = the H^m layer; summable_weighted_norm =
+the weighted ℓ¹ export). Remaining bricks:
+
+- **W5a — the continuous representative** (torus side; file
+  TheoremB/ContinuousRep.lean; VERBATIM AddCircleMulti local MeasureSpace
+  preamble with EXPLICITLY NAMED instances, prefix cr_). Define
+  `uCont j c (hc : Summable fun k => ‖c k‖)` as the sup-norm tsum in
+  C(T3, ℂ) of `fun k => c k j • mFourier k` (Summable in C from ℓ¹ since
+  ‖mFourier k‖ = 1); identify `ContinuousMap.toLp ... (uCont j c hc) =
+  synthT j c` via ContinuousMap.hasSum_of_hasSum_Lp + hasSum_synth +
+  L² limit uniqueness; export coefficient recovery (mFourierCoeff of
+  uCont = c · j via mFourierCoeff_synthT + toLp a.e.-congruence) and the
+  everywhere-pointwise representation
+  (hasSum_mFourier_series_apply_of_summable). Structural clauses
+  (reality, spectral div-free, mean zero, Parseval) inherit from
+  TorusSynthesis through the identification.
+- **W5b — the ℤ³-periodic lift and spatial regularity** (ℝ³ side; file
+  TheoremB/PeriodicLift.lean). `uLift j c : EuclideanSpace ℝ (Fin 3) → ℂ
+  := fun x => ∑' k, c k j • ∏ i, fourier (k i) (↑(x i) : AddCircle 1)`;
+  periodicity via AddCircle.coe_add_period; every term ContDiff ℝ ⊤
+  (compiled probe: fourier_coe_apply + contDiff_exp + proj, ≈10 lines);
+  `ContDiff ℝ p uLift` for every fixed p by contDiff_tsum with the
+  m!·(2π‖freq k‖)^m iteratedFDeriv bounds (norm_iteratedFDeriv_comp_le;
+  m fixed per slot so m! is harmless) against summable_weighted_norm;
+  fiberwise insertNth-format spatial partials (hasDerivAt_tsum) matching
+  the M4 mFourierCoeff_deriv consumption format; agreement of uLift with
+  uCont ∘ coe (the lift descends).
+- **W5c — the time layer** (file TheoremB/TimeLayer.lean). Along the
+  eternal Sobolev flow: t ↦ uLift/uCont pointwise time derivative on
+  t > 0 via hasDerivAt_tsum_of_isPreconnected on Ioo slabs (mode ODE on
+  Ioi 0 from ns_full_global_flow(_sobolev); t-locally-uniform ℓ¹
+  majorants from the per-time sob bounds + summable_weighted_norm;
+  ∂_t u continuous via continuousOn_convFull machinery). First order
+  ONLY — C^∞-in-time needs d/dt-of-convFull (absent) and stays a
+  recorded stretch OUTSIDE the capstone.
+- **W5-cap — theorem_B_smooth** (file TheoremB/TheoremBSmooth.lean):
+  data ∀-level summable (statement shape: hypothesis
+  `∀ p : ℕ, Summable (fun l => ‖freq l‖ ^ (2*p) * ‖c₀ l‖ ^ 2)`) + the
+  standing small-data hypotheses ⟹ the eternal flow c (with all
+  ns_full_global_flow clauses) admits the classical representative:
+  per-time uCont/uLift, ℤ³-periodic, ContDiff ℝ p in space for every p,
+  C¹ in time on t > 0, satisfying CALIBRATED NS pointwise everywhere
+  (2π factors exactly as theorem_B_torus installs them: ν_phys = ν̃/(2π)
+  convention recorded there; the mode ODE summed against characters;
+  nonlinearity identified via convFull_pairing_physical +
+  L2_ext_of_coeff coefficient injectivity — never a raw Cauchy
+  product). Per-level sob clauses quoted from ns_full_global_flow_sobolev
+  per m (the per-m/one-flow wording rule from the audit register
+  applies).
+
+Fallback ladder v1/v2/v3 — each rung independently taggable and honest:
+v1 = t6-sobolev-green (W1-W4, LANDED); v2 = + continuous space-time
+representative; v3 = full classical statement (t6-smooth-green).
+Do not promise analytic-in-space (contDiff_tsum caps at ℕ∞) and never
+claim C^∞-in-time in the capstone.
 
 ## Audit register (W1-W3 fleet, 29 Aug 2026 — 0 BLOCKER, 0 statement
 MAJOR; all findings prose/docstring, fixed pre-tag)
