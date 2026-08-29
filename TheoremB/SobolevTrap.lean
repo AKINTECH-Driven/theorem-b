@@ -16,9 +16,9 @@ dissipation kept as an equality until the last step, and the
 constant-source Groenwall (gronwall_const_source) with the shift trick
 f := sob m (c t) - sob m (c 0), A := K * sob m (c 0) closes.
 
-The merge glue deriving the frozen `galerkin_sobolev_bound` from
-`sobolev_pairing_absorbed` + this file's theorem sits in the comment block
-at the end, for the orchestrator to compile at merge.
+The frozen `galerkin_sobolev_bound` is derived from
+`sobolev_pairing_absorbed` + the pairing-conditional theorem as live,
+compiled code at the end of this file (merged at orchestration time).
 
 STATUS: claimed only insofar as scripts/check_axioms.sh reports GREEN on
 the target machine.
@@ -35,7 +35,8 @@ open Set
 /-! ## The m = 0 remark: level zero is the energy budget itself -/
 
 /-- The `m = 0` rung of the Sobolev ladder needs no Groenwall: `sob 0 = en`
-is bounded by the trap's energy budget directly. -/
+is bounded by the trap's energy budget directly. (Junk-symmetric rewrite of
+its own hypothesis — summability comes from the trap at every use site.) -/
 lemma sob_zero_bound {E : ℝ} {c : (Fin 3 → ℤ) → Vel} (h : en c ≤ E) :
     sob 0 c ≤ E := by
   rw [sob_zero_eq_en]

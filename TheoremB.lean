@@ -30,3 +30,4 @@ import TheoremB.LerayHopfVocab
 import TheoremB.SobolevNorms
 import TheoremB.SobolevPairing
 import TheoremB.SobolevTrap
+import TheoremB.TheoremBSobolev

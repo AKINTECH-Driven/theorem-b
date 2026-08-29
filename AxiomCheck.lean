@@ -30,6 +30,7 @@ import TheoremB.LerayHopfVocab
 import TheoremB.SobolevNorms
 import TheoremB.SobolevPairing
 import TheoremB.SobolevTrap
+import TheoremB.TheoremBSobolev
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -151,3 +152,5 @@ import TheoremB.SobolevTrap
 #print axioms TheoremB.sob_zero_bound
 #print axioms TheoremB.galerkin_sobolev_bound_of_pairing
 #print axioms TheoremB.galerkin_sobolev_bound
+#print axioms TheoremB.theorem_B_sobolev
+#print axioms TheoremB.ns_full_global_flow_sobolev

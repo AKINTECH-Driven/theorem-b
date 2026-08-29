@@ -3,7 +3,9 @@
 
 The graded convection pairing, fully absorbed at every Sobolev level:
 `2 |Σ_{k∈S} ‖k‖^(2m) ⟪convGal S c k, c k⟫| ≤ ν·sob (m+1) c + K·sob m c`
-with `K` explicit in `(m, ν, E, Z, C_K)`.
+with `K` of explicit form in the proof witness — a closed formula in
+`(m, ν, E, Z)` and the lattice-kernel constant `C_K` — exported formally
+as a compiled existence statement (`∃ K, 0 < K`).
 
 The route is the HALF-WEIGHT SPLIT: `‖k‖^(2m) = ‖k‖^m · ‖k‖^m`; one factor
 joins the pairing slot, lifting it to `z k = ‖k‖^m ‖c k‖` (whose ℓ² mass is
@@ -108,8 +110,9 @@ private lemma sp_term_norm_le (x y : (Fin 3 → ℤ) → Vel) (k l : Fin 3 → �
 set_option maxHeartbeats 1000000 in
 /-- **W2 capstone: the level-`m` absorbed pairing.**  For finitely supported
 fields avoiding the zero mode, with trapped energy and enstrophy budgets, the
-`‖k‖^(2m)`-weighted convection pairing is absorbed: half into the dissipation
-level `sob (m+1)`, half into `K · sob m` with `K` explicit. -/
+`‖k‖^(2m)`-weighted convection pairing is absorbed: a `ν`-budget piece into
+the dissipation level `sob (m+1)`, the rest into `K · sob m` with `K` of
+explicit form in the proof witness (exported as `∃ K`). -/
 theorem sobolev_pairing_absorbed {ν E Z : ℝ} (hν : 0 < ν) (hE : 0 ≤ E)
     (hZ : 0 ≤ Z) (m : ℕ) (hm : 1 ≤ m) :
     ∃ K, 0 < K ∧ ∀ {S : Finset (Fin 3 → ℤ)}, (0 : Fin 3 → ℤ) ∉ S →
