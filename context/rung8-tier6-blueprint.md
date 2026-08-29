@@ -151,6 +151,42 @@ witness with the eternal flow (the 14-hypothesis pattern is written in
 ns_full_global_flow's hA block; budgets exactly (en c₀, ens c₀)) ⟹ the
 eternal flow's sob bound for all t ≥ 0. Tag v1 here: t6-sobolev-green.
 
+W4 frozen capstone `theorem_B_sobolev` (declared here, before any builder
+touches it — theorem_B_cont's statement with the level-m additions):
+
+```
+theorem theorem_B_sobolev :
+    ∃ κ, 0 < κ ∧ ∀ {ν : ℝ}, 0 < ν → ∀ (m : ℕ), 1 ≤ m →
+      ∀ {c₀ : (Fin 3 → ℤ) → Vel},
+      Summable (fun l => ‖c₀ l‖ ^ 2) →
+      Summable (fun l => ‖freq l‖ ^ 2 * ‖c₀ l‖ ^ 2) →
+      Summable (fun l => ‖freq l‖ ^ (2 * m) * ‖c₀ l‖ ^ 2) →
+      c₀ 0 = 0 → RealField c₀ → DivFree c₀ → κ * en c₀ * ens c₀ < ν ^ 4 →
+      ∃ K, 0 < K ∧ ∀ T : ℝ, 0 ≤ T → ∃ c : ℝ → (Fin 3 → ℤ) → Vel,
+        c 0 = c₀ ∧
+        (∀ t ∈ Icc (0:ℝ) T, RealField (c t) ∧ DivFree (c t)) ∧
+        (∀ t ∈ Icc (0:ℝ) T, Summable (fun l => ‖c t l‖ ^ 2) ∧
+          Summable (fun l => ‖freq l‖ ^ 2 * ‖c t l‖ ^ 2)) ∧
+        (∀ k, ContinuousOn (fun s => c s k) (Icc (0:ℝ) T)) ∧
+        (∀ t ∈ Icc (0:ℝ) T, ∀ k, c t k = c₀ k + ∫ s in (0:ℝ)..t,
+          ((-(ν * ‖freq k‖ ^ 2)) • c s k + lerayProj k (convFull (c s) k))) ∧
+        (∀ t ∈ Ioo (0:ℝ) T, ∀ k, HasDerivAt (fun s => c s k)
+          ((-(ν * ‖freq k‖ ^ 2)) • c t k + lerayProj k (convFull (c t) k)) t) ∧
+        (∀ t ∈ Icc (0:ℝ) T, en (c t) ≤ en c₀ ∧ ens (c t) ≤ ens c₀ ∧
+          κ * en (c t) * ens (c t) < ν ^ 4) ∧
+        (∀ t ∈ Icc (0:ℝ) T,
+          Summable (fun l => ‖freq l‖ ^ (2 * m) * ‖c t l‖ ^ 2) ∧
+          sob m (c t) ≤ sob m c₀ * (1 + Real.exp (K * T)))
+```
+
+(K uniform across horizons — it depends only on (ν, m, en c₀, ens c₀);
+the per-horizon witness flow is per-T exactly as in theorem_B_cont.)
+Transfer capstone `ns_full_global_flow_sobolev`: mirrors
+ns_full_global_flow's statement + the level-m summability hypothesis +
+the eternal clause `∀ t, 0 ≤ t → sob m (c t) ≤ sob m c₀ *
+(1 + Real.exp (K * t))` with per-t summability, by taking horizon T := t
+and identifying via theorem_B_unique (budgets exactly (en c₀, ens c₀)).
+
 W5 + cap (after W4's statement freezes): the ℓ¹ weighted majorant
 ∑'‖freq k‖^p‖c_k(t)‖ < ∞ by CS against summable_freq_rpow_neg, the
 periodic lift, spatial C^p, time C¹, pointwise calibrated NS;
