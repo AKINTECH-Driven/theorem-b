@@ -189,6 +189,29 @@ lemma sob_summable_of_le {j m : ℕ} (hjm : j ≤ m) {c : (Fin 3 → ℤ) → Ve
       pow_le_pow_right₀ h1 (by omega)
     exact mul_le_mul_of_nonneg_right hpow (sq_nonneg _)
 
+/-- **Sobolev masses are monotone in the level** on mean-zero fields: off the
+zero mode every lattice frequency has `‖freq k‖ ≥ 1`, so the higher weight
+dominates pointwise.  (Closes the W1 audit's one finding: the ladder
+`sob_summable_of_le` gives summability monotonicity, this gives the mass
+form.  A single top-level bound therefore caps every level below it — which
+is what lets the classical layer use ONE window constant.) -/
+lemma sob_le_sob {j m : ℕ} (hjm : j ≤ m) {c : (Fin 3 → ℤ) → Vel}
+    (hc0 : c 0 = 0)
+    (hm : Summable fun k => ‖freq k‖ ^ (2 * m) * ‖c k‖ ^ 2) :
+    sob j c ≤ sob m c := by
+  have hj : Summable fun k => ‖freq k‖ ^ (2 * j) * ‖c k‖ ^ 2 :=
+    sob_summable_of_le hjm hc0 hm
+  have hle : ∀ k, ‖freq k‖ ^ (2 * j) * ‖c k‖ ^ 2 ≤ ‖freq k‖ ^ (2 * m) * ‖c k‖ ^ 2 := by
+    intro k
+    rcases eq_or_ne k 0 with rfl | hk
+    · simp [hc0]
+    · exact mul_le_mul_of_nonneg_right
+        (pow_le_pow_right₀ (one_le_norm_freq hk) (by omega)) (sq_nonneg _)
+  have e1 : sob j c = ∑' k, ‖freq k‖ ^ (2 * j) * ‖c k‖ ^ 2 := rfl
+  have e2 : sob m c = ∑' k, ‖freq k‖ ^ (2 * m) * ‖c k‖ ^ 2 := rfl
+  rw [e1, e2]
+  exact hj.tsum_le_tsum hle hm
+
 /-! ## The weighted ℓ¹ export for the classical layer -/
 
 /-- Two orders of extra Sobolev regularity buy a weighted ℓ¹ bound:

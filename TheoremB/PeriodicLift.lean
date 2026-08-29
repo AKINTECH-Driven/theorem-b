@@ -107,8 +107,10 @@ theorem contDiff_uLift_term (j : Fin 3) (c : (Fin 3 → ℤ) → Vel) (k : Fin 3
 /-! ## The torus-side character sums: pointwise norms, continuity, and the
 `insertNth`-format fiber derivative (the capstone-critical brick) -/
 
-/-- The character monomials have unit modulus at every point. -/
-private lemma norm_mFourier_apply (n : Fin 3 → ℤ) (z : UnitAddTorus (Fin 3)) :
+/-- The character monomials have unit modulus at every point.  (Public: the
+capstone uses the characters as the bounded weight family of the time
+engine's `hw : ∀ k, ‖w k‖ ≤ 1`.) -/
+theorem norm_mFourier_apply (n : Fin 3 → ℤ) (z : UnitAddTorus (Fin 3)) :
     ‖mFourier n z‖ = 1 := by
   simp [mFourier, ContinuousMap.coe_mk, norm_prod, fourier_apply]
 

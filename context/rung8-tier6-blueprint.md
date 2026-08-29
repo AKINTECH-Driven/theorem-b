@@ -271,9 +271,38 @@ discharges BOTH engine lemmas' hypotheses with the ODE spelling
 `ns_full_global_flow` exports, verbatim; and the hypothesis set is
 jointly satisfiable, so nothing is vacuous.
 
-REMAINING: only the W5-cap `theorem_B_smooth` — assembling W5a/W5b/W5c
-against ns_full_global_flow_sobolev into the calibrated pointwise
-statement.
+**W5-cap LANDED — `theorem_B_smooth`** (TheoremBSmooth.lean): small data
+with spectrum summable at EVERY Sobolev level generates the eternal flow
+with all ns_full_global_flow clauses PLUS (a) every Sobolev level for
+THIS ONE flow — the audit register's meta-corollary, now COMPILED by
+identifying each level's witness with the base flow through
+theorem_B_unique (`flow_agree_Ici`); (b) mean-zero along the flow,
+derived from the k = 0 integral equation, whose source vanishes by
+`convFull_zero_of_divFree`; (c) weighted ℓ¹ at every order; (d) SPACE:
+the ℤ³-periodic lift is `ContDiff ℝ p` for every p, and is periodic;
+(e) TIME: at every torus point the velocity value is differentiable in
+`t` on t > 0 with derivative the synthesized NS right-hand side — the
+spectral form of the equation holding POINTWISE.
+
+Enabling lemma added on the way (closes the W1 audit's only finding):
+`sob_le_sob`, Sobolev-mass monotonicity in the level on mean-zero fields.
+It collapses the seven window constants the majorant needs into ONE
+level-8 bound. `norm_mFourier_apply` published (the characters are the
+time engine's bounded weight family).
+
+Capstone audit (compiled probes): NON-VACUOUS — the zero datum satisfies
+every hypothesis for every ν > 0, so the hypothesis set is consistent;
+the differentiated object IS the velocity field
+(`∑' k, c k j * mFourier k x = uCont j c hc x`, hence the time clause
+genuinely reads ∂_t u_j(t,x) = RHS_j(x)); the spatial clause is the real
+ContDiff at every p.
+
+HONEST SCOPE, recorded in the file header and not to be overstated: the
+time clause carries the right-hand side in SYNTHESIZED SPECTRAL FORM.
+Rewriting it in classical notation (Laplacian as second spatial
+derivatives, nonlinearity as a Leray-projected product) is the remaining
+step and is NOT claimed. No analyticity (contDiff_tsum caps at ℕ∞); no
+C^∞-in-time (needs a d/dt of convFull, which does not exist here).
 
 Fallback ladder v1/v2/v3 — each rung independently taggable and honest:
 v1 = t6-sobolev-green (W1-W4, LANDED); v2 = + continuous space-time

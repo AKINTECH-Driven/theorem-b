@@ -34,6 +34,7 @@ import TheoremB.TheoremBSobolev
 import TheoremB.ContinuousRep
 import TheoremB.PeriodicLift
 import TheoremB.TimeLayer
+import TheoremB.TheoremBSmooth
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -180,3 +181,6 @@ import TheoremB.TimeLayer
 #print axioms TheoremB.norm_mode_le_of_sob
 #print axioms TheoremB.norm_nsRHS_le
 #print axioms TheoremB.exists_summable_nsRHS_maj
+#print axioms TheoremB.sob_le_sob
+#print axioms TheoremB.norm_mFourier_apply
+#print axioms TheoremB.theorem_B_smooth
