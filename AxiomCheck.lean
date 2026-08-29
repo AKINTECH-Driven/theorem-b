@@ -172,3 +172,11 @@ import TheoremB.TimeLayer
 #print axioms TheoremB.contDiff_uLift
 #print axioms TheoremB.tsum_weighted_norm_le
 #print axioms TheoremB.tsum_weighted_norm_le_of_bound
+#print axioms TheoremB.summable_convMaj_l1
+#print axioms TheoremB.summable_norm_convFull
+#print axioms TheoremB.hasDerivAt_weighted_tsum_flow
+#print axioms TheoremB.continuousOn_weighted_tsum
+#print axioms TheoremB.weighted_convMaj_le
+#print axioms TheoremB.norm_mode_le_of_sob
+#print axioms TheoremB.norm_nsRHS_le
+#print axioms TheoremB.exists_summable_nsRHS_maj

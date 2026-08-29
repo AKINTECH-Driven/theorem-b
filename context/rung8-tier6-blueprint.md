@@ -249,16 +249,31 @@ the insertNth first-derivative brick in exactly mFourierCoeff_deriv's
 input format, both continuity hypotheses it needs, the descent identity,
 and ContDiff ℝ p for every fixed p via a FACTORIAL-FREE
 (2π‖freq k‖)^q‖c k‖ majorant — better than the recon's m!·D^m route);
-**W5c part 1** (TimeLayer.lean — quarticKernel and the quantitative
-weighted ℓ¹ bound with its window form, which is what converts the
-per-time sob bounds into t-uniform ℓ¹ majorants).
+**W5c complete** (TimeLayer.lean — quarticKernel and the quantitative
+weighted ℓ¹ bound with its window form; `summable_convMaj_l1`, discrete
+Young ℓ¹∗ℓ¹⊆ℓ¹ on ℤ³ via a shear equivalence plus
+HasSum.prod_fiberwise, with `summable_norm_convFull`;
+`hasDerivAt_weighted_tsum_flow` and `continuousOn_weighted_tsum`, the
+term-wise time-differentiation engine on open slabs;
+`weighted_convMaj_le`, the ‖k‖^(−p) convection envelope — W1's
+half-weight split again, and the reason a majorant exists at all, since
+bare Cauchy-Schwarz gives a k-CONSTANT bound which is not summable;
+`norm_mode_le_of_sob`, per-mode decay ‖c k‖ ≤ √B/‖k‖^m from a
+level-m Sobolev-mass bound — the bridge from tsum-level campaign bounds
+to per-mode estimates; `norm_nsRHS_le`; and `exists_summable_nsRHS_maj`,
+the summable t-uniform majorant (νB + 32B²)·(‖k‖⁴)⁻¹ from order-six
+weighted ℓ¹ window bounds. ORDER SIX is what the viscous term costs:
+‖k‖²‖c k‖ ≤ B‖k‖⁻⁴ needs control of ‖k‖⁶‖c k‖.)
 
-PENDING (the W5c builder was interrupted by a process exit before
-finishing; its file header lists the same): the discrete-Young ℓ¹
-convolution majorant on ℤ³ and its convFull corollary; term-wise time
-differentiation of weighted mode sums on open slabs
-(hasDerivAt_tsum_of_isPreconnected); continuity of the derivative sum;
-the canonical-flow package. Then W5-cap `theorem_B_smooth`.
+Composition verified by compiled probe (the campaign's recurring
+composition-gap failure mode, caught at T3/T4/T5): the majorant
+discharges BOTH engine lemmas' hypotheses with the ODE spelling
+`ns_full_global_flow` exports, verbatim; and the hypothesis set is
+jointly satisfiable, so nothing is vacuous.
+
+REMAINING: only the W5-cap `theorem_B_smooth` — assembling W5a/W5b/W5c
+against ns_full_global_flow_sobolev into the calibrated pointwise
+statement.
 
 Fallback ladder v1/v2/v3 — each rung independently taggable and honest:
 v1 = t6-sobolev-green (W1-W4, LANDED); v2 = + continuous space-time
