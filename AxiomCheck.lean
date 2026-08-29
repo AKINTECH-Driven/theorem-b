@@ -35,6 +35,7 @@ import TheoremB.ContinuousRep
 import TheoremB.PeriodicLift
 import TheoremB.TimeLayer
 import TheoremB.Calibration
+import TheoremB.Nonlinearity
 import TheoremB.TheoremBSmooth
 
 #print axioms TheoremB.trap_forward_invariance
@@ -191,5 +192,13 @@ import TheoremB.TheoremBSmooth
 #print axioms TheoremB.hasDerivAt_charSum_insertNth_second
 #print axioms TheoremB.laplacian_charSum
 #print axioms TheoremB.viscous_eq_laplacian
+#print axioms TheoremB.tsum_char_mul
+#print axioms TheoremB.pressureCoeff
+#print axioms TheoremB.lerayProj_convFull_apply
+#print axioms TheoremB.summable_pressureCoeff
+#print axioms TheoremB.summable_freq_pressureCoeff
+#print axioms TheoremB.exists_fiber
+#print axioms TheoremB.convFull_apply
+#print axioms TheoremB.convection_classical
 #print axioms TheoremB.theorem_B_smooth_classical
 #print axioms TheoremB.theorem_B_smooth

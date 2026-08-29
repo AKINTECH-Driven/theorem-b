@@ -30,13 +30,22 @@ identifying every level's witness with the base flow through
   (`toLp_uCont`).  The tsum spelling is used in the statement only to
   avoid carrying a per-time summability certificate inside it.
 
-HONEST SCOPE. The time clause states the equation with its right-hand side
-in synthesized spectral form; rewriting that right-hand side in classical
-notation (the Laplacian as second spatial derivatives, the nonlinearity as
-a Leray-projected product) is the remaining step, and is NOT claimed here.
-Nothing is asserted about analyticity (`contDiff_tsum` caps at `ℕ∞`) or
-about `C^∞` in time (that needs a time-derivative of `convFull`, which the
-campaign does not have).
+* `theorem_B_smooth_classical` additionally gives C¹ IN TIME (the time
+  derivative is continuous), the SECOND spatial derivatives, and the full
+  CLASSICAL reading of the right-hand side:
+  - viscous term  = `(ν/(2π)²)·Δu`            (`viscous_eq_laplacian`);
+  - Leray term    = convection − `∇p`          (`lerayProj_convFull_apply`),
+    with the pressure `p` an honest ℓ¹ (hence continuous) field;
+  - convection    = `−(1/2π)·(u·∇)u`           (`convection_classical`).
+  Together: `∂ₜu = ν_phys·Δu − (1/2π)(u·∇)u − ∇p` — Navier-Stokes in
+  classical form, pointwise, with every constant explicit.
+
+HONEST SCOPE. Nothing is asserted about analyticity (`contDiff_tsum` caps
+at `ℕ∞`) or about `C^∞` in time (that needs a time-derivative of
+`convFull`, which the campaign does not have).  The classical constants
+carry the campaign's own normalisation (`ν_phys = ν/(2π)²`, convection
+factor `1/2π`); they are NOT the same numbers Tier 5 displays for the weak
+form, which is computed for a time-rescaled family.
 
 STATUS: claimed only insofar as scripts/check_axioms.sh reports GREEN on
 the target machine.
@@ -46,6 +55,7 @@ import TheoremB.ContinuousRep
 import TheoremB.PeriodicLift
 import TheoremB.TimeLayer
 import TheoremB.Calibration
+import TheoremB.Nonlinearity
 
 namespace TheoremB
 
@@ -153,7 +163,22 @@ theorem theorem_B_smooth_classical :
           (∑' k, (((-(ν * ‖freq k‖ ^ 2) : ℝ) : ℂ) * c t k j) • mFourier k z)
             = ((ν / (2 * Real.pi) ^ 2 : ℝ) : ℂ) *
               (∑ i : Fin 3, ∑' k,
-                ((2 * Real.pi * Complex.I * (k i : ℂ)) ^ 2 * c t k j) • mFourier k z)) := by
+                ((2 * Real.pi * Complex.I * (k i : ℂ)) ^ 2 * c t k j) • mFourier k z)) ∧
+        -- the PRESSURE is ℓ¹ (continuous) AND has one weighted order, so
+        -- its gradient ∇p is a genuine object
+        (∀ t ∈ Ici (0:ℝ), (Summable fun k => ‖pressureCoeff (c t) k‖) ∧
+          Summable fun k => ‖freq k‖ * ‖pressureCoeff (c t) k‖) ∧
+        -- the Leray projection is the convection MINUS a pressure gradient
+        (∀ t ∈ Ici (0:ℝ), ∀ (k : Fin 3 → ℤ) (j : Fin 3),
+          (lerayProj k (convFull (c t) k)) j
+            = convFull (c t) k j
+              - (2 * Real.pi * Complex.I * ((k j : ℤ) : ℂ)) * pressureCoeff (c t) k) ∧
+        -- and the convection itself IS the classical (u·∇)u
+        (∀ t ∈ Ici (0:ℝ), ∀ (j : Fin 3) (x : UnitAddTorus (Fin 3)),
+          (∑ i : Fin 3, (∑' l, c t l i * mFourier l x) *
+              (∑' m, (2 * Real.pi * Complex.I * ((m i : ℤ) : ℂ)) * c t m j
+                * mFourier m x))
+            = ((-(2 * Real.pi) : ℝ) : ℂ) * ∑' k, convFull (c t) k j * mFourier k x) := by
   obtain ⟨κ, hκ, hflow⟩ := ns_full_global_flow_sobolev
   refine ⟨κ, hκ, ?_⟩
   intro ν hν c₀ hall hmean0 hreal hdiv hsmall
@@ -324,9 +349,28 @@ theorem theorem_B_smooth_classical :
           (∑ i : Fin 3, ∑' k,
             ((2 * Real.pi * Complex.I * (k i : ℂ)) ^ 2 * c t k j) • mFourier k z) :=
     fun t ht j z => viscous_eq_laplacian ν j (c t) (by simpa using hl1 t ht 2) z
+  -- the pressure and the classical nonlinearity
+  have hpress : ∀ t ∈ Ici (0:ℝ), (Summable fun k => ‖pressureCoeff (c t) k‖) ∧
+      Summable fun k => ‖freq k‖ * ‖pressureCoeff (c t) k‖ := fun t ht =>
+    ⟨summable_pressureCoeff (hsum t ht).1 (hsum t ht).2
+      (by simpa using hl1 t ht 0) (by simpa using hl1 t ht 1),
+     summable_freq_pressureCoeff (hsum t ht).1 (hsum t ht).2
+      (by simpa using hl1 t ht 0) (by simpa using hl1 t ht 1)⟩
+  have hleray : ∀ t ∈ Ici (0:ℝ), ∀ (k : Fin 3 → ℤ) (j : Fin 3),
+      (lerayProj k (convFull (c t) k)) j
+        = convFull (c t) k j
+          - (2 * Real.pi * Complex.I * ((k j : ℤ) : ℂ)) * pressureCoeff (c t) k :=
+    fun t _ k j => lerayProj_convFull_apply (c t) k j
+  have hnl : ∀ t ∈ Ici (0:ℝ), ∀ (j : Fin 3) (x : UnitAddTorus (Fin 3)),
+      (∑ i : Fin 3, (∑' l, c t l i * mFourier l x) *
+          (∑' m, (2 * Real.pi * Complex.I * ((m i : ℤ) : ℂ)) * c t m j
+            * mFourier m x))
+        = ((-(2 * Real.pi) : ℝ) : ℂ) * ∑' k, convFull (c t) k j * mFourier k x :=
+    fun t ht j x => convection_classical (c t) j (hsum t ht).1 (hsum t ht).2
+      (by simpa using hl1 t ht 0) (by simpa using hl1 t ht 1) x
   exact ⟨c, hc0, hstruct, hsum, hcont, hinteq, hode, htrap, hlevel, hmean, hl1,
     hspace, fun t _ j g x => uLift_periodic j (c t) g x, htime, htimecont,
-    hsecond, hcalib⟩
+    hsecond, hcalib, hpress, hleray, hnl⟩
 
 /-- **Theorem B, smooth form** (the tagged statement, unchanged): the
 classically-regular eternal flow, without the `C¹` / second-derivative /
@@ -369,8 +413,8 @@ theorem theorem_B_smooth :
   obtain ⟨κ, hκ, h⟩ := theorem_B_smooth_classical
   refine ⟨κ, hκ, ?_⟩
   intro ν hν c₀ hall hmean0 hreal hdiv hsmall
-  obtain ⟨c, h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12, h13, -, -, -⟩ :=
-    h hν hall hmean0 hreal hdiv hsmall
+  obtain ⟨c, h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12, h13,
+    -, -, -, -, -, -⟩ := h hν hall hmean0 hreal hdiv hsmall
   exact ⟨c, h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12, h13⟩
 
 end TheoremB

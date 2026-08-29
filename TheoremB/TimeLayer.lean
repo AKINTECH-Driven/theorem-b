@@ -113,10 +113,11 @@ theorem tsum_weighted_norm_le_of_bound {p : ℕ} {c : (Fin 3 → ℤ) → Vel} {
 
 /-! ## 2. The discrete Young ℓ¹ convolution majorant on ℤ³ -/
 
-/-- The shear `(k, l) ↦ (l, k - l)` on `ℤ³ × ℤ³`: it turns the convolution
+/-- The shear `(l, m) ↦ (l + m, l)` on `ℤ³ × ℤ³`: it turns a convolution
 index pair into an independent pair, which is what makes `ℓ¹ ∗ ℓ¹ ⊆ ℓ¹`
-a product-summability statement. -/
-private def shearEquiv :
+a product-summability statement.  (Public: the classical-nonlinearity wave
+reuses it for the Cauchy product of two character series.) -/
+def shearEquiv :
     ((Fin 3 → ℤ) × (Fin 3 → ℤ)) ≃ ((Fin 3 → ℤ) × (Fin 3 → ℤ)) where
   toFun p := (p.1 + p.2, p.1)
   invFun q := (q.2, q.1 - q.2)
