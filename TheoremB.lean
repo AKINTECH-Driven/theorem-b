@@ -38,3 +38,4 @@ import TheoremB.Calibration
 import TheoremB.Nonlinearity
 import TheoremB.TheoremBSmooth
 import TheoremB.EnergyDecay
+import TheoremB.Bandwidth
