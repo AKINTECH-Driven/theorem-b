@@ -182,11 +182,23 @@ machinery the campaign does not have.
   only for integrability of `en(d ·)` in step 3; if it resists, the
   fallback is measurability as a pointwise limit of the continuous `φ_R`
   plus the `4E` bound. Risk LOW-MED.
-- **W-R2b — `decay_of_window_integral_ineq`.** The one genuinely new
-  brick. Elementary; no derivatives, no measure theory beyond
-  `intervalIntegral.integral_mono_on` (GUESS). Risk LOW-MED, entirely in
-  the `n`-step induction and the `(1 + x/n)^n → exp x` limit
-  (`tendsto_one_plus_div_pow_exp`, GUESS).
+- **W-R2b — `decay_of_window_integral_ineq`. LANDED, gate-green
+  (29 Aug 2026).** `TheoremB/WindowDecay.lean`. Risk was LOW-MED and
+  proved LOW-MED: two iterations to green. Name corrections against the
+  guesses: the limit is `Real.tendsto_one_add_div_pow_exp`
+  (Analysis/SpecialFunctions/Complex/LogBounds.lean:441, ℕ-pow form in
+  `namespace Real`) — `tendsto_one_plus_div_pow_exp` does NOT exist at
+  the pin; `intervalIntegral.integral_mono_on` and
+  `intervalIntegral.integral_nonneg` are both real, with the signatures
+  guessed. `div_le_div_of_nonneg_right` wants `0 ≤` on the denominator,
+  not `0 <`.
+  Audit note: `hT : 0 ≤ T` is NOT consumed — when `T < 0` the window is
+  empty and the conclusion is vacuous, so the hypothesis only weakens
+  the lemma. Retained for interface stability and renamed `_hT`
+  (identical type). Precedent: the Tier-5 audit's finding on
+  `mode_equation_of_weak`.
+  The file imports Mathlib ONLY, no campaign module — so it is a clean
+  standalone PR candidate, see §8.
 - **W-R3 — the section rerun.** FullUnique.lean:425-700 replayed with
   the §4 substitutions. Line-isomorphic to an existing proof, which is
   the tier's whole bet. Risk MED, assembly-scale only.
@@ -321,8 +333,13 @@ v3 = `t7-modes-green` (full `theorem_B_modes`).
 `decay_of_window_integral_ineq` belongs in Unit 3 of
 `upstreaming-dossier.md` alongside `gronwall_const_source`: Mathlib's
 Gronwall family is differential and left-endpoint-bound, and a
-derivative-free window-integral form is strictly more applicable. Add it
-to the dossier when W-R2b lands, not before.
+derivative-free window-integral form is strictly more applicable.
+W-R2b has landed, so this is now actionable. It is the campaign's most
+PR-ready artifact to date: `TheoremB/WindowDecay.lean` imports Mathlib
+only and depends on no campaign definition, so it can be lifted
+verbatim. Generalization before PR: none needed for ℝ; the natural
+extension is a `[LinearOrderedField]`-valued or Bochner-valued form.
+Acting on it is outward-facing and therefore the user's call.
 
 ## 9. Honesty ledger for this rung
 

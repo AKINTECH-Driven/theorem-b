@@ -39,6 +39,7 @@ import TheoremB.Nonlinearity
 import TheoremB.TheoremBSmooth
 import TheoremB.EnergyDecay
 import TheoremB.Bandwidth
+import TheoremB.WindowDecay
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -207,3 +208,4 @@ import TheoremB.Bandwidth
 #print axioms TheoremB.en_le_ens
 #print axioms TheoremB.galerkin_energy_decay
 #print axioms TheoremB.theorem_B_bandwidth
+#print axioms TheoremB.decay_of_window_integral_ineq
