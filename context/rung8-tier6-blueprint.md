@@ -297,12 +297,40 @@ the differentiated object IS the velocity field
 genuinely reads ∂_t u_j(t,x) = RHS_j(x)); the spatial clause is the real
 ContDiff at every p.
 
-HONEST SCOPE, recorded in the file header and not to be overstated: the
-time clause carries the right-hand side in SYNTHESIZED SPECTRAL FORM.
-Rewriting it in classical notation (Laplacian as second spatial
-derivatives, nonlinearity as a Leray-projected product) is the remaining
-step and is NOT claimed. No analyticity (contDiff_tsum caps at ℕ∞); no
-C^∞-in-time (needs a d/dt of convFull, which does not exist here).
+**W6 LANDED (commit dfb49a7) — the two gaps against the tier goal closed.**
+Checking the delivery against the blueprint's own goal line found two
+shortfalls, both now fixed:
+1. **C¹ in time** was NOT delivered — the capstone had `HasDerivAt` only
+   (differentiability), while C¹ needs the derivative CONTINUOUS. The
+   lemma for it (`continuousOn_weighted_tsum`) had been built in W5c and
+   left UNCONSUMED. Now wired in: the window majorant is factored out and
+   shared between the derivative and its continuity, and the RHS mode
+   continuity comes from theorem_B_unique's own incantation
+   (continuousOn_convFull + lerayProj_continuous).
+2. **Calibration** — new file `Calibration.lean`. The frequency twist
+   `twistFreq i c k = (2πi·kᵢ)·c k` is again Vel-valued, so PeriodicLift's
+   first-derivative brick applies a SECOND time: the second spatial
+   derivative costs no new analysis. `laplacian_symbol`:
+   `∑ᵢ (2πi·kᵢ)² = −(2π)²‖freq k‖²`. Hence `viscous_eq_laplacian` — the
+   viscous term IS the Laplacian scaled by ν/(2π)², so the lifted field's
+   physical viscosity is **ν_phys = ν/(2π)²**.
+   ⚠️ This factor is NOT the one Tier 5 displays for the weak form (which
+   is computed for a TIME-RESCALED family). Two calibrations of two
+   different objects — never quote them interchangeably.
+
+Structure: `theorem_B_smooth_classical` carries the full clause list plus
+C¹, the second derivatives, and the calibration; the TAGGED
+`theorem_B_smooth` is derived from it by projection, statement verified
+BYTE-IDENTICAL to t6-smooth-green (`git diff` of the statement block).
+`sob_le_sob` added, closing the W1 audit's last finding.
+
+STILL NOT CLAIMED, and this is now the only remaining gap: the
+NONLINEARITY in classical form. The Leray projection is nonlocal;
+writing it classically requires constructing the pressure `p` (spectrally
+`p̂_k` from the divergence part of the convection) and proving the
+synthesized convection equals `−(u·∇)u` pointwise. Also still excluded:
+analyticity (contDiff_tsum caps at ℕ∞) and C^∞-in-time (needs d/dt of
+convFull).
 
 Fallback ladder v1/v2/v3 — each rung independently taggable and honest:
 v1 = t6-sobolev-green (W1-W4, LANDED); v2 = + continuous space-time
