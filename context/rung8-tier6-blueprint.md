@@ -80,6 +80,83 @@ regularity class.
   representative, honestly labeled, with the pointwise clause v2.
 - **W-cap — theorem_B_smooth**.
 
+## Frozen interfaces (statements freeze here; recon-derived verbatim)
+
+W1 file `TheoremB/SobolevNorms.lean`:
+
+```
+noncomputable def sob (m : ℕ) (c : (Fin 3 → ℤ) → Vel) : ℝ :=
+  ∑' k : Fin 3 → ℤ, ‖freq k‖ ^ (2 * m) * ‖c k‖ ^ 2
+```
+
+plus: `sob_zero_eq_en`, `sob_one_eq_ens`, `sob_nonneg`; public
+weight-generic clones `weighted_tsum_eq_sum` / `summable_weighted_of_support`
+/ `hasDerivAt_weighted_finset_sum_sq` (GalerkinTrap's privates, arbitrary
+weight `w : (Fin 3 → ℤ) → ℝ`); `sob_truncate_le`; `weighted_limit_le`
+(generic-weight `en_limit_le`); the lift identities
+`(‖freq k‖^m·x)² = ‖freq k‖^(2m)·x²` and
+`‖freq k‖²·‖freq k‖^(2m) = ‖freq k‖^(2(m+1))`; `freq_triangle` (from
+freq_sub); `two_pow_split : 0 ≤ a → 0 ≤ b → 1 ≤ m →
+(a+b)^m ≤ 2^(m−1)·(a^m + b^m)` (compiled proof in the recon probe —
+NNReal route or `add_pow_le`); the sob-ladder
+(sob-m summable + support off 0 ⟹ summable at every j ≤ m via
+one_le_norm_freq).
+
+W2 file `TheoremB/SobolevPairing.lean` — the tier's center of mass:
+
+```
+theorem sobolev_pairing_absorbed {ν E Z : ℝ} (hν : 0 < ν) (hE : 0 ≤ E)
+    (hZ : 0 ≤ Z) (m : ℕ) (hm : 1 ≤ m) :
+    ∃ K, 0 < K ∧ ∀ {S : Finset (Fin 3 → ℤ)}, (0 : Fin 3 → ℤ) ∉ S →
+      ∀ {c : (Fin 3 → ℤ) → Vel}, (∀ k ∉ S, c k = 0) →
+        en c ≤ E → ens c ≤ Z →
+        2 * |∑ k ∈ S, ‖freq k‖ ^ (2*m) * inner ℝ (convGal S c k) (c k)| ≤
+          ν * sob (m+1) c + K * sob m c
+```
+
+NO RealField, NO DivFree (raw convGal; the consumer drops lerayProj via
+inner_lerayProj_of_divFree before invoking this). All summability
+finite-support-trivial. Proof = PairingBound T1+T2b line-isomorphic port
+under the half-weight split; clone privates b2_term_norm_le,
+b2_tsum_mul_le, b2_young8, b2_young16 (young lemmas port UNCHANGED).
+
+W3 file `TheoremB/SobolevTrap.lean`:
+
+```
+theorem galerkin_sobolev_bound {ν : ℝ} (hν : 0 < ν) (E Z : ℝ)
+    (hE : 0 ≤ E) (hZ : 0 ≤ Z) (m : ℕ) (hm : 1 ≤ m) :
+    ∃ K, 0 < K ∧ ∀ {T : ℝ} {S : Finset (Fin 3 → ℤ)},
+      (0 : Fin 3 → ℤ) ∉ S → ∀ {c : ℝ → (Fin 3 → ℤ) → Vel},
+      (∀ t, ∀ k ∉ S, c t k = 0) → DivFree (c 0) →
+      (∀ t ∈ Set.Icc 0 T, ∀ k, HasDerivAt (fun s => c s k)
+        (-(ν * ‖freq k‖^2) • c t k + lerayProj k (convGal S (c t) k)) t) →
+      (∀ t ∈ Set.Icc 0 T, en (c t) ≤ E ∧ ens (c t) ≤ Z) →
+      ∀ t ∈ Set.Icc 0 T, sob m (c t) ≤ sob m (c 0) * (1 + Real.exp (K * T))
+```
+
+Derivative of t ↦ sob m (c t) goes through the finite collapse FIRST
+(hen_deriv pattern); DivFree along the flow via divFree_propagates_on;
+drop −ν·sob(m+1) ≤ 0; gronwall_const_source shift trick. Plus the ∀m
+package (m = 0 straight from the en trap).
+
+W4 file `TheoremB/TheoremBSobolev.lean`: route (α) — a fresh replay of
+theorem_B_cont (FullUnique lines ~100–312; everything it uses is public)
+with two insertions: W3 applied per box radius R (sob m (truncate) ≤
+sob m c₀ makes the family's sob bounds UNIFORM IN R), and
+weighted_limit_le after extraction. `theorem_B_sobolev` = theorem_B_cont's
+statement + `Summable (fun l => ‖freq l‖^(2m)·‖c₀ l‖²)` hypothesis +
+per-t sob bound and summability clauses. THEN
+`ns_full_global_flow_sobolev`: theorem_B_unique identifies each horizon's
+witness with the eternal flow (the 14-hypothesis pattern is written in
+ns_full_global_flow's hA block; budgets exactly (en c₀, ens c₀)) ⟹ the
+eternal flow's sob bound for all t ≥ 0. Tag v1 here: t6-sobolev-green.
+
+W5 + cap (after W4's statement freezes): the ℓ¹ weighted majorant
+∑'‖freq k‖^p‖c_k(t)‖ < ∞ by CS against summable_freq_rpow_neg, the
+periodic lift, spatial C^p, time C¹, pointwise calibrated NS;
+`theorem_B_smooth`. Fallback ladder v1/v2/v3 — each rung independently
+taggable and honest.
+
 ## Traps carried forward
 
 `add_pow_le` IS at the pin (Algebra/Order/Ring/Basic:119) — one recon
