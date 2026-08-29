@@ -27,6 +27,7 @@ import TheoremB.TheoremBTorus
 import TheoremB.PhysicalPairing
 import TheoremB.TestSeparation
 import TheoremB.LerayHopfVocab
+import TheoremB.SobolevNorms
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -134,3 +135,13 @@ import TheoremB.LerayHopfVocab
 #print axioms TheoremB.band_tests_separate
 #print axioms TheoremB.mFourier_span_dense
 #print axioms LHRestate.mem_L2Sigma_iff
+#print axioms TheoremB.sob_zero_eq_en
+#print axioms TheoremB.sob_one_eq_ens
+#print axioms TheoremB.sob_truncate_le
+#print axioms TheoremB.weighted_limit_le
+#print axioms TheoremB.hasDerivAt_weighted_finset_sum_sq
+#print axioms TheoremB.freq_triangle
+#print axioms TheoremB.two_pow_split
+#print axioms TheoremB.norm_freq_pow_split
+#print axioms TheoremB.sob_summable_of_le
+#print axioms TheoremB.summable_weighted_norm
