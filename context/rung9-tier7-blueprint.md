@@ -211,16 +211,35 @@ machinery the campaign does not have.
   `mode_equation_of_weak`.
   The file imports Mathlib ONLY, no campaign module — so it is a clean
   standalone PR candidate, see §8.
-- **W-R3 — the section rerun.** FullUnique.lean:425-700 replayed with
-  the §4 substitutions. Line-isomorphic to an existing proof, which is
-  the tier's whole bet. Risk MED, assembly-scale only.
-- **W-R4 — `theorem_B_modes` + audit probes.** Capstone assembly, plus
-  the two compiled probes the register demands: hypothesis set jointly
-  satisfiable, and a non-trivial instance at some `δ > 0` (Correction 2).
-  Risk MED.
-- **W-R-cap** — `N₀` packaged as a definition with its defining
-  inequality, and the arithmetic mode count recorded in the docstring
-  (see §6).
+- **W-R3 — the section rerun. LANDED, gate-green (29 Aug 2026).**
+  `TheoremB/ModesWindow.lean`, `modes_window_ineq`. 452 lines, four
+  compile iterations; the bet on line-isomorphism to FullUnique paid.
+  Traps hit, both mechanical: `intervalIntegral.integral_neg` will not
+  fire on `-(c * φ s)`, so the rate is carried as `(-(c)) * φ s` and
+  every piece stays a `const_mul` (then `rw [neg_mul]` before the final
+  `linarith`, so both sides share the atom `c * ∫φ`); and `linarith`
+  cannot scale a hypothesis by `ν`, so `ν·∫σ ≤ ν·∫_0^T σ` must be
+  supplied pre-multiplied.
+- **W-R4 — `theorem_B_modes`. LANDED, gate-green (29 Aug 2026).**
+  `TheoremB/DeterminingModes.lean`; probes in `TheoremB/ModesProbe.lean`.
+  The composition is two waves and one line: W-R3's window inequality is
+  EXACTLY the shape W-R2b consumes, by construction.
+  Audit probe 1, COMPILED (`modes_hypotheses_consistent`): the zero flow
+  discharges every hypothesis for every `ν > 0` and horizon, so the
+  hypothesis set is consistent.
+  Audit probe 2, RESOLVED and recorded in the probe file: the low-mode
+  hypothesis is implied by `en (d s) ≤ δ`, and every defect in the class
+  obeys `en (d s) ≤ 4E`; so at `δ := 4E` it holds for EVERY pair of
+  flows in the class, with nothing assumed relating them. The theorem is
+  therefore inhabited by genuinely distinct flows, not only by
+  `c₁ = c₂`. That instance buys little (its floor exceeds the trivial
+  bound `4E`) — which IS Correction 2's content: the force lives at
+  small `δ`, and the statement degrades gracefully instead of going
+  vacuous as `δ` grows.
+- **W-R-cap — DROPPED, deliberately.** `N₀` as a packaged definition was
+  dropped: `theorem_B_modes` already quantifies over every `N` past
+  `2ν + K < ν·N²`, so a named `N₀` would add a definition without adding
+  content. The arithmetic mode count stays a docstring remark, trap 4.
 
 ## 6. Frozen interfaces (statements freeze here)
 
@@ -363,8 +382,11 @@ Acting on it is outward-facing and therefore the user's call.
 | Cited, not ours | Foias-Prodi determining modes (2D unconditional, 3D conditional); Azouani-Olson-Titi nudging. Our contribution is explicitness, the unconditional 3D small-data regime, and machine-checking. Not novel in principle |
 | Refused | Nothing this rung required refusing |
 
-Smallest next move: W-R1 (`theorem_B_bandwidth`), which is a composition
-of landed theorems and depends on neither W-R0b nor W-R2b. Then W-R0b by
-route (β), which buys the W-R2b engine for R2 as a side effect.
+SUMMIT REACHED 29 Aug 2026, tag `t7-modes-green`. W-R0a, W-R1, W-R2a,
+W-R2b, W-R3, W-R4 all landed and gate-green; 176 audited theorems. The
+one wave NOT done is W-R0b, the transfer of ambient decay from the
+Galerkin flows to the eternal flow — a scoping result for Correction 1,
+not a dependency of the capstone; route (β) stays the way in.
 
-*End of Rung 9 blueprint.*
+Smallest next move: W-R0b by route (β), or upstream `WindowDecay.lean`
+per §8.

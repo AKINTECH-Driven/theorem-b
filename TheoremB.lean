@@ -43,3 +43,4 @@ import TheoremB.WindowDecay
 import TheoremB.EnergyIntegrable
 import TheoremB.ModesWindow
 import TheoremB.DeterminingModes
+import TheoremB.ModesProbe

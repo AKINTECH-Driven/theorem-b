@@ -43,6 +43,7 @@ import TheoremB.WindowDecay
 import TheoremB.EnergyIntegrable
 import TheoremB.ModesWindow
 import TheoremB.DeterminingModes
+import TheoremB.ModesProbe
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -219,3 +220,4 @@ import TheoremB.DeterminingModes
 #print axioms TheoremB.box_subset
 #print axioms TheoremB.modes_window_ineq
 #print axioms TheoremB.theorem_B_modes
+#print axioms TheoremB.modes_hypotheses_consistent
