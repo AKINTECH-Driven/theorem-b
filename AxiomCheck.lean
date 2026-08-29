@@ -37,6 +37,7 @@ import TheoremB.TimeLayer
 import TheoremB.Calibration
 import TheoremB.Nonlinearity
 import TheoremB.TheoremBSmooth
+import TheoremB.EnergyDecay
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -202,3 +203,5 @@ import TheoremB.TheoremBSmooth
 #print axioms TheoremB.convection_classical
 #print axioms TheoremB.theorem_B_smooth_classical
 #print axioms TheoremB.theorem_B_smooth
+#print axioms TheoremB.en_le_ens
+#print axioms TheoremB.galerkin_energy_decay

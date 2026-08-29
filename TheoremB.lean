@@ -37,3 +37,4 @@ import TheoremB.TimeLayer
 import TheoremB.Calibration
 import TheoremB.Nonlinearity
 import TheoremB.TheoremBSmooth
+import TheoremB.EnergyDecay

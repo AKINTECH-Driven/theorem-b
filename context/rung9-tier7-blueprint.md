@@ -141,10 +141,36 @@ machinery the campaign does not have.
 
 ## 5. Waves
 
-- **W-R0 — `theorem_B_decay`.** `en (c t) ≤ en c₀ * exp(−2νt)` along
-  `ns_full_global_flow`. Galerkin energy identity + `one_le_norm_freq` +
-  Fatou (`en_limit_le`, LimitHelpers.lean:100). Risk LOW. Gate the
-  tier's honesty on this landing first (Correction 1).
+- **W-R0a — the Galerkin half. LANDED, gate-green (29 Aug 2026).**
+  `TheoremB/EnergyDecay.lean`: `en_le_ens` (spectral Poincare, three
+  rewrites off `sob_le_sob` at levels 0 and 1 — the lemma Tier 6 added
+  for its own majorant already IS this inequality) and
+  `galerkin_energy_decay`, `en (c t) ≤ en (c 0)·exp(−2νt)` on the
+  window. Hypotheses are exactly `galerkin_conditional_trap`'s
+  energy-side ones, so every existing consumer discharges them
+  unchanged; the conclusion strengthens its `en (c t) ≤ en (c 0)`
+  clause to a rate. Risk was LOW and proved LOW.
+- **W-R0b — the transfer to the eternal flow. NOT LANDED, risk MED
+  (recon correction: this blueprint's first draft graded all of W-R0
+  LOW, which was wrong — the Galerkin half is LOW, the transfer is
+  assembly-scale).** `en_limit_le` needs a uniform finite-subsum bound
+  at the extraction, which `theorem_B`'s statement does not export, so
+  the decay clause cannot be a corollary of the exported clauses. Two
+  routes:
+  (α) replay the Tier-3 assembly with the W-R0a bound inserted, then
+  identify with `ns_full_global_flow`'s flow via `theorem_B_unique` —
+  the `ns_full_global_flow_sobolev` template, Tier 6 W4, graded MED
+  there for the same reason;
+  (β) prove `convFull_energy_pairing` (`∑' k, ⟪c k, P_k convFull c k⟫
+  = 0` for real div-free summable `c`, the full-level twin of
+  `convGal_energy_pairing`), then run §4's own limit-then-iterate
+  technique with the pairing vanishing instead of absorbed.
+  **(β) is preferred**: it is smaller, it SHARES the W-R2b engine
+  rather than duplicating the extraction, and `convFull_energy_pairing`
+  is a structural fact of independent value that the campaign does not
+  yet own. Its cost is a tsum rearrangement (shear reindex + reality,
+  as in NSGalerkin.lean:288) against the existing
+  `summable_norm_convFull` / `mixed_summable_convMaj` certificates.
 - **W-R1 — `theorem_B_bandwidth`.** `tail_en_lt` at `Z := ens c₀`
   composed with `ns_full_global_flow`'s summability and trap clauses.
   Risk LOW. Tag `t7-bandwidth-green` here; this rung is independently
@@ -308,7 +334,8 @@ to the dossier when W-R2b lands, not before.
 | Cited, not ours | Foias-Prodi determining modes (2D unconditional, 3D conditional); Azouani-Olson-Titi nudging. Our contribution is explicitness, the unconditional 3D small-data regime, and machine-checking. Not novel in principle |
 | Refused | Nothing this rung required refusing |
 
-Smallest next move: W-R0, then W-R1 to tag `t7-bandwidth-green`. Both are
-compositions of landed theorems and neither depends on W-R2b.
+Smallest next move: W-R1 (`theorem_B_bandwidth`), which is a composition
+of landed theorems and depends on neither W-R0b nor W-R2b. Then W-R0b by
+route (β), which buys the W-R2b engine for R2 as a side effect.
 
 *End of Rung 9 blueprint.*
