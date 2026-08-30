@@ -105,11 +105,87 @@ CLAIMED — 101 audited theorems total:
   pointwise product of synthesized fields is the coefficient
   convolution — closed entirely inside L² by a twist trick.
 
+UPDATE (Tier 6, 29 Aug 2026): the regularity half — 164 audited theorems.
+- **`theorem_B_sobolev`** / **`ns_full_global_flow_sobolev`** — every
+  spectral Sobolev norm propagates along the flow: for each `m ≥ 1`, a
+  datum with `sob m` finite keeps it finite, with
+  `sob m (c t) ≤ sob m c₀ · (1 + exp(K_m·t))`, `K_m` depending only on
+  `(ν, m, E₀, Z₀)`. No induction on `m` — the global trap's `E₀, Z₀`
+  replace all lower-order controls, so every level closes independently.
+- **`theorem_B_smooth`** / **`theorem_B_smooth_classical`** — the smooth
+  layer. For data whose spectrum is summable at EVERY Sobolev level, the
+  eternal flow's `ℤ³`-periodic lift is `C^p` in space for every `p`, is
+  `C¹` in time on `t > 0`, and satisfies Navier-Stokes in CLASSICAL
+  form, POINTWISE:
+
+      ∂ₜu = ν_phys·Δu − (1/2π)(u·∇)u − ∇p,    ν_phys = ν/(2π)²
+
+  with every constant explicit. The viscous term is identified with the
+  actual Laplacian through the second spatial derivatives and the symbol
+  `∑ᵢ(2πi·kᵢ)² = −(2π)²‖k‖²`; the nonlinearity with the actual `(u·∇)u`
+  by a Cauchy product of absolutely convergent character series; and the
+  Leray projection is split into convection minus a pressure gradient,
+  the pressure an honest `ℓ¹` field carrying one weighted order — so
+  `∇p` is a genuine object, not a formal symbol. The all-levels clause
+  is compiled for THIS ONE flow, each level's witness identified with
+  the base flow through `theorem_B_unique`.
+
+Tier-6 scope, in the wording its own audit register requires:
+- Constants are **of explicit form** — closed formulas in `(ν, m)` and
+  the energy/enstrophy budgets, up to a single convergent lattice-kernel
+  sum `Σ‖k‖^(−7/2)`, exported as compiled existence statements. They are
+  not printed numbers, and `K_m` grows like `2^(16m)`.
+- **No analyticity** (`contDiff_tsum` caps at `ℕ∞`) and **no `C^∞` in
+  time** (that needs a time derivative of the convection, which does not
+  exist here). Both are excluded, not merely unproved.
+- The calibration `ν_phys = ν/(2π)²` is for the LIFTED field. It is NOT
+  the factor Tier 5 displays for the weak form, which is computed for a
+  time-rescaled family. Two calibrations of two different objects; never
+  quote them interchangeably.
+
+UPDATE (Tier 7, 29-30 Aug 2026): determining modes — 180 audited
+theorems, tag `t7-complete`.
+- **`theorem_B_bandwidth`** — along the eternal flow, the energy above
+  frequency `N` never exceeds `Z₀/N²`, at every time and for every `N`.
+  The flow stays within `Z₀/N²` in energy of its `N`-mode truncation,
+  forever.
+- **`theorem_B_modes`** — determining modes with an explicit count. Two
+  flows in the trap class, **with different initial data**, whose defect
+  carries at most `δ` in the modes below `N`, satisfy
+
+      en(u−v)(t) ≤ en(u−v)(0)·exp(−(νN² − K)·t) + νN²/(νN² − K)·δ
+
+  for every `N` past `2ν + K < νN²`, with `K` the absorbed-pairing
+  constant at the class budgets. As `N` grows the floor tends to `δ`:
+  the flow is recovered to the accuracy with which its low modes are
+  known. `δ = 0` gives exact synchronization.
+- **`ns_full_global_flow_decay`** — the eternal flow's energy decays at
+  rate `2ν`.
+
+Why the threshold reads `2ν + K < νN²` and not `K < νN²`: in this regime
+every solution already decays at `2ν` unaided, so a determining-modes
+statement that merely beat `0` would be describing the ambient decay and
+calling it synchronization. The threshold is built into the frozen
+statement, so no outward description can overstate the result without
+changing it.
+
+Tier-7 scope, and it is the important part: this is the Foias-Prodi
+determining-modes theorem — classical, unconditional in 2D, conditional
+in 3D. What is ours is that the small-data trap dissolves the 3D
+conditionality, that the count is explicit, and that the whole thing is
+machine-checked. **It is not novel in principle, and no priority is
+claimed for it.** `K` is again a constant of explicit form rather than a
+number, and since it carries `ν^(−15)` the threshold `N` is
+astronomically large: this is a finiteness statement, not a small count.
+
 What is STILL not claimed, precisely:
-- The weak form is quantified over band-limited (trigonometric
+- The Tier-5 weak form is quantified over band-limited (trigonometric
   polynomial) divergence-free test fields, not arbitrary smooth tests
   (their density in L² is standard and cited, not formalized into the
-  statement); no classical/pointwise solution concept is claimed.
+  statement). Tier 6 does NOT lift this caveat: its classical pointwise
+  statement is about a different object — the `ℤ³`-periodic lift — and
+  holds only for data whose spectrum is summable at every Sobolev level,
+  not for general trap-class data.
 - Identification with the leray-hopf weak solution classes (same
   Mathlib pin, interop mechanical up to conventions) remains future
   work; notably their scope excludes uniqueness entirely, so the
@@ -118,7 +194,7 @@ What is STILL not claimed, precisely:
   times; two-sided derivatives only at interior times.
 
 Verification discipline: a deterministic gate accepts the build only if
-`#print axioms` for all 68 capstones reports at most
+`#print axioms` for all 180 audited theorems reports at most
 `propext, Classical.choice, Quot.sound` and no `sorryAx`; statements frozen
 at declaration; every commit preceded by an independent adversarial audit
 (three parallel auditors at each summit). The audits drew blood twice at
@@ -130,10 +206,13 @@ junk-tsum-proof.
 
 Repository tags: `m1-green` → `m2-complete` → `m3-conditional-green` →
 `m4-wave1..4-green` → `m5-wave1/2-green`, `m5-complete` →
-`t3-theorem-b-green` → `t4-wellposedness-green` → `t5-torus-green`. As of our 26-29 Aug 2026
-reconnaissance we found no prior machine-checked small-data existence OR
-uniqueness result for 3D Navier-Stokes in any proof assistant;
-corrections welcome.
+`t3-theorem-b-green` → `t4-wellposedness-green` → `t5-torus-green` →
+`t5-polish-green` → `t6-sobolev-green` → `t6-smooth-green` →
+`t6-classical-green` → `t7-bandwidth-green` → `t7-modes-green` →
+`t7-complete`. As of our 26-29 Aug 2026 reconnaissance we found no prior
+machine-checked small-data existence OR uniqueness result for 3D
+Navier-Stokes in any proof assistant; corrections welcome. No priority
+claim is made for the Tier-6 or Tier-7 layers.
 
 ## Notes for the long form (not yet written)
 
