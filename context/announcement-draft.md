@@ -1,4 +1,4 @@
-# DRAFT: A machine-checked small-data Theorem B for 3D Navier-Stokes, spectral form
+# DRAFT: A machine-checked small-data theory for 3D Navier-Stokes, from spectral to classical form
 
 Status: DRAFT for Konstantinos's review. Not published; publishing is his
 call alone. Tone targets a Zulip post (short form) with the bones of a short
@@ -8,28 +8,64 @@ nothing is claimed beyond it. Supersedes the M3-scoped draft of 27 Aug.
 ## Short form (Zulip)
 
 We have kernel-checked, in Lean 4 over Mathlib (pin `15a89b24`, toolchain
-`v4.31.0-rc2`), an *unconditional* small-data existence-and-trapping theorem
-for the 3D incompressible Navier-Stokes equations in spectral form on the
-frequency lattice `ℤ³` of the 3-torus — 68 audited theorems, every one on
-exactly `{propext, Classical.choice, Quot.sound}`.
+`v4.31.0-rc2`), a small-data theory for the 3D incompressible
+Navier-Stokes equations on the 3-torus that runs from an *unconditional*
+existence-and-trapping theorem through uniqueness to a **classical,
+pointwise** solution — 180 audited theorems, every one on exactly
+`{propext, Classical.choice, Quot.sound}`, none on `sorryAx`.
 
-The capstone (`theorem_B`): there is a universal constant `κ > 0` such that
-for every viscosity `ν > 0` and every mean-zero, real, divergence-free
-initial coefficient field `c₀ : ℤ³ → ℂ³` with summable energy
-`E₀ = Σ‖c₀ₖ‖²` and enstrophy `Z₀ = Σ‖k‖²‖c₀ₖ‖²` satisfying `κ·E₀·Z₀ < ν⁴`,
-on every finite horizon `[0, T]` there exists a coefficient flow of the FULL
-Navier-Stokes system
+The object is the coefficient system on the frequency lattice `ℤ³`:
 
-    cₖ' = −ν‖k‖² cₖ + P_k( conv(c)ₖ ),    conv(c)ₖ = −Σ_l (i c_l·(k−l)) c_{k−l},
+    cₖ' = −ν‖k‖² cₖ + P_k( conv(c)ₖ ),   conv(c)ₖ = −Σ_l (i c_l·(k−l)) c_{k−l},
 
-(`P_k` the mode-wise Leray projection, the convolution a genuine infinite
-sum over `ℤ³`) which starts at the datum, is real and divergence-free
-throughout, has genuinely summable energy and enstrophy series at every time
-(exported in the statement, so no `tsum` in it can be the junk value of a
-divergent series), satisfies the integral equation on the closed window and
-the differential equation at every interior time, and is TRAPPED: energy and
-enstrophy never exceed their initial values and the strict smallness
-inequality survives.
+with `P_k` the mode-wise Leray projection and the convolution a genuine
+infinite sum over `ℤ³`. Write `E₀ = Σ‖c₀ₖ‖²`, `Z₀ = Σ‖k‖²‖c₀ₖ‖²`. The
+standing hypothesis throughout is smallness in the form `κ·E₀·Z₀ < ν⁴`,
+for a universal `κ > 0`, on mean-zero, real, divergence-free data.
+
+What is proved, one line per layer:
+
+- **Existence and trapping** (`theorem_B`) — a flow of the FULL system on
+  every horizon: real and divergence-free throughout, with genuinely
+  summable energy and enstrophy at every time (exported in the statement,
+  so no `tsum` in it can be the junk value of a divergent series),
+  satisfying the integral equation on the closed window and the ODE at
+  every interior time, and TRAPPED — energy and enstrophy never exceed
+  their initial values and the strict smallness survives.
+- **Uniqueness, and one eternal flow** (`theorem_B_unique`,
+  `ns_full_global_flow`) — uniqueness is unconditional in the
+  enstrophy-bounded class: no smallness, no dissipation hypothesis, no
+  reality assumed. The per-horizon witnesses splice into a single
+  solution on `[0, ∞)`.
+- **A velocity field on the torus** (`theorem_B_torus`,
+  `theorem_B_torus_unique`) — the coefficient flow synthesized through
+  Mathlib's `mFourierBasis` into an `L²` field satisfying calibrated
+  Navier-Stokes in band-limited weak form, unique in its class.
+- **Regularity, up to the classical form** (`theorem_B_sobolev`,
+  `theorem_B_smooth_classical`) — every spectral Sobolev level
+  propagates; and for data summable at EVERY level, the `ℤ³`-periodic
+  lift is `C^p` in space for every `p`, `C¹` in time on `t > 0`, and
+  satisfies
+
+      ∂ₜu = ν_phys·Δu − (1/2π)(u·∇)u − ∇p,    ν_phys = ν/(2π)²
+
+  POINTWISE — the viscous term identified with the actual Laplacian, the
+  nonlinearity with the actual `(u·∇)u`, and the pressure an honest `ℓ¹`
+  field carrying one weighted order, so `∇p` is a genuine object.
+- **Finite bandwidth and determining modes** (`theorem_B_bandwidth`,
+  `theorem_B_modes`) — the flow stays within `Z₀/N²` in energy of its
+  `N`-mode truncation, forever; and two flows in the class whose defect
+  carries at most `δ` below mode `N` synchronize exponentially at rate
+  `νN² − K`, down to a floor tending to `δ`.
+
+What is and is not new, plainly. For the existence, trapping and
+uniqueness layers our 26-29 Aug 2026 reconnaissance found no precedent in
+any proof assistant — a negative literature result, offered with the
+hedge that deserves; corrections welcome. The regularity and
+determining-modes layers are formalizations of classical mathematics
+(Foias-Prodi in particular) and **no priority is claimed for them**; what
+is ours there is explicitness, the dissolution of the 3D conditionality
+by the small-data trap, and the machine-checking.
 
 The proof stack, each layer independently gated and adversarially audited:
 
@@ -56,6 +92,25 @@ The proof stack, each layer independently gated and adversarially audited:
    through. The zero mode's equation holds in the limit by mechanism, not
    fiat: divergence-freeness survives the limit and annihilates the
    zero-mode convection.
+6. **Tier 4** — uniqueness by the finite-section energy method (the
+   infinite sum is never differentiated) and the eternal flow, spliced
+   from per-horizon witnesses with uniqueness erasing the seams.
+7. **Tier 5** — the function-space bridge: synthesis into `L²` on the
+   unit torus, the calibrated weak form, and uniqueness pulled back
+   through coefficient extraction.
+8. **Tier 6** — regularity: per-level Sobolev propagation with no
+   induction on the level, then the periodic lift, its spatial `C^p` and
+   time `C¹` regularity, and the identification of every term of the
+   equation with its classical counterpart.
+9. **Tier 7** — the bandwidth layer: a uniform-in-time finite-mode
+   approximation, ambient energy decay at rate `2ν`, and determining
+   modes with an explicit count.
+
+## The layers, in the order they landed
+
+What follows is the build log, kept in the order the tiers were tagged.
+Each block was written when its tier went green and is left as written;
+the summary above is the current state.
 
 UPDATE (Tier 4, same day): both former non-claims are now CLAIMED and
 kernel-checked — 84 audited theorems total:
@@ -177,6 +232,8 @@ machine-checked. **It is not novel in principle, and no priority is
 claimed for it.** `K` is again a constant of explicit form rather than a
 number, and since it carries `ν^(−15)` the threshold `N` is
 astronomically large: this is a finiteness statement, not a small count.
+
+## Scope, verification, and tags
 
 What is STILL not claimed, precisely:
 - The Tier-5 weak form is quantified over band-limited (trigonometric
