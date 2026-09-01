@@ -9,15 +9,25 @@ viscous term is exactly
 
   `-(ν‖k‖²)`-weighted sum  =  `(ν / (2π)²) · Δu`,
 
-so the physical viscosity of the lifted field is `ν_phys = ν / (2π)²`.
+so the COEFFICIENT OF `Δu` in the lifted field's equation is `ν / (2π)²`.
 
-CAREFUL — this is NOT numerically the same factor Tier 5 records for the
-weak form.  There the calibration is computed for a RESCALED family (a time
-rescale `μ = 2π` alongside the space scaling), and the factors displayed
-there reflect that rescaling.  Here the lift carries the campaign's own time
-variable with no rescaling at all, and the constant is read directly off the
-pointwise spatial derivatives.  The two are calibrations of two different
-objects and must not be conflated or quoted interchangeably.
+CAREFUL — two things, both flagged by the 2 Sep 2026 audit.
+(1) Calling this "the physical viscosity" is ill-defined: the un-rescaled
+lift also carries the convection with coefficient `1/(2π)`
+(`convection_classical`), so it is NOT in Navier-Stokes standard form,
+and "viscosity" only acquires a meaning once a normalisation is chosen.
+This file fixes the Laplacian coefficient; the convection coefficient is
+fixed alongside it in `Nonlinearity.lean`; quote them TOGETHER.
+(2) The Tier 5 weak-form ledger (`context/rung7-tier5-blueprint.md`)
+displays `ν̃/(2π)` for the same coefficient flow.  Both readings are
+correct, for different objects: the ledger's family `d_k(t) = λ·c_k(μt)`
+has Laplacian coefficient `μν̃/(2π)²` and convection coefficient
+`(μ/λ)/(2π)`; Tier 6 is `(λ, μ) = (1, 1)`, Tier 5 is `(1, 2π)` — a PURE
+TIME reparametrisation, amplitudes untouched (there is no space scaling).
+Reconciliation: the Tier 6 lift read in the clock `τ = 2πt` is a
+classical solution of STANDARD Navier-Stokes with viscosity `ν/(2π)`,
+exactly Tier 5's number.  Never quote either constant without its
+normalisation.
 
 Route: the frequency twist `twistFreq i c k = (2πi·kᵢ)·c k` is again a
 `Vel`-valued family, so PeriodicLift's first-derivative brick
@@ -203,9 +213,11 @@ theorem laplacian_charSum (j : Fin 3) (c : (Fin 3 → ℤ) → Vel)
   rw [← Finset.sum_smul, ← Finset.sum_mul, laplacian_symbol k]
 
 /-- **The calibration.**  The campaign's viscous term is the classical
-Laplacian scaled by `ν / (2π)²`: the lifted field solves the equation with
-PHYSICAL viscosity `ν_phys = ν / (2π)²`.  (Equivalently: to realise physical
-viscosity `ν_phys`, run the spectral system at `ν = (2π)²·ν_phys`.) -/
+Laplacian scaled by `ν / (2π)²`: in the lifted field's equation the
+coefficient of `Δu` is `ν / (2π)²` (and, from `convection_classical`, the
+coefficient of `(u·∇)u` is `1/(2π)`).  Read in the clock `τ = 2πt` this is
+standard Navier-Stokes with viscosity `ν/(2π)`; see the file header for why
+"physical viscosity" is not a well-defined phrase for the un-rescaled lift. -/
 theorem viscous_eq_laplacian (ν : ℝ) (j : Fin 3) (c : (Fin 3 → ℤ) → Vel)
     (hc2 : Summable fun k : Fin 3 → ℤ => ‖freq k‖ ^ 2 * ‖c k‖)
     (z : UnitAddTorus (Fin 3)) :

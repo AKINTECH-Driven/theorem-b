@@ -19,7 +19,14 @@ statement.
 
 As `N → ∞` the floor `ν·N²/(ν·N² − K)·δ` tends to `δ`: the flow is
 recovered to the accuracy with which its low modes are known. `δ = 0`
-gives exact synchronization.
+removes the floor: the defect then decays exponentially at rate νN² − K (it does not vanish, and distinct flows do satisfy δ = 0 — a single-mode Stokes datum above N paired with the zero flow; 2 Sep 2026 audit).
+
+Read the quantifier order too. `K` is fixed BEFORE the horizon, the
+tolerance, and the pair of flows: the statement reads `∃ K` ahead of
+`∀ {T δ}` and `∀ {c₁ c₂}`, exactly as `pairing_absorbed` reads `∃ K`
+ahead of `∀ {a b}`. It is one constant for the whole class `(ν, E, Z)`,
+of explicit form up to the lattice-kernel constant, exported as a
+compiled existential - not a per-pair or per-horizon estimate.
 -/
 import TheoremB.ModesWindow
 import TheoremB.WindowDecay
@@ -29,13 +36,20 @@ namespace TheoremB
 open Set
 
 /-- **W-R4, the Tier-7 summit: determining modes with an explicit
-count.** `K` is `pairing_absorbed`'s constant at the class budgets, so
-it depends only on `(ν, E, Z)`; any `N` past the threshold
-`2ν + K < ν·N²` is a determining-mode count.
+count.** `K` is obtained from `pairing_absorbed` at the class budgets
+`(ν, E, Z)` BEFORE any horizon, tolerance, or flow is chosen: the
+statement quantifies `∃ K` ahead of `∀ {T δ}` and `∀ {c₁ c₂}`, exactly
+as `pairing_absorbed` quantifies `∃ K` ahead of `∀ {a b}`. So `K` is
+box-free, horizon-free, and pair-free - one constant for the whole
+class, of explicit form up to the lattice-kernel constant
+(`kernel_sum_le`), exported as a compiled existential. Any `N` past the
+threshold `2ν + K < ν·N²` is then a determining-mode count for every
+pair of flows in the class, on every horizon.
 
 Initial data are NOT assumed equal - that is the content. -/
 theorem theorem_B_modes :
-    ∀ {ν E Z T δ : ℝ}, 0 < ν → 0 ≤ T → 0 ≤ δ →
+    ∀ {ν E Z : ℝ}, 0 < ν → 0 ≤ E → 0 ≤ Z → ∃ K, 0 < K ∧
+    ∀ {T δ : ℝ}, 0 ≤ T → 0 ≤ δ →
     ∀ {c₁ c₂ : ℝ → (Fin 3 → ℤ) → Vel},
     (∀ k, ContinuousOn (fun s => c₁ s k) (Icc (0:ℝ) T)) →
     (∀ k, ContinuousOn (fun s => c₂ s k) (Icc (0:ℝ) T)) →
@@ -53,7 +67,7 @@ theorem theorem_B_modes :
       ((-(ν * ‖freq k‖ ^ 2)) • c₁ s k + lerayProj k (convFull (c₁ s) k))) →
     (∀ t ∈ Icc (0:ℝ) T, ∀ k, c₂ t k = c₂ 0 k + ∫ s in (0:ℝ)..t,
       ((-(ν * ‖freq k‖ ^ 2)) • c₂ s k + lerayProj k (convFull (c₂ s) k))) →
-    ∃ K, 0 < K ∧ ∀ N : ℕ, 2 * ν + K < ν * (N:ℝ) ^ 2 →
+    ∀ N : ℕ, 2 * ν + K < ν * (N:ℝ) ^ 2 →
       (∀ s ∈ Icc (0:ℝ) T,
         (∑ k ∈ insert 0 (boxS N), ‖c₁ s k - c₂ s k‖ ^ 2) ≤ δ) →
       ∀ t ∈ Icc (0:ℝ) T,
@@ -61,12 +75,15 @@ theorem theorem_B_modes :
           ≤ en (fun l => c₁ 0 l - c₂ 0 l) *
               Real.exp (-((ν * (N:ℝ) ^ 2 - K) * t))
             + ν * (N:ℝ) ^ 2 / (ν * (N:ℝ) ^ 2 - K) * δ := by
-  intro ν E Z T δ hν hT hδ c₁ c₂ h1cont h2cont h1sum h2sum h1b h2b
-    h1div h2div h1zero h2zero h1eq h2eq
-  obtain ⟨K, hK, hwindow⟩ := modes_window_ineq hν hT hδ h1cont h2cont
-    h1sum h2sum h1b h2b h1div h2div h1zero h2zero h1eq h2eq
+  intro ν E Z hν hE0 hZ0
+  -- K is fixed HERE, before any horizon, tolerance, or flow is chosen
+  obtain ⟨K, hK, hwindow⟩ := modes_window_ineq hν hE0 hZ0
   refine ⟨K, hK, ?_⟩
-  intro N hthr hlow
+  intro T δ hT hδ c₁ c₂ h1cont h2cont h1sum h2sum h1b h2b
+    h1div h2div h1zero h2zero h1eq h2eq N hthr hlow
+  -- the window inequality, specialised to this horizon and this pair
+  have hwin := hwindow hT hδ h1cont h2cont h1sum h2sum h1b h2b
+    h1div h2div h1zero h2zero h1eq h2eq
   -- the threshold forces a positive rate, strictly better than ambient decay
   have hrate : 0 < ν * (N:ℝ) ^ 2 - K := by nlinarith
   have hNpos : 0 < N := by
@@ -75,9 +92,6 @@ theorem theorem_B_modes :
     interval_cases N
     · simp at hthr
       nlinarith
-  -- budgets, for the integrability of the energy history
-  have h0mem : (0:ℝ) ∈ Icc (0:ℝ) T := ⟨le_refl 0, hT⟩
-  have hE0 : 0 ≤ E := le_trans (tsum_nonneg fun l => sq_nonneg _) (h1b 0 h0mem).1
   have hdcont : ∀ k, ContinuousOn (fun s => c₁ s k - c₂ s k) (Icc (0:ℝ) T) :=
     fun k => (h1cont k).sub (h2cont k)
   have hdsum : ∀ s ∈ Icc (0:ℝ) T, Summable (fun l => ‖c₁ s l - c₂ s l‖ ^ 2) :=
@@ -98,7 +112,7 @@ theorem theorem_B_modes :
     (fun t₀ ht₀ t ht => hEint0T.mono_set (by
       rw [uIcc_of_le ht.1, uIcc_of_le hT]
       exact Icc_subset_Icc ht₀.1 ht.2))
-    (fun t₀ ht₀ t ht => hwindow N hNpos hlow t₀ ht₀ t ht)
+    (fun t₀ ht₀ t ht => hwin N hNpos hlow t₀ ht₀ t ht)
   intro t ht
   have h := hdecay t ht
   have hfloor : ν * (N:ℝ) ^ 2 * δ / (ν * (N:ℝ) ^ 2 - K)

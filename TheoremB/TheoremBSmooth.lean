@@ -37,15 +37,23 @@ identifying every level's witness with the base flow through
   - Leray term    = convection − `∇p`          (`lerayProj_convFull_apply`),
     with the pressure `p` an honest ℓ¹ (hence continuous) field;
   - convection    = `−(1/2π)·(u·∇)u`           (`convection_classical`).
-  Together: `∂ₜu = ν_phys·Δu − (1/2π)(u·∇)u − ∇p` — Navier-Stokes in
-  classical form, pointwise, with every constant explicit.
+  Together (and now COMPILED as one statement in
+  `ClassicalEquation.lean`, `theorem_B_smooth_classical_eq`, after the
+  2 Sep 2026 audit noted the assembly was prose):
+  `∂ₜu = (ν/(2π)²)·Δu − (1/2π)(u·∇)u − ∇p` — Navier-Stokes in classical
+  form, pointwise, with every COEFFICIENT OF THE EQUATION explicit
+  (`ν/(2π)²` and `1/2π`); the smallness threshold `κ` and the growth
+  constants are exported as compiled existentials, of explicit form.
 
 HONEST SCOPE. Nothing is asserted about analyticity (`contDiff_tsum` caps
 at `ℕ∞`) or about `C^∞` in time (that needs a time-derivative of
-`convFull`, which the campaign does not have).  The classical constants
-carry the campaign's own normalisation (`ν_phys = ν/(2π)²`, convection
-factor `1/2π`); they are NOT the same numbers Tier 5 displays for the weak
-form, which is computed for a time-rescaled family.
+`convFull`, which the campaign does not have).  The classical coefficients
+carry the campaign's own normalisation — `ν/(2π)²` on `Δu` and `1/2π` on
+`(u·∇)u`, always to be quoted together; "physical viscosity" is not a
+well-defined phrase for this un-rescaled lift (see `Calibration.lean`).
+They are NOT the numbers Tier 5 displays for the weak form, which is
+computed for a time-rescaled family; read in the clock `τ = 2πt` the lift
+is standard Navier-Stokes with viscosity `ν/(2π)`, Tier 5's number.
 
 STATUS: claimed only insofar as scripts/check_axioms.sh reports GREEN on
 the target machine.
@@ -111,8 +119,11 @@ with derivative the synthesized Navier-Stokes right-hand side.
 
 See the file header for the honest scope.  This is the FULL form: it adds
 to `theorem_B_smooth` the `C¹`-in-time clause (continuity of the time
-derivative), the existence of the second spatial fiber derivatives, and the
-calibration identifying the viscous term with `(ν/(2π)²)·Δu`. -/
+derivative), the existence of the second spatial fiber derivatives, the
+calibration identifying the viscous term with `(ν/(2π)²)·Δu`, and the
+three classical-nonlinearity clauses — the pressure is ℓ¹ with one
+weighted order, the Leray projection is the convection minus the pressure
+gradient mode by mode, and the convection is `−(1/2π)(u·∇)u`. -/
 theorem theorem_B_smooth_classical :
     ∃ κ, 0 < κ ∧ ∀ {ν : ℝ}, 0 < ν → ∀ {c₀ : (Fin 3 → ℤ) → Vel},
       (∀ m : ℕ, Summable fun l => ‖freq l‖ ^ (2 * m) * ‖c₀ l‖ ^ 2) →
@@ -374,8 +385,9 @@ theorem theorem_B_smooth_classical :
 
 /-- **Theorem B, smooth form** (the tagged statement, unchanged): the
 classically-regular eternal flow, without the `C¹` / second-derivative /
-calibration clauses of `theorem_B_smooth_classical`, which is strictly
-stronger and supplies them. -/
+calibration / pressure / Leray-split / convection clauses of
+`theorem_B_smooth_classical`, which is strictly stronger and supplies
+them. -/
 theorem theorem_B_smooth :
     ∃ κ, 0 < κ ∧ ∀ {ν : ℝ}, 0 < ν → ∀ {c₀ : (Fin 3 → ℤ) → Vel},
       (∀ m : ℕ, Summable fun l => ‖freq l‖ ^ (2 * m) * ‖c₀ l‖ ^ 2) →

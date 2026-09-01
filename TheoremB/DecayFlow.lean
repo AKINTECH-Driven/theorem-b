@@ -233,10 +233,16 @@ theorem theorem_B_decay_cont :
   exact ⟨c, hc0, fun t ht => ⟨hcreal t ht, hcdiv t ht⟩,
     fun t ht => ⟨(hcen t ht).2, (hcens t ht).2⟩, hccont, hinteq, hderiv, htrap, hcdec⟩
 
-/-- **W-R0b, the capstone: the eternal flow decays at rate `2ν`.**
+/-- **W-R0b, the capstone: the eternal flow decays at least at rate `2ν`.**
 
 The flow of `ns_full_global_flow`, with its clauses quoted, additionally
 satisfies `en (c t) ≤ en c₀ · exp(−2νt)` for every `t ≥ 0`.
+
+What is compiled is the UPPER bound. Its sharpness — that `2ν` is
+attained — is true on paper (a single-mode datum `±k₁` with `|k₁| = 1`
+and amplitude `a ⊥ k₁` has `convFull ≡ 0`, so `c(t) = e^{−νt}c₀` exactly,
+and it sits in the trap class for small amplitude) but is NOT a compiled
+statement of this campaign (2 Sep 2026 audit, minor).
 
 Obtained per-time: on the horizon `[0, t]`, `theorem_B_decay_cont`'s
 witness carries the decay and inhabits the Tier-4 uniqueness class, so

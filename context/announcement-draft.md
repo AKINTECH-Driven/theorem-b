@@ -11,8 +11,9 @@ We have kernel-checked, in Lean 4 over Mathlib (pin `15a89b24`, toolchain
 `v4.31.0-rc2`), a small-data theory for the 3D incompressible
 Navier-Stokes equations on the 3-torus that runs from an *unconditional*
 existence-and-trapping theorem through uniqueness to a **classical,
-pointwise** solution — 180 audited theorems, every one on exactly
-`{propext, Classical.choice, Quot.sound}`, none on `sorryAx`.
+pointwise** solution — 186 audited declarations (the axiom ledger:
+theorems, one definition, and the compiled non-vacuity probes), every one
+on exactly `{propext, Classical.choice, Quot.sound}`, none on `sorryAx`.
 
 The object is the coefficient system on the frequency lattice `ℤ³`:
 
@@ -42,21 +43,26 @@ What is proved, one line per layer:
   Mathlib's `mFourierBasis` into an `L²` field satisfying calibrated
   Navier-Stokes in band-limited weak form, unique in its class.
 - **Regularity, up to the classical form** (`theorem_B_sobolev`,
-  `theorem_B_smooth_classical`) — every spectral Sobolev level
-  propagates; and for data summable at EVERY level, the `ℤ³`-periodic
-  lift is `C^p` in space for every `p`, `C¹` in time on `t > 0`, and
-  satisfies
+  `theorem_B_smooth_classical`, `theorem_B_smooth_classical_eq`) — every
+  spectral Sobolev level propagates; and for data summable at EVERY
+  level, the `ℤ³`-periodic lift is `C^p` in space for every `p`, `C¹` in
+  time on `t > 0`, and satisfies, as ONE compiled statement,
 
-      ∂ₜu = ν_phys·Δu − (1/2π)(u·∇)u − ∇p,    ν_phys = ν/(2π)²
+      ∂ₜu = (ν/(2π)²)·Δu − (1/2π)(u·∇)u − ∇p
 
   POINTWISE — the viscous term identified with the actual Laplacian, the
   nonlinearity with the actual `(u·∇)u`, and the pressure an honest `ℓ¹`
-  field carrying one weighted order, so `∇p` is a genuine object.
+  field whose gradient series is its compiled fiber derivative
+  (`hasDerivAt_pressure_insertNth`). The two coefficients are quoted
+  together on purpose: this un-rescaled lift is standard Navier-Stokes at
+  viscosity `ν/(2π)` in the clock `τ = 2πt`.
 - **Finite bandwidth and determining modes** (`theorem_B_bandwidth`,
-  `theorem_B_modes`) — the flow stays within `Z₀/N²` in energy of its
-  `N`-mode truncation, forever; and two flows in the class whose defect
-  carries at most `δ` below mode `N` synchronize exponentially at rate
-  `νN² − K`, down to a floor tending to `δ`.
+  `theorem_B_modes`, `ns_full_global_flow_modes`) — the eternal flow
+  keeps at most `Z₀/N²` of its energy outside the cube `‖k‖_∞ ≤ N`, for
+  every `N` and forever; and two flows in the class whose low-mode defect
+  (inside that cube) stays at most `δ` throughout a window synchronize
+  at rate `νN² − K` down to a floor of order `δ`, with ONE constant `K`
+  fixed at the class budgets before either flow is chosen.
 
 What is and is not new, plainly. For the existence, trapping and
 uniqueness layers our 26-29 Aug 2026 reconnaissance found no precedent in
@@ -64,10 +70,17 @@ any proof assistant — a negative literature result, offered with the
 hedge that deserves; corrections welcome. The regularity and
 determining-modes layers are formalizations of classical mathematics
 (Foias-Prodi in particular) and **no priority is claimed for them**; what
-is ours there is explicitness, the dissolution of the 3D conditionality
-by the small-data trap, and the machine-checking.
+is ours there is explicitness of form, the composition of the classical
+conditional statement with the small-data trap (itself a compiled
+theorem, `ns_full_global_flow_modes`), and the machine-checking.
 
-The proof stack, each layer independently gated and adversarially audited:
+The proof stack, every commit gated by the deterministic axiom check.
+Independent adversarial audits were run before the tags through Tier 6
+wave 4; the Tier 6 classical layer and all of Tier 7 were audited only by
+their builders at tag time and independently audited POST-TAG on
+2 Sep 2026 — an audit that found two statement-shape blockers in Tier 7
+and one compiled-assembly gap in Tier 6, all fixed the same day and
+recorded in the repository:
 
 1. **Tier 0** — ODE traps: forward invariance of `{κEZ < ν⁴}` by first-exit,
    and the Riccati comparison window.
@@ -100,11 +113,13 @@ The proof stack, each layer independently gated and adversarially audited:
    through coefficient extraction.
 8. **Tier 6** — regularity: per-level Sobolev propagation with no
    induction on the level, then the periodic lift, its spatial `C^p` and
-   time `C¹` regularity, and the identification of every term of the
-   equation with its classical counterpart.
+   time `C¹` regularity, the identification of every term of the
+   equation with its classical counterpart, and their assembly into one
+   compiled pointwise equation.
 9. **Tier 7** — the bandwidth layer: a uniform-in-time finite-mode
-   approximation, ambient energy decay at rate `2ν`, and determining
-   modes with an explicit count.
+   approximation, ambient energy decay at least at rate `2ν`, and
+   determining modes with a threshold of explicit form (a closed formula
+   up to the lattice-kernel constant, not a printable integer).
 
 ## The layers, in the order they landed
 
@@ -173,17 +188,21 @@ UPDATE (Tier 6, 29 Aug 2026): the regularity half — 164 audited theorems.
   `C¹` in time on `t > 0`, and satisfies Navier-Stokes in CLASSICAL
   form, POINTWISE:
 
-      ∂ₜu = ν_phys·Δu − (1/2π)(u·∇)u − ∇p,    ν_phys = ν/(2π)²
+      ∂ₜu = (ν/(2π)²)·Δu − (1/2π)(u·∇)u − ∇p
 
-  with every constant explicit. The viscous term is identified with the
-  actual Laplacian through the second spatial derivatives and the symbol
-  `∑ᵢ(2πi·kᵢ)² = −(2π)²‖k‖²`; the nonlinearity with the actual `(u·∇)u`
-  by a Cauchy product of absolutely convergent character series; and the
-  Leray projection is split into convection minus a pressure gradient,
-  the pressure an honest `ℓ¹` field carrying one weighted order — so
-  `∇p` is a genuine object, not a formal symbol. The all-levels clause
-  is compiled for THIS ONE flow, each level's witness identified with
-  the base flow through `theorem_B_unique`.
+  with every COEFFICIENT of the equation explicit (`ν/(2π)²` and `1/2π`;
+  the smallness threshold `κ` and the growth constants are compiled
+  existentials of explicit form). The viscous term is identified with
+  the actual Laplacian through the second spatial derivatives and the
+  symbol `∑ᵢ(2πi·kᵢ)² = −(2π)²‖k‖²`; the nonlinearity with the actual
+  `(u·∇)u` by a Cauchy product of absolutely convergent character series;
+  and the Leray projection is split into convection minus a pressure
+  gradient, the pressure an honest `ℓ¹` field carrying one weighted order
+  and `∇p` its compiled fiber derivative (`hasDerivAt_pressure_insertNth`).
+  The equation is ONE compiled statement, `theorem_B_smooth_classical_eq`
+  (added 2 Sep 2026 after the audit noted the assembly had been prose).
+  The all-levels clause is compiled for THIS ONE flow, each level's
+  witness identified with the base flow through `theorem_B_unique`.
 
 Tier-6 scope, in the wording its own audit register requires:
 - Constants are **of explicit form** — closed formulas in `(ν, m)` and
@@ -193,29 +212,45 @@ Tier-6 scope, in the wording its own audit register requires:
 - **No analyticity** (`contDiff_tsum` caps at `ℕ∞`) and **no `C^∞` in
   time** (that needs a time derivative of the convection, which does not
   exist here). Both are excluded, not merely unproved.
-- The calibration `ν_phys = ν/(2π)²` is for the LIFTED field. It is NOT
-  the factor Tier 5 displays for the weak form, which is computed for a
-  time-rescaled family. Two calibrations of two different objects; never
-  quote them interchangeably.
+- The coefficients `ν/(2π)²` (on `Δu`) and `1/2π` (on `(u·∇)u`) belong
+  to the un-rescaled lift and must be quoted together; "physical
+  viscosity" is not a well-defined phrase for it. They are consistent
+  with, not contradictory to, the Tier 5 weak-form ledger: read in the
+  clock `τ = 2πt` the lift is standard Navier-Stokes with viscosity
+  `ν/(2π)`, Tier 5's number. Never quote either constant without its
+  normalisation.
 
-UPDATE (Tier 7, 29-30 Aug 2026): determining modes — 180 audited
-theorems, tag `t7-complete`.
-- **`theorem_B_bandwidth`** — along the eternal flow, the energy above
-  frequency `N` never exceeds `Z₀/N²`, at every time and for every `N`.
-  The flow stays within `Z₀/N²` in energy of its `N`-mode truncation,
-  forever.
-- **`theorem_B_modes`** — determining modes with an explicit count. Two
-  flows in the trap class, **with different initial data**, whose defect
-  carries at most `δ` in the modes below `N`, satisfy
+UPDATE (Tier 7, 29-30 Aug 2026; audited and corrected 2 Sep 2026):
+determining modes — 186 audited declarations, tag `t7-complete`.
+- **`theorem_B_bandwidth`** — along the eternal flow, the energy OUTSIDE
+  the cube `‖k‖_∞ ≤ N` never exceeds `Z₀/N²`, at every time and for every
+  `N > 0`. The flow stays within `Z₀/N²` in energy of its cube-`N`
+  truncation, forever. (Audit record: as first tagged the statement
+  quoted only three of the flow's seven clauses and was provable by the
+  constant witness `c t := c₀`; the four dropped clauses — always present
+  in the proof — were restored on 2 Sep and the tag re-laid.)
+- **`theorem_B_modes`** — determining modes with a threshold of explicit
+  form. Two flows in the enstrophy-bounded class, **with different
+  initial data**, whose low-mode defect (in the cube `‖k‖_∞ ≤ N`) stays
+  at most `δ` THROUGHOUT the window, satisfy
 
       en(u−v)(t) ≤ en(u−v)(0)·exp(−(νN² − K)·t) + νN²/(νN² − K)·δ
 
   for every `N` past `2ν + K < νN²`, with `K` the absorbed-pairing
-  constant at the class budgets. As `N` grows the floor tends to `δ`:
-  the flow is recovered to the accuracy with which its low modes are
-  known. `δ = 0` gives exact synchronization.
+  constant at the class budgets, fixed BEFORE either flow is chosen
+  (re-quantified on 2 Sep 2026: as first tagged, `∃ K` sat after the
+  flows, making the compiled constant formally per-pair). As `N` grows
+  the floor tends to `δ`: the flow is recovered to the accuracy with
+  which its low modes are known. `δ = 0` removes the floor and the defect
+  decays exponentially at rate `νN² − K` — it does not vanish, and
+  distinct flows do satisfy `δ = 0` (a single-mode Stokes datum above `N`
+  paired with the zero flow).
+- **`ns_full_global_flow_modes`** (2 Sep 2026) — the above composed onto
+  two eternal small-data flows from different data, with one `K` for all
+  windows, mean-zero along each flow derived rather than assumed.
 - **`ns_full_global_flow_decay`** — the eternal flow's energy decays at
-  rate `2ν`.
+  least at rate `2ν`: `en(c t) ≤ en c₀ · e^(−2νt)`. Sharpness is true on
+  paper (single-mode data attain it) and is not compiled.
 
 Why the threshold reads `2ν + K < νN²` and not `K < νN²`: in this regime
 every solution already decays at `2ν` unaided, so a determining-modes
@@ -226,12 +261,19 @@ changing it.
 
 Tier-7 scope, and it is the important part: this is the Foias-Prodi
 determining-modes theorem — classical, unconditional in 2D, conditional
-in 3D. What is ours is that the small-data trap dissolves the 3D
-conditionality, that the count is explicit, and that the whole thing is
-machine-checked. **It is not novel in principle, and no priority is
-claimed for it.** `K` is again a constant of explicit form rather than a
-number, and since it carries `ν^(−15)` the threshold `N` is
-astronomically large: this is a finiteness statement, not a small count.
+in 3D. What is ours is that the small-data trap supplies the 3D
+condition for all time and the composition is compiled
+(`ns_full_global_flow_modes`), that the threshold is of explicit form,
+and that the whole thing is machine-checked. **It is not novel in
+principle, and no priority is claimed for it.** `K` is again a constant
+of explicit form rather than a number, and since it carries `ν^(−15)`
+the threshold `N` is astronomically large: this is a finiteness
+statement, not a small count. Two further honesty notes: in the trap
+class the estimate beats the ambient `2ν` decay only transiently (its
+floor is at least `δ` while the ambient bound tends to zero), so its
+content is the lock-on RATE; and in the enstrophy-bounded class without
+smallness, where `theorem_B_modes` also applies, no decay at all is
+proved, so there it is exactly the classical conditional result.
 
 ## Scope, verification, and tags
 
@@ -251,22 +293,33 @@ What is STILL not claimed, precisely:
   times; two-sided derivatives only at interior times.
 
 Verification discipline: a deterministic gate accepts the build only if
-`#print axioms` for all 180 audited theorems reports at most
-`propext, Classical.choice, Quot.sound` and no `sorryAx`; statements frozen
-at declaration; every commit preceded by an independent adversarial audit
-(three parallel auditors at each summit). The audits drew blood twice at
-summits: the M4 modeling audit caught a pressureless-class scoping that was
-answered in-wave with the Leray layer, and the Tier-3 audit caught the
-capstone's conclusion discarding its own summability certificates — fixed
-before the tag by exporting them, which is why the statement is
-junk-tsum-proof.
+`#print axioms` for all 186 audited declarations reports at most
+`propext, Classical.choice, Quot.sound` and no `sorryAx`; statements
+frozen at declaration, every strengthening landing as a new sibling with
+the frozen statement re-verified byte-identical. Independent adversarial
+audits (three to six parallel auditors) preceded every tag through Tier 6
+wave 4; the Tier 6 classical layer and all of Tier 7 were self-audited by
+their builders at tag time and independently audited post-tag on
+2 Sep 2026. The audits drew blood at every stage, by design: M4 (a
+pressureless-class scoping, answered in-wave with the Leray layer);
+Tier 3 (the capstone discarding its own summability certificates — the
+fix later powered Tier 4); Tier 4 and Tier 5 (the same composition-gap
+pattern, existence not exporting what its uniqueness class needs);
+Tier 6 (a `C¹`-in-time clause claimed by the goal but never proved, with
+its lemma sitting unconsumed); and 2 Sep (the vacuous bandwidth
+statement, the per-pair `K`, and the classical equation existing only as
+an assembly of clauses). Every finding was fixed before, or in the case
+of the post-tag audit immediately after, its tag; every finding made a
+statement stronger.
 
 Repository tags: `m1-green` → `m2-complete` → `m3-conditional-green` →
 `m4-wave1..4-green` → `m5-wave1/2-green`, `m5-complete` →
 `t3-theorem-b-green` → `t4-wellposedness-green` → `t5-torus-green` →
 `t5-polish-green` → `t6-sobolev-green` → `t6-smooth-green` →
 `t6-classical-green` → `t7-bandwidth-green` → `t7-modes-green` →
-`t7-complete`. As of our 26-29 Aug 2026 reconnaissance we found no prior
+`t7-complete` → `t7-audited-green` (2 Sep 2026: the post-tag audit's
+fixes; `t7-bandwidth-green` re-laid on the corrected statement). As of
+our 26-29 Aug 2026 reconnaissance we found no prior
 machine-checked small-data existence OR uniqueness result for 3D
 Navier-Stokes in any proof assistant; corrections welcome. No priority
 claim is made for the Tier-6 or Tier-7 layers.
@@ -288,9 +341,11 @@ claim is made for the Tier-6 or Tier-7 layers.
   convection limit (`Σ 1/|l|²` diverges over ℤ³), so plain dominated
   convergence/Tannery fails; the enstrophy tail bound `Σ_{|l|>M}‖c_l‖² ≤
   Z/M²` — uniform along all Galerkin flows — is what closes every limit.
-- Credits: Konstantinos Tsantakos (command, architecture); Claude (Fable 5,
-  Anthropic) as the proving engine under an orchestrated multi-agent
-  workflow with adversarial verification; Mathlib community, especially the
+- Credits: Konstantinos Tsantakos (command, architecture); Claude
+  (Anthropic — Fable 5 through Tier 6 and the 2 Sep audit and fixes,
+  Opus 5 for Tier 7) as the proving engine under an orchestrated
+  multi-agent workflow with adversarial verification; Mathlib community,
+  especially the
   Ascoli, interval-integral FTC, and tsum layers this build stands on.
 - Venue thought: Lean Zulip #maths first; arXiv note viable now that the
   result is unconditional; decide after Tier 4 (uniqueness) resolves or

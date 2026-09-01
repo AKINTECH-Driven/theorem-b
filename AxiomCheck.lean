@@ -37,12 +37,14 @@ import TheoremB.TimeLayer
 import TheoremB.Calibration
 import TheoremB.Nonlinearity
 import TheoremB.TheoremBSmooth
+import TheoremB.ClassicalEquation
 import TheoremB.EnergyDecay
 import TheoremB.Bandwidth
 import TheoremB.WindowDecay
 import TheoremB.EnergyIntegrable
 import TheoremB.ModesWindow
 import TheoremB.DeterminingModes
+import TheoremB.ModesFlow
 import TheoremB.ModesProbe
 import TheoremB.GalerkinDecay
 import TheoremB.DecayFlow
@@ -210,6 +212,8 @@ import TheoremB.DecayFlow
 #print axioms TheoremB.convFull_apply
 #print axioms TheoremB.convection_classical
 #print axioms TheoremB.theorem_B_smooth_classical
+#print axioms TheoremB.hasDerivAt_pressure_insertNth
+#print axioms TheoremB.theorem_B_smooth_classical_eq
 #print axioms TheoremB.theorem_B_smooth
 #print axioms TheoremB.en_le_ens
 #print axioms TheoremB.galerkin_energy_decay
@@ -223,6 +227,10 @@ import TheoremB.DecayFlow
 #print axioms TheoremB.modes_window_ineq
 #print axioms TheoremB.theorem_B_modes
 #print axioms TheoremB.modes_hypotheses_consistent
+#print axioms TheoremB.mean_zero_along_flow
+#print axioms TheoremB.ns_full_global_flow_modes
+#print axioms TheoremB.probe2_low_mode_at_4E
+#print axioms TheoremB.probe_modes_composes_with_flow
 #print axioms TheoremB.ns_galerkin_decay_leray
 #print axioms TheoremB.galerkin_family_decay
 #print axioms TheoremB.theorem_B_decay_cont

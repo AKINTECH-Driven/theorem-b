@@ -37,12 +37,14 @@ import TheoremB.TimeLayer
 import TheoremB.Calibration
 import TheoremB.Nonlinearity
 import TheoremB.TheoremBSmooth
+import TheoremB.ClassicalEquation
 import TheoremB.EnergyDecay
 import TheoremB.Bandwidth
 import TheoremB.WindowDecay
 import TheoremB.EnergyIntegrable
 import TheoremB.ModesWindow
 import TheoremB.DeterminingModes
+import TheoremB.ModesFlow
 import TheoremB.ModesProbe
 import TheoremB.GalerkinDecay
 import TheoremB.DecayFlow

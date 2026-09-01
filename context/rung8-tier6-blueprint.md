@@ -231,11 +231,13 @@ the weighted ℓ¹ export). Remaining bricks:
   ns_full_global_flow clauses) admits the classical representative:
   per-time uCont/uLift, ℤ³-periodic, ContDiff ℝ p in space for every p,
   C¹ in time on t > 0, satisfying CALIBRATED NS pointwise everywhere
-  (2π factors exactly as theorem_B_torus installs them: ν_phys = ν̃/(2π)
-  convention recorded there; the mode ODE summed against characters;
+  (SPEC DRIFT, recorded: this bullet promised Tier 5's factors; delivered
+  is ν/(2π)² on Δu for the UN-rescaled lift — see the W6/W7 records below
+  and Calibration.lean's header for the reconciliation; the mode ODE summed against characters;
   nonlinearity identified via convFull_pairing_physical +
-  L2_ext_of_coeff coefficient injectivity — never a raw Cauchy
-  product). Per-level sob clauses quoted from ns_full_global_flow_sobolev
+  L2_ext_of_coeff coefficient injectivity — the spec said "never a raw Cauchy product";
+  delivered is `tsum_char_mul`, a Cauchy product WITH ℓ¹ certificates,
+  which is the honest object here). Per-level sob clauses quoted from ns_full_global_flow_sobolev
   per m (the per-m/one-flow wording rule from the audit register
   applies).
 
@@ -313,7 +315,10 @@ shortfalls, both now fixed:
    derivative costs no new analysis. `laplacian_symbol`:
    `∑ᵢ (2πi·kᵢ)² = −(2π)²‖freq k‖²`. Hence `viscous_eq_laplacian` — the
    viscous term IS the Laplacian scaled by ν/(2π)², so the lifted field's
-   physical viscosity is **ν_phys = ν/(2π)²**.
+   coefficient of Δu is **ν/(2π)²** (with 1/(2π) on the convection — quote
+   them together; "physical viscosity" is not well-defined for the
+   un-rescaled lift, which is standard NS at ν/(2π) in the clock τ = 2πt;
+   2 Sep 2026 audit).
    ⚠️ This factor is NOT the one Tier 5 displays for the weak form (which
    is computed for a TIME-RESCALED family). Two calibrations of two
    different objects — never quote them interchangeably.
@@ -342,9 +347,14 @@ nonlocal, so split it into the convection minus a pressure gradient.
 - `exists_fiber`: every torus point IS a coordinate-fiber point, so the
   twisted series really is `∂ᵢuⱼ` at every point, not just along a fiber.
 
-The capstone's right-hand side is therefore classical throughout:
-**∂ₜu = ν_phys·Δu − (1/2π)(u·∇)u − ∇p**, with ν_phys = ν/(2π)², every
-constant explicit, holding POINTWISE.
+The capstone's right-hand side is therefore classical throughout, and —
+since the 2 Sep 2026 audit noted the assembly was prose — it is now ONE
+COMPILED STATEMENT, `theorem_B_smooth_classical_eq` (ClassicalEquation.lean):
+**∂ₜu = (ν/(2π)²)·Δu − (1/2π)(u·∇)u − ∇p**, holding POINTWISE, with every
+coefficient of the equation explicit (quote the two together; the
+un-rescaled lift is standard NS at viscosity ν/(2π) in the clock τ = 2πt).
+`∇p` is the compiled fiber derivative of the pressure series
+(`hasDerivAt_pressure_insertNth`), not a formal symbol.
 
 W7 audit (compiled probes, all pass): the pressure decomposition is an
 identity against lerayProj's own definition, not a definition-by-fiat;
@@ -372,11 +382,12 @@ Claim-wording rules for every outward description of this tier:
    energy/enstrophy budgets, up to a single convergent lattice-kernel
    sum Σ‖k‖^(−7/2) — exported formally as compiled existence statements
    (∃ K, 0 < K).
-2. Never claim a single compiled all-m flow statement. The honest form:
-   for every m ≥ 1, the (unique — theorem_B_unique) eternal flow
-   additionally satisfies the level-m clause; m = 0 is the trap clause
-   itself (sob 0 = en). The one-flow-all-levels sentence is a
-   meta-corollary through uniqueness, not a compiled theorem.
+2. (SUPERSEDED for the capstone, still binding for the per-level
+   theorems.) The one-flow-all-levels sentence IS now compiled — clause 8
+   of `theorem_B_smooth` / `theorem_B_smooth_classical` — via
+   `flow_agree_Ici`. For `theorem_B_sobolev` / `ns_full_global_flow_sobolev`
+   the honest form remains per-level: for every m ≥ 1 the (unique) eternal
+   flow satisfies the level-m clause; m = 0 is the trap clause itself.
 Prose amendments (delivered ≠ wave-bullet prose; frozen interfaces all
 landed verbatim): W1's ladder is SUMMABILITY-monotone-in-m (no sob-mass
 monotonicity lemma exists — add `sob_le_sob` only if W5 wants it); the

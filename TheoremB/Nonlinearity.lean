@@ -178,8 +178,12 @@ theorem summable_pressureCoeff {c : (Fin 3 → ℤ) → Vel}
 /-- **The pressure has a gradient.**  One weighted ℓ¹ order for `p̂` — which is
 what `hasDerivAt_charSum_insertNth` needs to differentiate the pressure series
 — comes for free from the same bound, and does NOT need `‖freq k‖ ≥ 1`:
-`‖k‖·‖p̂ₖ‖ ≤ ‖Bₖ‖/2π` exactly. So `∇p` is a genuine object, not a formal
-symbol. -/
+`‖k‖·‖p̂ₖ‖ ≤ ‖Bₖ‖/2π` exactly. This is the certificate that makes `∇p` a
+COMPILED object rather than a formal symbol: `hasDerivAt_pressure_insertNth`
+(`ClassicalEquation.lean`) differentiates the pressure series along every
+coordinate fiber and lands on exactly the gradient series that appears in
+the Leray split. (The 2 Sep 2026 audit flagged that, before that lemma
+existed, this sentence was prose.) -/
 theorem summable_freq_pressureCoeff {c : (Fin 3 → ℤ) → Vel}
     (hE : Summable fun l => ‖c l‖ ^ 2)
     (hZ : Summable fun l => ‖freq l‖ ^ 2 * ‖c l‖ ^ 2)

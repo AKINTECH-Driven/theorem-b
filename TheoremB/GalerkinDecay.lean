@@ -27,7 +27,7 @@ namespace TheoremB
 
 open Set
 
-/-- **The Leray-projected Galerkin system decays at rate `2ν`.** The
+/-- **The Leray-projected Galerkin system decays at least at rate `2ν`.** The
 sibling of `ns_galerkin_trap_leray`, with its `en (c t) ≤ en (c 0)`
 clause strengthened to an explicit rate.
 
@@ -58,7 +58,7 @@ theorem ns_galerkin_decay_leray {ν T : ℝ} (hν : 0 < ν)
     _ ≤ 0 := le_of_eq h
 
 /-- **W-R0b step 1: the composition probe.** Every member of the
-exhaustion family `galerkin_family` builds decays at rate `2ν` from the
+exhaustion family `galerkin_family` builds decays at least at rate `2ν` from the
 FULL datum's energy, uniformly in the box radius `R`.
 
 Uniformity in `R` is what matters: the bound on the right is

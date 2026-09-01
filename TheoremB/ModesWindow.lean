@@ -39,12 +39,18 @@ enstrophy-bounded class whose defect carries at most `δ` in the modes
 below `N` obey, on every subwindow, an energy inequality with rate
 `ν·N² − K` and source `ν·N²·δ`.
 
-`K` is `pairing_absorbed`'s constant at the class budgets, so it depends
-only on `(ν, E, Z)`. No sign condition on `ν·N² − K` is needed here; the
+`K` is obtained from `pairing_absorbed` at the class budgets `(ν, E, Z)`
+BEFORE any horizon, tolerance, or flow is chosen: the statement quantifies
+`∃ K` ahead of `∀ {T δ}` and `∀ {c₁ c₂}`, exactly as `pairing_absorbed`
+quantifies `∃ K` ahead of `∀ {a b}`. So `K` is box-free, horizon-free,
+and pair-free - one constant for the whole class, of explicit form up to
+the lattice-kernel constant (`kernel_sum_le`), exported as a compiled
+existential. No sign condition on `ν·N² − K` is needed here; the
 threshold enters only when this is fed to
 `decay_of_window_integral_ineq`. -/
 theorem modes_window_ineq :
-    ∀ {ν E Z T δ : ℝ}, 0 < ν → 0 ≤ T → 0 ≤ δ →
+    ∀ {ν E Z : ℝ}, 0 < ν → 0 ≤ E → 0 ≤ Z → ∃ K, 0 < K ∧
+    ∀ {T δ : ℝ}, 0 ≤ T → 0 ≤ δ →
     ∀ {c₁ c₂ : ℝ → (Fin 3 → ℤ) → Vel},
     (∀ k, ContinuousOn (fun s => c₁ s k) (Icc (0:ℝ) T)) →
     (∀ k, ContinuousOn (fun s => c₂ s k) (Icc (0:ℝ) T)) →
@@ -62,7 +68,7 @@ theorem modes_window_ineq :
       ((-(ν * ‖freq k‖ ^ 2)) • c₁ s k + lerayProj k (convFull (c₁ s) k))) →
     (∀ t ∈ Icc (0:ℝ) T, ∀ k, c₂ t k = c₂ 0 k + ∫ s in (0:ℝ)..t,
       ((-(ν * ‖freq k‖ ^ 2)) • c₂ s k + lerayProj k (convFull (c₂ s) k))) →
-    ∃ K, 0 < K ∧ ∀ N : ℕ, 0 < N →
+    ∀ N : ℕ, 0 < N →
       (∀ s ∈ Icc (0:ℝ) T,
         (∑ k ∈ insert 0 (boxS N), ‖c₁ s k - c₂ s k‖ ^ 2) ≤ δ) →
       ∀ t₀ ∈ Icc (0:ℝ) T, ∀ t ∈ Icc t₀ T,
@@ -70,14 +76,12 @@ theorem modes_window_ineq :
             (ν * (N:ℝ) ^ 2 - K) *
               (∫ s in t₀..t, en (fun l => c₁ s l - c₂ s l))
           ≤ en (fun l => c₁ t₀ l - c₂ t₀ l) + ν * (N:ℝ) ^ 2 * δ * (t - t₀) := by
-  intro ν E Z T δ hν hT hδ c₁ c₂ h1cont h2cont h1sum h2sum h1b h2b
-    h1div h2div h1zero h2zero h1eq h2eq
-  have h0mem : (0:ℝ) ∈ Icc (0:ℝ) T := ⟨le_refl 0, hT⟩
-  have hE0 : 0 ≤ E := le_trans (tsum_nonneg fun l => sq_nonneg _) (h1b 0 h0mem).1
-  have hZ0 : 0 ≤ Z := le_trans (tsum_nonneg fun l => by positivity) (h1b 0 h0mem).2
+  intro ν E Z hν hE0 hZ0
+  -- K is fixed HERE, before any horizon, tolerance, or flow is chosen
   obtain ⟨K, hK, hpair⟩ := pairing_absorbed (E := E) (Z := Z) hν hE0 hZ0
   refine ⟨K, hK, ?_⟩
-  intro N hN hlow t₀ ht₀ t ht
+  intro T δ hT hδ c₁ c₂ h1cont h2cont h1sum h2sum h1b h2b
+    h1div h2div h1zero h2zero h1eq h2eq N hN hlow t₀ ht₀ t ht
   have hNR : (0:ℝ) < (N:ℝ) := by exact_mod_cast hN
   have ht0T : t ≤ T := ht.2
   have ht₀0 : 0 ≤ t₀ := ht₀.1

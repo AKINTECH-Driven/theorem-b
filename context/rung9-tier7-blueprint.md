@@ -1,12 +1,21 @@
 # Rung 9 — Tier 7 blueprint: the bandwidth of the flow
 
-Status: route PROPOSED, 29 Aug 2026, at tag `t6-smooth-green`. **No recon
-fleet has been run and NOTHING here is compile-verified.** Every existing
-lemma cited below was read from source in this tree (file:line given);
-every Mathlib name is a guess under contract clause 3 and must be
-confirmed on-machine before use. Contract otherwise unchanged: kernel +
-gate judge; statements freeze at declaration; adversarial audit before
-tags.
+Status: TIER COMPLETE (29 Aug 2026, `t7-complete`, all seven waves
+gate-green) — and INDEPENDENTLY AUDITED POST-TAG on 2 Sep 2026 by a
+six-auditor fleet (record: `~/.claude/projects/…/audit-2026-09-02/`).
+Verification this tier actually received BEFORE its tags: the axiom gate
+per wave, two compiled probes, one prose probe, and one builder
+self-audit — no independent reader. The post-tag audit found TWO
+BLOCKERS, both in statement shape, neither in the mathematics:
+`theorem_B_bandwidth` was VACUOUS (its ∃c quoted 3 of 7 flow clauses, so
+the constant witness proved it) and `theorem_B_modes` quantified `∃ K`
+AFTER the flows (per-pair, not class-uniform). Both fixed 2 Sep; see the
+audit records in §5/§6 below. The original proposal header read "route
+PROPOSED … NOTHING here is compile-verified" — true on 29 Aug, kept in
+git history, superseded here. Contract unchanged: kernel + gate judge;
+statements freeze at declaration; adversarial audit before tags — a rule
+this tier did NOT meet at tag time, which is why the audit is recorded
+here rather than assumed.
 
 Provenance: proposed as "Rung R" in `rth-nse-rosetta.md` (Millennium
 Expedition, Session 2 addendum), the single row of that table graded
@@ -21,10 +30,11 @@ Answer it with a number: an explicit `N₀(ν, E₀, Z₀)` such that the flow
 below frequency `N₀` determines the whole flow. Two capstones.
 
 - **`theorem_B_bandwidth` (R1, uniform approximation).** Along the eternal
-  flow, the energy above frequency `N` never exceeds `Z₀/N²`, for every
-  `N` and every `t ≥ 0`. The flow is within `Z₀/N²` of its `N`-mode
-  truncation, forever, with no smallness needed beyond the trap that
-  `ns_full_global_flow` already exports.
+  flow, the energy OUTSIDE the sup-norm cube `‖k‖_∞ ≤ N` (`boxS N`; a
+  subset of the Euclidean tail `|k| > N`) never exceeds `Z₀/N²`, for every
+  `N > 0` and every `t ≥ 0`. The flow is within `Z₀/N²` in energy of its
+  cube-`N` truncation, forever, with no smallness needed beyond the trap
+  that `ns_full_global_flow` already exports.
 - **`theorem_B_modes` (R2, determination with an error floor).** There is
   `N₀` of explicit form such that for `N ≥ N₀`, any two flows in the trap
   class whose modes below `N` agree to within `δ` on a window satisfy
@@ -202,10 +212,19 @@ machinery the campaign does not have.
   wave ships without a compiled composition probe against a real
   producer, not merely a type-correct statement.** `galerkin_family_decay`
   is that probe for this tier.
-- **W-R1 — `theorem_B_bandwidth`.** `tail_en_lt` at `Z := ens c₀`
-  composed with `ns_full_global_flow`'s summability and trap clauses.
-  Risk LOW. Tag `t7-bandwidth-green` here; this rung is independently
-  publishable and independently honest.
+- **W-R1 — `theorem_B_bandwidth`. LANDED 29 Aug, FOUND VACUOUS 2 Sep,
+  FIXED 2 Sep.** `tail_en_lt` at `Z := ens c₀` composed with
+  `ns_full_global_flow`'s clauses. As first tagged it composed with only
+  THREE of those clauses (datum, summability, budgets) and dropped the
+  four that pin the witness to the equation — so the constant witness
+  `c t := c₀` proved it and the tag `t7-bandwidth-green` marked a
+  statement about the datum, not the flow. The blueprint's own caption
+  ("the flow clauses are quoted") was false about its own block, and no
+  independent reader existed to notice. Fixed by restoring the clauses
+  the proof already obtained and discarded (§6, re-frozen); the tag is
+  re-laid on the fixed statement. Lesson, added to the house rules: a
+  freeze that CLAIMS to quote another theorem's clauses is diffed against
+  that theorem's clause list before it is frozen.
 - **W-R2a — integrability of the energy history. LANDED, gate-green
   (29 Aug 2026), VIA THE FALLBACK.** `TheoremB/EnergyIntegrable.lean`.
   The wave was specified as `continuousOn_en_defect` with measurability
@@ -252,6 +271,25 @@ machinery the campaign does not have.
   cannot scale a hypothesis by `ν`, so `ν·∫σ ≤ ν·∫_0^T σ` must be
   supplied pre-multiplied.
 - **W-R4 — `theorem_B_modes`. LANDED, gate-green (29 Aug 2026).**
+  **AUDIT 2 Sep 2026 — BLOCKER, FIXED.** `∃ K` was quantified after the
+  flows (per-pair); re-quantified, see §6. `ModesProbe.lean`'s header
+  said "compiled, not asserted" while probe 2 (the δ := 4E inhabitation)
+  was prose; probe 2 is now the compiled `probe2_low_mode_at_4E`, and
+  `probe_modes_composes_with_flow` compiles the "genuinely distinct
+  trapped flows inhabit the hypotheses" claim.
+- **W-R5 — `ns_full_global_flow_modes`. LANDED 2 Sep 2026, gate-green
+  (`TheoremB/ModesFlow.lean`).** The composition the announcement had
+  been describing in prose — "the small-data trap dissolves the 3D
+  conditionality" — is now a theorem: two eternal small-data flows from
+  different data satisfy the determining-modes rate/floor estimate on
+  every window and for every `N` past the threshold, with ONE `K` fixed
+  from `pairing_absorbed` at budgets `max (en c₀) (en c₀')`,
+  `max (ens c₀) (ens c₀')` before either flow is chosen. Mean-zero along
+  each flow is DERIVED (`mean_zero_along_flow`: the `k = 0` integral
+  equation's source vanishes by `convFull_zero_of_divFree`), since
+  `ns_full_global_flow` does not export it. The audit had graded this
+  sentence "describes the probe, not a tagged theorem"; that grade no
+  longer applies.
   `TheoremB/DeterminingModes.lean`; probes in `TheoremB/ModesProbe.lean`.
   The composition is two waves and one line: W-R3's window inequality is
   EXACTLY the shape W-R2b consumes, by construction.
@@ -284,17 +322,36 @@ theorem theorem_B_bandwidth :
       c₀ 0 = 0 → RealField c₀ → DivFree c₀ → κ * en c₀ * ens c₀ < ν ^ 4 →
       ∃ c : ℝ → (Fin 3 → ℤ) → Vel,
         c 0 = c₀ ∧
+        (∀ t ∈ Ici (0:ℝ), RealField (c t) ∧ DivFree (c t)) ∧
         (∀ t ∈ Ici (0:ℝ), Summable (fun l => ‖c t l‖ ^ 2) ∧
           Summable (fun l => ‖freq l‖ ^ 2 * ‖c t l‖ ^ 2)) ∧
-        (∀ t ∈ Ici (0:ℝ), en (c t) ≤ en c₀ ∧ ens (c t) ≤ ens c₀) ∧
+        (∀ k, ContinuousOn (fun s => c s k) (Ici (0:ℝ))) ∧
+        (∀ t ∈ Ici (0:ℝ), ∀ k, c t k = c₀ k + ∫ s in (0:ℝ)..t,
+          ((-(ν * ‖freq k‖ ^ 2)) • c s k + lerayProj k (convFull (c s) k))) ∧
+        (∀ t ∈ Ioi (0:ℝ), ∀ k, HasDerivAt (fun s => c s k)
+          ((-(ν * ‖freq k‖ ^ 2)) • c t k + lerayProj k (convFull (c t) k)) t) ∧
+        (∀ t ∈ Ici (0:ℝ), en (c t) ≤ en c₀ ∧ ens (c t) ≤ ens c₀ ∧
+          κ * en (c t) * ens (c t) < ν ^ 4) ∧
         (∀ N : ℕ, 0 < N → ∀ t ∈ Ici (0:ℝ),
           en (c t) - (∑ k ∈ insert 0 (boxS N), ‖c t k‖ ^ 2)
             ≤ ens c₀ / (N:ℝ) ^ 2)
 ```
 
-The flow clauses are quoted from `ns_full_global_flow`; only the last is
-new. State the bandwidth clause in `tail_en_lt`'s own shape (full sum
-minus finite section), NOT via a new truncation definition.
+ALL SEVEN flow clauses of `ns_full_global_flow` are quoted verbatim; only
+the last conjunct is new. State the bandwidth clause in `tail_en_lt`'s
+own shape (full sum minus finite section), NOT via a new truncation
+definition.
+
+**RE-FROZEN 2 Sep 2026 after the post-tag audit.** The block as first
+frozen (29 Aug) quoted only THREE of the seven clauses — datum,
+summability, budgets — while its own caption claimed "the flow clauses
+are quoted". The dropped four (reality/div-free, mode continuity, the
+integral equation, the mode ODE) plus the `κ`-trap conjunct were exactly
+what pins the witness to Navier-Stokes; without them the CONSTANT
+function `c t := c₀` proves the statement from `tail_en_lt` alone
+(compiled probe, two independent auditors: BLOCKER). The proof always
+had them — obtained and discarded. Restored; the tag
+`t7-bandwidth-green` is re-laid on the fixed statement.
 
 W-R2b file `TheoremB/WindowDecay.lean`:
 
@@ -313,7 +370,8 @@ W-R4 file `TheoremB/DeterminingModes.lean`:
 
 ```
 theorem theorem_B_modes :
-    ∀ {ν E Z T δ : ℝ}, 0 < ν → 0 ≤ T → 0 ≤ δ →
+    ∀ {ν E Z : ℝ}, 0 < ν → 0 ≤ E → 0 ≤ Z → ∃ K, 0 < K ∧
+    ∀ {T δ : ℝ}, 0 ≤ T → 0 ≤ δ →
     ∀ {c₁ c₂ : ℝ → (Fin 3 → ℤ) → Vel},
     (∀ k, ContinuousOn (fun s => c₁ s k) (Icc (0:ℝ) T)) →
     (∀ k, ContinuousOn (fun s => c₂ s k) (Icc (0:ℝ) T)) →
@@ -325,20 +383,33 @@ theorem theorem_B_modes :
     (∀ t ∈ Icc (0:ℝ) T, en (c₂ t) ≤ E ∧ ens (c₂ t) ≤ Z) →
     (∀ t ∈ Icc (0:ℝ) T, DivFree (c₁ t)) →
     (∀ t ∈ Icc (0:ℝ) T, DivFree (c₂ t)) →
-    (∀ t ∈ Icc (0:ℝ) T, c₁ t 0 = 0) → (∀ t ∈ Icc (0:ℝ) T, c₂ t 0 = 0) →
+    (∀ t ∈ Icc (0:ℝ) T, c₁ t 0 = 0) →
+    (∀ t ∈ Icc (0:ℝ) T, c₂ t 0 = 0) →
     (∀ t ∈ Icc (0:ℝ) T, ∀ k, c₁ t k = c₁ 0 k + ∫ s in (0:ℝ)..t,
       ((-(ν * ‖freq k‖ ^ 2)) • c₁ s k + lerayProj k (convFull (c₁ s) k))) →
     (∀ t ∈ Icc (0:ℝ) T, ∀ k, c₂ t k = c₂ 0 k + ∫ s in (0:ℝ)..t,
       ((-(ν * ‖freq k‖ ^ 2)) • c₂ s k + lerayProj k (convFull (c₂ s) k))) →
-    ∃ K, 0 < K ∧ ∀ N : ℕ, 2 * ν + K < ν * (N:ℝ) ^ 2 →
-      (∀ t ∈ Icc (0:ℝ) T,
-        (∑ k ∈ insert 0 (boxS N), ‖c₁ t k - c₂ t k‖ ^ 2) ≤ δ) →
+    ∀ N : ℕ, 2 * ν + K < ν * (N:ℝ) ^ 2 →
+      (∀ s ∈ Icc (0:ℝ) T,
+        (∑ k ∈ insert 0 (boxS N), ‖c₁ s k - c₂ s k‖ ^ 2) ≤ δ) →
       ∀ t ∈ Icc (0:ℝ) T,
         en (fun l => c₁ t l - c₂ t l)
           ≤ en (fun l => c₁ 0 l - c₂ 0 l) *
               Real.exp (-((ν * (N:ℝ) ^ 2 - K) * t))
             + ν * (N:ℝ) ^ 2 / (ν * (N:ℝ) ^ 2 - K) * δ
 ```
+
+**RE-FROZEN 2 Sep 2026 after the post-tag audit (BLOCKER).** As first
+frozen, `∃ K` sat AFTER `∀ {T δ}` and `∀ {c₁ c₂}` and the 14 flow
+hypotheses, so the compiled constant was formally per-horizon, per-
+tolerance and per-PAIR — not the class-uniform determining-modes constant
+the docstring and the announcement claimed. The proof's witness was
+always uniform (`pairing_absorbed` at `(ν, E, Z)`, before any flow), so
+the fix is a re-quantification mirroring `pairing_absorbed` exactly:
+`∃ K` now precedes the flows, with `0 ≤ E`, `0 ≤ Z` hoisted to
+hypotheses. Hypotheses, threshold, low-mode clause and conclusion are
+character-identical to the first freeze. Same shape applied to the
+engine `modes_window_ineq`.
 
 Deliberate statement decisions, each with its reason:
 
@@ -415,7 +486,10 @@ Acting on it is outward-facing and therefore the user's call.
 
 TIER 7 COMPLETE, 29 Aug 2026, tag `t7-complete`. EVERY wave landed and
 gate-green — W-R0a, W-R0b, W-R1, W-R2a, W-R2b, W-R3, W-R4 — at 180
-audited theorems. `t7-bandwidth-green` (v1) and `t7-modes-green` (v3)
+audited declarations. AUDITED AND CORRECTED 2 Sep 2026 (`t7-audited-green`):
+two statement-shape blockers fixed (§5 W-R1, W-R4), W-R5
+`ns_full_global_flow_modes` landed, probe 2 compiled — 186 audited
+declarations. `t7-bandwidth-green` (v1) and `t7-modes-green` (v3)
 mark the ladder's rungs; `t7-complete` closes the tier.
 
 Smallest next move: nothing inside Tier 7 — it is closed. The open

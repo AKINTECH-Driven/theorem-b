@@ -6,7 +6,7 @@ mean-zero field the spectral Poincare inequality `en ≤ ens` holds for
 free - every nonzero lattice frequency has `1 ≤ ‖freq k‖` - and the
 exact energy identity `en' = -2ν·ens + (energy pairing)` therefore
 upgrades to `en' ≤ -2ν·en` whenever the pairing is nonpositive. Every
-trapped Galerkin flow decays exponentially at rate `2ν`, with no
+trapped Galerkin flow decays exponentially at least at rate `2ν`, with no
 smallness used beyond what the trap already supplies.
 
 This is the fact that makes the ASYMPTOTIC form of a determining-modes
@@ -43,7 +43,7 @@ lemma en_le_ens {c : (Fin 3 → ℤ) → Vel} (hc0 : c 0 = 0)
 
 A finitely supported flow off the zero mode, solving the mode ODE with a
 forcing whose energy pairing is nonpositive on the window, has energy
-decaying at rate `2ν`. The hypotheses are exactly
+decaying at least at rate `2ν`. The hypotheses are exactly
 `galerkin_conditional_trap`'s energy-side hypotheses WEAKENED to the
 window (`hODE` on `Icc 0 T`, not on all of `ℝ`), which is the form every
 producer in this campaign actually exports - `galerkin_family` gives the
