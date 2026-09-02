@@ -64,15 +64,60 @@ What is proved, one line per layer:
   at rate `νN² − K` down to a floor of order `δ`, with ONE constant `K`
   fixed at the class budgets before either flow is chosen.
 
-What is and is not new, plainly. For the existence, trapping and
-uniqueness layers our 26-29 Aug 2026 reconnaissance found no precedent in
-any proof assistant — a negative literature result, offered with the
-hedge that deserves; corrections welcome. The regularity and
-determining-modes layers are formalizations of classical mathematics
-(Foias-Prodi in particular) and **no priority is claimed for them**; what
-is ours there is explicitness of form, the composition of the classical
-conditional statement with the small-data trap (itself a compiled
-theorem, `ns_full_global_flow_modes`), and the machine-checking.
+What is and is not new, plainly. Nothing here is new mathematics: the
+trap is Leray 1934 / Fujita-Kato 1964, uniqueness is
+Prodi-Serrin-Ladyzhenskaya, Sobolev propagation is Foias-Temam 1989,
+determining modes is Foias-Prodi 1967 in the rate form of
+Hayden-Olson-Titi 2011, and **no mathematical priority is claimed for
+any layer**. Nor is the method new: the axiom gate, frozen statements,
+builder/auditor role split and agent doctrine are adopted from the
+leray-hopf project. What is ours is the machine-checking of the
+composition, hedged as follows. To our knowledge (reconnaissance 26 Aug
+to 2 Sep 2026, the last pass a 41-agent prior-art audit; corrections
+welcome), `theorem_B` + `theorem_B_unique` + `ns_full_global_flow` are
+the first kernel-checked small-data GLOBAL well-posedness theorem for
+the full 3D Navier-Stokes Fourier-coefficient system on the 3-torus: a
+global strong (bounded-energy-and-enstrophy) solution, unique within the
+bounded-enstrophy class on every finite horizon with no smallness or
+dissipation hypothesis on the competitor, with a pointwise classical-form
+lift, every Sobolev level propagated, and a rate-form determining-modes
+theorem composed onto it. Two earlier machine-checked 3D Navier-Stokes
+developments are strictly separate and are cited below: the first
+machine-checked 3D NS EXISTENCE is leray-hopf's (weak, Leray-Hopf), and
+a machine-checked 3D NS UNIQUENESS (local-in-time, mild, on `ℝ³`)
+predates ours by ten days. The bare sentences "first machine-checked 3D
+NS uniqueness / existence in any proof assistant" are therefore FALSE
+and must not be used.
+
+Related machine-checked work (as located on 2 Sep 2026; none re-built
+by us, kernel status as reported by each author):
+- **uda-lab/leray-hopf** (Tomoki Uda; Lean 4, same Mathlib pin
+  `15a89b24`; Jul-Aug 2026): Leray-Hopf weak existence on `T³` and `ℝ³`,
+  finite-horizon and global; kernel-only per its README; explicitly
+  disclaims uniqueness and regularity. Our Galerkin/torus vocabulary and
+  our verification doctrine follow its pattern.
+- **HeliCorgi/ns-mns2-flowmap-bridge** (Lean 4 + Mathlib; commit
+  `e8b71440`, 18/19 Aug 2026 — ten days before `theorem_B_unique`,
+  877e2d7 of 28 Aug): local-in-time existence AND uniqueness of `H³`
+  mild solutions on `ℝ³` within its Duhamel contract
+  (`IsMildSolutionOn.unique`, `r3EndpointSafeProjectedMildSolution_unique`),
+  standard-three-axiom audit file per its README; global regularity and
+  small-data global theory explicitly out of scope. Missed by our 26-29
+  Aug reconnaissance.
+- **Miller, Vlasov mean-field derivation** (arXiv 2607.08986, Jul 2026):
+  global existence and uniqueness for the nonlinear Vlasov equation,
+  kernel-axiom-only — so "first machine-checked well-posedness of a
+  nonlinear evolution PDE" is not ours either.
+- **Armstrong-Kempe, De Giorgi-Nash-Moser in Lean** (arXiv 2604.05984,
+  Apr 2026): elliptic regularity, kernel-axiom-only; not NS, but the
+  earlier PDE regularity formalization.
+- **navier-stokes.dev** (undated; 12 postulated axioms; no repository
+  located): seen, not verifiable, not counted as prior art either way.
+- Statement-only: google-deepmind/formal-conjectures PR #1457 (the
+  community's periodic Clay wording, merged May 2026) and
+  lean-dojo/LeanMillenniumPrizeProblems (sorry'd). Neither proves anything;
+  the former is the natural alignment target for
+  `theorem_B_smooth_classical_eq` and that probe has NOT been run.
 
 The proof stack, every commit gated by the deterministic axiom check.
 Independent adversarial audits were run before the tags through Tier 6
@@ -150,8 +195,13 @@ kernel-checked — 84 audited theorems total:
   among its kind on every horizon.
 As of our reconnaissance (28 Aug 2026, including a full sweep of the
 leray-hopf repository, which proves existence but no uniqueness of any
-kind), we found no prior machine-checked uniqueness theorem for 3D
-Navier-Stokes in any proof assistant; corrections welcome.
+kind), we had found no prior machine-checked uniqueness theorem for 3D
+Navier-Stokes in any proof assistant. CORRECTED 2 Sep 2026: that
+reconnaissance missed HeliCorgi/ns-mns2-flowmap-bridge (local-in-time
+`H³` mild uniqueness on `ℝ³`, 18/19 Aug 2026). The defensible residue is
+uniqueness on the 3-torus in the bounded-enstrophy class on every finite
+horizon, with no smallness on the competitor; see "What is and is not
+new" above.
 
 UPDATE (Tier 5, next day): the function-space non-claim is now largely
 CLAIMED — 101 audited theorems total:
@@ -287,8 +337,9 @@ What is STILL not claimed, precisely:
   not for general trap-class data.
 - Identification with the leray-hopf weak solution classes (same
   Mathlib pin, interop mechanical up to conventions) remains future
-  work; notably their scope excludes uniqueness entirely, so the
-  uniqueness clauses here appear to be beyond any prior formalization.
+  work; their scope excludes uniqueness entirely. The uniqueness clauses
+  here go beyond leray-hopf, not beyond every prior formalization: see
+  HeliCorgi under "Related machine-checked work".
 - Endpoint derivatives: the flow satisfies the integral equation at all
   times; two-sided derivatives only at interior times.
 
@@ -318,11 +369,17 @@ Repository tags: `m1-green` → `m2-complete` → `m3-conditional-green` →
 `t5-polish-green` → `t6-sobolev-green` → `t6-smooth-green` →
 `t6-classical-green` → `t7-bandwidth-green` → `t7-modes-green` →
 `t7-complete` → `t7-audited-green` (2 Sep 2026: the post-tag audit's
-fixes; `t7-bandwidth-green` re-laid on the corrected statement). As of
-our 26-29 Aug 2026 reconnaissance we found no prior
-machine-checked small-data existence OR uniqueness result for 3D
-Navier-Stokes in any proof assistant; corrections welcome. No priority
-claim is made for the Tier-6 or Tier-7 layers.
+fixes; `t7-bandwidth-green` re-laid on the corrected statement). Priority, in its
+only defensible form: to our knowledge (reconnaissance 26 Aug to 2 Sep
+2026) the first kernel-checked small-data GLOBAL well-posedness — strong
+class, unique in the bounded-enstrophy class on every finite horizon —
+for the full 3D Navier-Stokes coefficient system on the 3-torus, beside
+leray-hopf's earlier weak existence and HeliCorgi's earlier local mild
+uniqueness on `ℝ³`; corrections welcome. No mathematical priority is
+claimed for any layer, and none for the method. Before any outward
+claim: build HeliCorgi and run its axiom audit ourselves, and register
+the frozen capstones with Palomar or replay them through lean4checker —
+priority currently rests on private git tags.
 
 ## Notes for the long form (not yet written)
 

@@ -29,8 +29,18 @@ lemmas inside `TheoremB/SpectralNorms.lean` (M2).
 s < −3, via natMax shell counts), `kernel_sum_le` (the shift-uniform
 convolution-kernel bound at exponent 7/4), `weighted_interp` (the
 (1/8, 7/8) Hölder interpolation between ℓ²-mass and weighted ℓ²-mass).
-**Why**: Mathlib has no lattice summability-by-decay toolkit for ℤ^d;
-these are the standard bricks of discrete harmonic analysis.
+**Why**: these are the standard bricks of discrete harmonic analysis.
+CORRECTION (2 Sep 2026): the pin is NOT bare here — `ZLattice.summable_norm_rpow`
+exists and is what `summable_freq_rpow_neg` consumes (SpectralNorms.lean:84),
+`Mathlib/Topology/Algebra/InfiniteSum/DiscreteConvolution.lean` exists at
+the pin, and `tsum_mul_tsum_of_summable_norm` is in
+`Analysis/Normed/Ring/InfiniteSum.lean`. What is plausibly absent is the
+shift-uniform kernel bound at exponent 7/4 with shell counts and the
+(1/8, 7/8) weighted interpolation; a PR must be scoped to those and cite
+the existing API. The same caution applies to every "absent from Mathlib"
+line in this dossier: each was read from the pinned sources, none was
+checked against Mathlib master or open PRs, and "PR-ready" is a
+self-assessment under Mathlib's 2026 policy on LLM-generated code.
 **Generalization**: ℤ^d with the exponent window s < −d; the kernel lemma
 at general conjugate exponents.
 

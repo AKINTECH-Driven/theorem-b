@@ -92,3 +92,9 @@ at pin (fallback exists); SummationFilter noise in error messages.
 leray-hopf has NO uniqueness of any kind — if U4 lands, this appears to be
 the first machine-checked uniqueness statement for 3D NS in any generality,
 in any proof assistant (recon 28 Aug; corrections welcome).
+**CORRECTION (2 Sep 2026, novelty audit):** the sentence above is FALSE as
+a bare claim. HeliCorgi/ns-mns2-flowmap-bridge committed local-in-time `H³`
+mild uniqueness on `ℝ³` (`IsMildSolutionOn.unique`) on 18/19 Aug 2026, ten
+days before `theorem_B_unique`; the 28 Aug recon missed it. The defensible
+residue is uniqueness on the 3-torus in the bounded-enstrophy class on
+every finite horizon — see announcement-draft.md "What is and is not new".
