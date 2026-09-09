@@ -55,6 +55,20 @@ and meets any budget — the capstones MUST export `Summable` for `g` (the
 Tier-3 lesson, again). Probes persisted under
 `audit-2026-09-02/tier8-build-f0/`. No tag until F1 (ladder §5a).
 
+9 Sep 2026, wave F1 BUILT: `TheoremB/ForcedGalerkin.lean` (826 lines): the
+seven frozen F1 statements byte-identical to §4a F1 (both readers and the
+orchestrator checked), plus the SKELETON Ico engine form
+`ns_galerkin_forced_trap_on` now compiled with the same clauses, and the
+composition probe `probe_forced_zero_feeds_frozen` (the forced ODE clause at
+`g = 0` reduces to the frozen unforced clause; the only compiled direction
+between the chains, NOT a strengthening). Gate GREEN 199/199 (builder, both
+readers, orchestrator). Two readers CLEAN (0 blockers, 0 majors). The §6a
+"MUST INHABIT JOINTLY" skeleton is discharged at the Galerkin level by the
+shape reader's probe (nonzero datum AND nonzero force inside the thresholds,
+non-constant flow; `audit-2026-09-02/tier8-build-f1/audit-shape/`); the
+capstone-level form stays with F5. Tag `t8a-forced-trap-green` laid on this
+commit per the ladder.
+
 Pin: Lean `4.31.0-rc2`, Mathlib `15a89b24`. Where the two critics of a
 design disagreed, this file takes the more conservative reading and says
 why (§5, §7).

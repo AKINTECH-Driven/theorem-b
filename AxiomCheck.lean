@@ -49,6 +49,7 @@ import TheoremB.ModesProbe
 import TheoremB.GalerkinDecay
 import TheoremB.DecayFlow
 import TheoremB.ForcedTrap
+import TheoremB.ForcedGalerkin
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -240,3 +241,12 @@ import TheoremB.ForcedTrap
 #print axioms TheoremB.forced_trap_forward_invariance
 #print axioms TheoremB.forced_conditional_trap
 #print axioms TheoremB.forced_thresholds_inhabited
+#print axioms TheoremB.force_energy_pairing_le
+#print axioms TheoremB.force_enstrophy_pairing_le
+#print axioms TheoremB.galerkin_forced_trap_on
+#print axioms TheoremB.divFree_propagates_on_forced
+#print axioms TheoremB.realField_propagates_on_forced
+#print axioms TheoremB.ns_galerkin_forced_trap_on
+#print axioms TheoremB.ns_galerkin_forced_trap_icc
+#print axioms TheoremB.ns_galerkin_unique_on_forced
+#print axioms TheoremB.probe_forced_zero_feeds_frozen
