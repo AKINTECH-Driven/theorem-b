@@ -1,11 +1,12 @@
 # Rung 10 — Tier 8 blueprint: the forced trap (8a) and the community class inhabited (8b)
 
 Status: **Tier 8a COMPLETE at the F5 commit** (9 Sep 2026; the tag
-`t8a-complete` is to be laid on the F5 commit and was not yet laid when this
-was written; the commit adds `TheoremB/ForcedProbe.lean` and registers its
-nine probes; gate GREEN 226/226, re-run by the F5 prose pass). **Tier 8b
-remains PLANNING; nothing of 8b is built.** The BUILD LOG below records
-waves F0 to F5. The paragraph that follows is the original planning status
+`t8a-complete` was laid on the F5 commit `2a4036b`; the commit adds
+`TheoremB/ForcedProbe.lean` and registers its nine probes; gate GREEN
+226/226, re-run by the F5 prose pass). **Tier 8b wave W1 BUILT** (9 Sep
+2026, `TheoremB/TimeSmooth.lean`, gate GREEN 251/251, tag
+`t8b-time-smooth-green`; W2 to W4 remain PLANNING). The BUILD LOG below
+records waves F0 to F5 and W1. The paragraph that follows is the original planning status
 of 9 Sep 2026, kept as written.
 
 Original status: PLANNING (9 Sep 2026): **nothing built; gate untouched at
@@ -163,6 +164,55 @@ the same wave: `context/announcement-draft.md` (Tier 8a section), `README.md`
 written). Two readers then reviewed the file and the prose; their majors
 and minors were fixed in the same wave (this file, the announcement, the
 README and the probe docstrings), no registered statement changed.
+
+9 Sep 2026, Tier 8b wave W1 BUILT (separate chat, as the house rule requires):
+`TheoremB/TimeSmooth.lean` (1,322 lines): the 24 frozen W1 declarations of
+§4b (the defs `convBil` and `WindowL1`; 22 theorems including the capstone
+`theorem_B_time_smooth`) byte-identical to §4b W1, checked by the builder,
+both readers and the orchestrator with independent extractors; every proof
+closed; registered in `TheoremB.lean` and `AxiomCheck.lean` with 22 ledger
+lines plus 3 for the chain-pinning probes `chain_unique`,
+`chain_unique_Ici`, `clause21_pinned` (the CHAIN PINNED entry of §6b,
+re-proved by the statement-shape reader and landed in the tree because the
+frozen comment of clause 21 cites `chain_unique`). Gate GREEN 251/251
+(builder, both readers, orchestrator). Two independent readers CLEAN
+(0 blockers, 0 majors) BEFORE the commit. Recorded facts: (1) a
+reconnaissance pass before the build compiled the ten riskiest idioms at the
+pin (session directory `audit-tier8b/recon-w1/`): `∞` for `ContDiffOn` is a
+SCOPED notation (`open scoped ContDiff`); the `innerSL` route for the `dotR`
+derivative fails on a ℂ instance path, the component-sum route through
+`EuclideanSpace.proj` is used; the WF chain recursion's `decreasing_by`
+goals are `≤ n`; `Finset.sum_attach` closes only with its function given
+explicitly; `Set.left_mem_Ici` is deprecated. (2) STATEMENT OBSERVATION,
+not drift: the frozen `hasDerivAt_leibnizSum` takes derivative hypotheses
+for `i ≤ n + 1`, but the derivative of `S n` needs them only for `i ≤ n`
+(windows are needed up to `n + 1`); the chain induction runs on the
+non-frozen sibling `hasDerivAt_leibnizSum'` and the frozen form is its
+weakening. (3) Route deviation without statement effect: `WindowL1.majorant`
+uses orders 0 and 5, not 4 and 5 (with order 4 alone `‖l‖·A l ~ ‖l‖⁻³` is
+not summable on ℤ³). (4) `hasDerivWithinAt_mode_zero` is proved by the
+endpoint tool as decided (§8 item 4); it, `contDiffOn_infty_of_hasDerivAt_chain`
+and `lerayProj_smul` are not consumed by the capstone route (frozen
+regardless). (5) The §7 spec-drift sentence (the TheoremBSmooth /
+ClassicalEquation headers' "no time-derivative of convFull") is NOT struck:
+the W1 build rule freezes every earlier file; the drift is recorded in the
+W1 header and here, and the strike is the user's call. (6) Blueprint prose
+corrections: the classical block is 64 lines on both sides after
+comment-stripping, not "61/61"; the §6b BYTE-IDENTITY bullet says the three
+comment lines were "restored at freeze", but the binding §4b block does not
+carry them, and the tree follows §4b byte-for-byte (the block equals
+ClassicalEquation.lean's with comments stripped). (7) The W2 engine (the
+two-line `variable` block and the six Mathlib-only `WithinSeries`
+statements) was re-proved during this wave as a reconnaissance probe outside
+the tree (`audit-tier8b/recon-w2/WithinSeriesProbe.lean`, `import Mathlib`
+only, exit 0, byte-identical 6/6, one reader CLEAN), to be landed verbatim
+by W2; the blueprint's `feas-b/F1_WithinEngine.lean` is not on disk
+anywhere. The readers' other probes (nonzero admissible datum, constant
+witness against clause 6, the time-constant witness excluded, the rest-state
+chain, empty-window facts, the mode-zero lemma non-tautological, satisfiability
+by the zero datum) are persisted under `audit-tier8b/build-w1/audit-shape/`
+and `audit-proof/`; the §6b CheapWitness items land in W3/W4's probe file as
+planned. Tag `t8b-time-smooth-green` laid here (ladder §5b).
 
 Pin: Lean `4.31.0-rc2`, Mathlib `15a89b24`. Where the two critics of a
 design disagreed, this file takes the more conservative reading and says
@@ -1927,7 +1977,10 @@ Statement-shape facts to carry:
   reading, §6b).
 - Spec-drift to record when W1 lands: the TheoremBSmooth / ClassicalEquation
   headers' sentence "the campaign does not have a time-derivative of
-  convFull" becomes false; strike it in the same commit.
+  convFull" becomes false; strike it in the same commit. W1 LANDED (9 Sep
+  2026): recorded as superseded in the TimeSmooth.lean header and in the
+  build log, NOT struck, because the W1 build rule freezes every earlier
+  file; striking it is the user's call.
 - Deliberate 8a statement decisions: force hypotheses on `Ici 0` in the
   capstones, `ℝ` in the Galerkin layer (bridge ~10 lines) — KEEP;
   `0 < Zs` — KEEP (degenerate box buys nothing); non-strict
@@ -2028,7 +2081,8 @@ blueprint takes and what remains the user's call:
    smallest next move is 8a F0 (`TheoremB/ForcedTrap.lean`: four
    declarations already PROVED in the probe; one session; gate-checkable
    immediately). 8b W1 may start in a SEPARATE session. Neither in the
-   same chat. What remains is 8b, nothing of which is built.
+   same chat. What remains is 8b: W1 built 9 Sep 2026
+   (`t8b-time-smooth-green`); W2 to W4 unbuilt.
 10. **Mean-zero / RealField / DivFree of `D n`** — not exported; add only
     if the pressure chain or an audit wants reality of `D n`.
 
@@ -2041,3 +2095,8 @@ UPDATE (F5, 9 Sep 2026): that move and the five after it are done; 8a is
 complete at the F5 commit (`t8a-complete` to be laid on it). The smallest next move is now 8b wave W1
 (`TheoremB/TimeSmooth.lean`, §4b), in a separate session, with nothing of
 8b built yet.
+
+UPDATE (W1, 9 Sep 2026): W1 is built and tagged `t8b-time-smooth-green`
+(gate GREEN 251/251). The smallest next move is W2: land the re-proved
+engine probe verbatim as `TheoremB/WithinSeries.lean`, then build
+`TheoremB/JointSmooth.lean` against §4b W2.

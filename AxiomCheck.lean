@@ -54,6 +54,7 @@ import TheoremB.ForcedGalerkinFlow
 import TheoremB.ForcedTheoremB
 import TheoremB.ForcedUnique
 import TheoremB.ForcedProbe
+import TheoremB.TimeSmooth
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -281,3 +282,28 @@ import TheoremB.ForcedProbe
 #print axioms TheoremB.forced_breakdown_threshold_without_budget_fails
 #print axioms TheoremB.eternal_forced_flows_agree
 #print axioms TheoremB.eternal_forced_witnesses_agree
+#print axioms TheoremB.convBil_self
+#print axioms TheoremB.hasDerivAt_convBil_flow
+#print axioms TheoremB.lerayProj_add
+#print axioms TheoremB.lerayProj_smul
+#print axioms TheoremB.HasDerivAt.lerayProj
+#print axioms TheoremB.weighted_convMaj_le₂
+#print axioms TheoremB.norm_convBil_le
+#print axioms TheoremB.tsum_weighted_convBil_le
+#print axioms TheoremB.WindowL1.majorant
+#print axioms TheoremB.WindowL1.convBil
+#print axioms TheoremB.WindowL1.visc
+#print axioms TheoremB.WindowL1.lerayProj
+#print axioms TheoremB.WindowL1.add
+#print axioms TheoremB.WindowL1.nsmul
+#print axioms TheoremB.sobolev_growth_all_m
+#print axioms TheoremB.windowL1_of_sobolev_all
+#print axioms TheoremB.hasDerivWithinAt_mode_zero
+#print axioms TheoremB.continuousOn_convBil
+#print axioms TheoremB.contDiffOn_infty_of_hasDerivAt_chain
+#print axioms TheoremB.contDiffOn_infty_Ici_of_chain
+#print axioms TheoremB.hasDerivAt_leibnizSum
+#print axioms TheoremB.theorem_B_time_smooth
+#print axioms TheoremB.chain_unique
+#print axioms TheoremB.chain_unique_Ici
+#print axioms TheoremB.clause21_pinned
