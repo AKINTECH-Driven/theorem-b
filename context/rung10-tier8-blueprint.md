@@ -1,6 +1,14 @@
 # Rung 10 — Tier 8 blueprint: the forced trap (8a) and the community class inhabited (8b)
 
-Status: PLANNING (9 Sep 2026) — **nothing built; gate untouched at
+Status: **Tier 8a COMPLETE at the F5 commit** (9 Sep 2026; the tag
+`t8a-complete` is to be laid on the F5 commit and was not yet laid when this
+was written; the commit adds `TheoremB/ForcedProbe.lean` and registers its
+nine probes; gate GREEN 226/226, re-run by the F5 prose pass). **Tier 8b
+remains PLANNING; nothing of 8b is built.** The BUILD LOG below records
+waves F0 to F5. The paragraph that follows is the original planning status
+of 9 Sep 2026, kept as written.
+
+Original status: PLANNING (9 Sep 2026): **nothing built; gate untouched at
 `82a9ab6`** (HEAD `b45ce9e` is prose-only on top of it;
 `scripts/check_axioms.sh` NOT run by this pass; the "GREEN 186/186"
 figure is the campaign record from the 2 Sep audit, not re-measured here).
@@ -102,6 +110,59 @@ clause list at g = 0; NOT a strengthening) is registered as an extra ledger
 line. The F3-to-F4 seam is compiled by the shape reader
 (`audit-shape/D_Readmission.lean`: two eternal forced flows with the exported
 clauses agree on every horizon). Tag `t8a-forced-B-green` laid here.
+
+9 Sep 2026, wave F4 BUILT (commit `01a17cf`): `TheoremB/ForcedUnique.lean`
+(170 lines as committed): the two corollaries `forced_breakdown_threshold`
+(box form, the contrapositive of `theorem_B_forced` at
+`G := min (ν²·Es) (ν²·Zs/8)`) and `forced_breakdown_threshold'` (the natural
+box `(en c₀, ens c₀)`, needing `0 < ens c₀`), byte-identical to §4a F4. Gate
+GREEN 217/217 (builder, both readers, orchestrator). Two readers CLEAN. The
+three audit notes the readers asked for are in the box-form docstring:
+(1) the contrapositive reading "a flow that leaves the box does so only if
+the force budget is violated" passes through `theorem_B_unique_forced`, not
+this statement alone; (2) the conclusion's time is `∃ t ∈ Ici 0`, inherited
+from the global force budget, not localised to the horizon; (3) at `T = 0`
+the antecedent is always false (a constant flow is confined), so `T = 0` is
+never to be cited. PLACEMENT, as recorded at F3: the F4 capstones
+`theorem_B_unique_forced` and `ns_full_global_flow_forced` live in
+`ForcedTheoremB.lean`; `ForcedUnique.lean` owns only the two corollaries.
+Probes persisted under `audit-2026-09-02/tier8-build-f4/`. No tag.
+
+9 Sep 2026, wave F5 BUILT: `TheoremB/ForcedProbe.lean` (1,015 lines;
+imports `ForcedUnique`; the five frozen forced files consumed, not edited),
+registered in `TheoremB.lean` and `AxiomCheck.lean` with nine ledger lines:
+`probe_forced_joint_hypotheses_strict` and
+`probe_forced_capstones_fire_jointly` (for every `κ, ν > 0` a NONZERO datum
+and a NONZERO ℓ² force strictly inside the four box and force thresholds
+of `theorem_B_forced` and inside its smallness threshold, and for every
+`ν > 0` such a pair on which both `theorem_B_forced` and
+`ns_full_global_flow_forced` fire; the §6a joint-inhabitation SKELETON
+discharged at capstone level); `probe_line_force_fails_only_certificate`
+(the line force meets every energy budget through the junk value `0` and is
+rejected by the summability certificate alone);
+`probe_constant_witness_fails_equation_clauses` (the constant zero witness
+passes four of the five non-equation clauses, the initial-condition clause
+not being stated, and fails the integral and mode-ODE clauses
+independently) and `probe_constant_witness_fails_ode_unforced` (at
+`g = 0` the constant shear fails the ODE clause for every `ν > 0`);
+`probe_no_confined_flow_inhabited` and
+`forced_breakdown_threshold_without_budget_fails` (the corollary's full
+hypothesis list, "no confined flow" included, is inhabited, and the
+corollary with its conclusion weakened to `False` is refuted for every
+candidate `κ`); `eternal_forced_flows_agree` and
+`eternal_forced_witnesses_agree` (the F3-to-F4 seam: two flows carrying the
+exported clause list agree on the half line; uniqueness of the eternal flow
+as a corollary of what it exports). The `g = 0` direction is not
+duplicated (`probe_forced_zero_feeds_frozen`,
+`probe_frozen_flow_inhabits_forced_clauses` are already in the tree). The
+pair-mode machinery is private and carries no ledger line. Gate GREEN
+226/226 (`audit-2026-09-02/tier8-build-f5/gate-f5.log`). Prose updated in
+the same wave: `context/announcement-draft.md` (Tier 8a section), `README.md`
+(capstone table, gate count, verification, tags), and this file. Tag
+`t8a-complete` to be laid on the F5 commit (not yet laid when this was
+written). Two readers then reviewed the file and the prose; their majors
+and minors were fixed in the same wave (this file, the announcement, the
+README and the probe docstrings), no registered statement changed.
 
 Pin: Lean `4.31.0-rc2`, Mathlib `15a89b24`. Where the two critics of a
 design disagreed, this file takes the more conservative reading and says
@@ -1655,6 +1716,9 @@ Transcriptions of the compiled probes listed in §6 (8a): the four design
 probes, the two shape-audit files, and the joint nonzero inhabitation
 (SKELETON — see §6).
 
+BUILT (F5, 9 Sep 2026): nine gated declarations, listed by name in the
+BUILD LOG; the joint nonzero inhabitation is compiled, not a skeleton.
+
 ## 5. Wave plan (estimates re-based on the feasibility critics' measured replay sizes; where design and critic disagreed the LARGER figure is taken)
 
 Campaign average is ≈2000 lines per wave; every wave ships with a
@@ -1781,6 +1845,11 @@ Fallback ladder (each rung taggable and honest): 8b-v1 = W1
   `ens probeForce = 2`; `auditForce_cases`, `norm_freq_auditE1_sq` are
   reusable). Until it lands the 8a hypotheses are known inhabited
   separately (thresholds; force) and jointly only at `g = 0`.
+  UPDATE (F5, 9 Sep 2026): DISCHARGED at capstone level by
+  `probe_forced_joint_hypotheses_strict` and
+  `probe_forced_capstones_fire_jointly` (`TheoremB/ForcedProbe.lean`,
+  registered; the datum is the pair shear at radius `s/2`, the force the
+  pair shear at amplitude `(νs/8)·cos t`, `4κs⁴ ≤ ν⁴`).
 
 ## 7. Audit register
 
@@ -1944,16 +2013,22 @@ blueprint takes and what remains the user's call:
 4. **`hasDerivWithinAt_mode_zero`** — decided: keep the statement, prove
    via the endpoint tool (§4b W1).
 5. **Comment lines in byte-identity** — decided: restore them at freeze.
-6. **Joint nonzero inhabitation of the 8a hypotheses** — SKELETON, F5.
+6. **Joint nonzero inhabitation of the 8a hypotheses**: DISCHARGED at
+   capstone level by `TheoremB/ForcedProbe.lean` (F5, 9 Sep 2026:
+   `probe_forced_joint_hypotheses_strict`,
+   `probe_forced_capstones_fire_jointly`; gate 226/226).
 7. **A generic "difference-flow" uniqueness engine** (one engine consumed by
    both the frozen and the forced uniqueness) — deferred: a NEW engine
    sibling costing the same lines once; pays only if a forced smooth layer
    (8c) also needs uniqueness.
 8. **Textbook theorem numbers** — need a reader with the books.
-9. **Order of 8a vs 8b** — independent files; the smallest next move is
-   8a F0 (`TheoremB/ForcedTrap.lean`: four declarations already PROVED in
-   the probe; one session; gate-checkable immediately). 8b W1 may start in
-   a SEPARATE session. Neither in the same chat.
+9. **Order of 8a vs 8b**: DONE for 8a (F0 to F5 built; `t8a-complete`
+   pending on the F5 commit).
+   The original decision, kept as written: independent files; the
+   smallest next move is 8a F0 (`TheoremB/ForcedTrap.lean`: four
+   declarations already PROVED in the probe; one session; gate-checkable
+   immediately). 8b W1 may start in a SEPARATE session. Neither in the
+   same chat. What remains is 8b, nothing of which is built.
 10. **Mean-zero / RealField / DivFree of `D n`** — not exported; add only
     if the pressure chain or an audit wants reality of `D n`.
 
@@ -1961,3 +2036,8 @@ Smallest next move: 8a wave F0 — transcribe
 `design-a/DesignA_F0_ForcedTrap.lean` into `TheoremB/ForcedTrap.lean`
 (`push Not` for the deprecated `push_neg`), run the gate, and hand it to
 an independent reader before any tag.
+
+UPDATE (F5, 9 Sep 2026): that move and the five after it are done; 8a is
+complete at the F5 commit (`t8a-complete` to be laid on it). The smallest next move is now 8b wave W1
+(`TheoremB/TimeSmooth.lean`, §4b), in a separate session, with nothing of
+8b built yet.

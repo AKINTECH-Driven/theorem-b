@@ -11,7 +11,7 @@ We have kernel-checked, in Lean 4 over Mathlib (pin `15a89b24`, toolchain
 `v4.31.0-rc2`), a small-data theory for the 3D incompressible
 Navier-Stokes equations on the 3-torus that runs from an *unconditional*
 existence-and-trapping theorem through uniqueness to a **classical,
-pointwise** solution — 186 audited declarations (the axiom ledger:
+pointwise** solution — 226 audited declarations (the axiom ledger:
 theorems, one definition, and the compiled non-vacuity probes), every one
 on exactly `{propext, Classical.choice, Quot.sound}`, none on `sorryAx`.
 
@@ -63,6 +63,15 @@ What is proved, one line per layer:
   (inside that cube) stays at most `δ` throughout a window synchronize
   at rate `νN² − K` down to a floor of order `δ`, with ONE constant `K`
   fixed at the class budgets before either flow is chosen.
+- **The forced trap** (`theorem_B_forced`, `theorem_B_unique_forced`,
+  `ns_full_global_flow_forced`, `forced_breakdown_threshold`): the same
+  system driven by a small mean-zero, real, divergence-free force that
+  enters through its energy (the squared `ℓ²` norm) only: a box
+  `(Es, Zs)` with `κ_forced·Es·Zs ≤ ν⁴` and force budget `G ≤ ν²·Es`,
+  `8G ≤ ν²·Zs` is never left, on every horizon and on `[0, ∞)`, unique in
+  the enstrophy-bounded class; plus a breakdown threshold in the
+  campaign's coefficient vocabulary. NOT a strengthening of the unforced
+  chain at `g = 0`; see the Tier 8a section below.
 
 What is and is not new, plainly. Nothing here is new mathematics: the
 trap is Leray 1934 / Fujita-Kato 1964, uniqueness is
@@ -188,6 +197,14 @@ recorded in the repository:
    approximation, ambient energy decay at least at rate `2ν`, and
    determining modes with a threshold of explicit form (a closed formula
    up to the lattice-kernel constant, not a printable integer).
+10. **Tier 8a**: the forced trap. A barrier lemma replacing the first-exit
+    bootstrap (neither energy nor enstrophy is monotone under forcing), the
+    forced Galerkin layer and its trapped eternal flows per box, the
+    box-exhaustion limit with the force term passing through as a fixed
+    `ℓ²` term, uniqueness with the force cancelling in the difference of two
+    flows, the eternal splice, and the breakdown-threshold corollaries.
+    Every wave F0 to F4 read by two independent adversarial readers
+    before its commit.
 
 ## The layers, in the order they landed
 
@@ -348,6 +365,170 @@ content is the lock-on RATE; and in the enstrophy-bounded class without
 smallness, where `theorem_B_modes` also applies, no decay at all is
 proved, so there it is exactly the classical conditional result.
 
+## Tier 8a: the forced trap
+
+UPDATE (Tier 8a, 9 Sep 2026): the box trap under a small force, in the
+same coefficient vocabulary, built as pure siblings of the unforced chain
+(no frozen statement edited): 226 audited declarations, tags
+`t8a-forced-trap-green`, `t8a-forced-B-green` (`t8a-complete` is to be
+laid on the F5 commit and was not yet laid when this was written).
+
+The object is the same system driven mode by mode by a spectral force
+`g`:
+
+    cₖ' = −ν‖k‖² cₖ + P_k( conv(c)ₖ ) + gₖ(t),
+
+with the force mean-zero, real, divergence-free, `ℓ²` at every time (the
+summability certificate is a hypothesis of every existence capstone and
+of the breakdown corollaries, not of `theorem_B_unique_forced`, and it is
+load-bearing: `en (g t)` is a `tsum`, and a non-`ℓ²` force would meet any
+budget with the junk value `0`), and per-mode CONTINUOUS in time on
+`[0, ∞)`. The force enters through its energy `en (g t) = Σ‖gₖ(t)‖²` (the
+squared `ℓ²` norm) ONLY: the enstrophy-side force pairing is taken against
+the dissipation and Young-split, so no `H¹` bound on the force is needed.
+The trap is a BOX `(Es, Zs)` rather than the datum's own energy and
+enstrophy: with `κ·Es·Zs ≤ ν⁴`, a force budget `G ≤ ν²·Es`,
+`8·G ≤ ν²·Zs`, data with `en c₀ ≤ Es`, `ens c₀ ≤ Zs`, and `en (g t) ≤ G`
+at every time, the flow never leaves the box.
+
+What is proved, one line per layer (files `TheoremB/ForcedTrap.lean`,
+`ForcedGalerkin.lean`, `ForcedGalerkinFlow.lean`, `ForcedTheoremB.lean`,
+`ForcedUnique.lean`, `ForcedProbe.lean`):
+
+- **The forced conditional trap** (`forced_conditional_trap`): the Tier-2
+  trap transplanted to a forced trajectory, with witness `κ_forced = 8·K`,
+  `K` the master-inequality constant of `SpectralNorms.lean` (a pure
+  lattice constant, not the determining-modes `K`). Under forcing neither
+  energy nor enstrophy is monotone, so the first-exit bootstrap is
+  replaced by a barrier lemma (`barrier_forward_invariance`: a level is
+  never crossed if the derivative is nonpositive on a strip just above
+  it), the one analysis brick not already in the tree. The forced Galerkin
+  layer and its trapped eternal flow per box (waves F1, F2) are replays of
+  the unforced ones with the force pairings Cauchy-Schwarzed.
+- **Existence with the box trap** (`theorem_B_forced`): on every horizon
+  `[0, T]`, a flow of the FULL forced system starting at the datum: real
+  and divergence-free throughout, with summable energy and enstrophy at
+  every time (exported), mode-continuous, satisfying the forced integral
+  equation on the closed window and the forced ODE at every interior
+  time, and never leaving the box. Per-horizon, by box exhaustion,
+  Arzela-Ascoli and dominated convergence as in Tier 3; the force term
+  passes through the limit as a fixed `ℓ²` term.
+- **Uniqueness** (`theorem_B_unique_forced`): two mode-continuous,
+  divergence-free flows on `[0, T]` from the same datum, with summable
+  energy and enstrophy series bounded by any budgets, satisfying the
+  forced integral equation under the same force, agree at every time and
+  mode. The only hypothesis on the force is per-mode continuity on the
+  window: no smallness, no reality, no mean-zero and no summability of the
+  force are assumed, because the force cancels in the difference of two
+  flows.
+- **One eternal forced flow** (`ns_full_global_flow_forced`): a single
+  flow on `[0, ∞)` with the clauses above at every `t ≥ 0` (the ODE at
+  every `t > 0`), spliced from per-horizon witnesses along integer
+  segments with uniqueness erasing the seams; inside the box forever.
+  Uniqueness of the eternal flow itself is not a clause of the statement;
+  it is the compiled corollary `eternal_forced_witnesses_agree`
+  (`ForcedProbe.lean`): any two flows carrying the exported clause list
+  (six of its seven clauses are used; the mode-ODE clause is not needed)
+  agree on the half line.
+- **A breakdown threshold, in coefficient vocabulary**
+  (`forced_breakdown_threshold`, `forced_breakdown_threshold'`): the
+  contrapositive of `theorem_B_forced` at the budget
+  `G := min(ν²·Es, ν²·Zs/8)`: from trap-class data inside an admissible
+  box, under an admissible force, if NO flow of the class stays confined
+  to the box on `[0, T]`, then at some time `t ≥ 0` the force's energy
+  exceeds `ν²·Es` or eight times it exceeds `ν²·Zs`. The primed form is
+  the same at the natural box `(en c₀, ens c₀)` (it needs `0 < ens c₀`).
+  Three audit notes in the docstring bind every reading: the hypothesis
+  "no confined flow" is weaker than non-existence, and turning "a flow
+  leaves the box" into it passes through `theorem_B_unique_forced`; the
+  time in the conclusion is `∃ t ∈ Ici 0`, not localised to the horizon;
+  and at `T = 0` the antecedent is always false, so `T = 0` is never to be
+  cited.
+- **The probes** (`ForcedProbe.lean`, nine gated declarations): for every
+  `κ, ν > 0` a NONZERO datum and a NONZERO `ℓ²` force sit strictly inside
+  the four box and force thresholds and inside the smallness threshold
+  (`probe_forced_joint_hypotheses_strict`), and for every `ν > 0` there
+  is such a pair on which both capstones fire
+  (`probe_forced_capstones_fire_jointly`); the line force (unit shear on
+  every mode `(n, 0, 0)`) meets every energy budget through the junk value
+  and is rejected by the summability certificate alone
+  (`probe_line_force_fails_only_certificate`); the constant zero witness
+  passes four of the five non-equation clauses (the initial-condition
+  clause is not stated) and fails each equation clause independently, and at `g = 0` a constant shear fails the ODE clause for
+  every `ν > 0` (`probe_constant_witness_fails_equation_clauses`,
+  `probe_constant_witness_fails_ode_unforced`); the force disjunct of the
+  breakdown threshold is load-bearing, the corollary with its conclusion
+  weakened to `False` being refuted for every candidate `κ`
+  (`probe_no_confined_flow_inhabited`,
+  `forced_breakdown_threshold_without_budget_fails`); and the F3-to-F4
+  seam is compiled (`eternal_forced_flows_agree`,
+  `eternal_forced_witnesses_agree`). Every witness except the line force
+  of Probe 2 is a two-mode real shear on `{e₁, −e₁}`, the cheapest field
+  with vanishing full convection.
+
+What is NOT claimed, precisely:
+- The breakdown threshold is a statement in the campaign's COEFFICIENT
+  vocabulary. It is NOT the community's
+  `navier_stokes_breakdown_periodic`, NOT its negation, and NOT a
+  real-space statement: no velocity field, no pressure, no smoothness
+  class and no time derivative of a physical field appears in it.
+- At `g = 0` the forced chain is NOT a strengthening of the unforced one
+  and must never be described as one: `κ_forced = 8·K` where the unforced
+  trap has `K`, the smallness `κ·Es·Zs ≤ ν⁴` is non-strict, and the box
+  `(Es, Zs)` is a stronger energy hypothesis than the frozen
+  `κ·en c₀·ens c₀ < ν⁴`. The only compiled direction between the two
+  chains is frozen ⇒ forced clause list at `g = 0`
+  (`probe_forced_zero_feeds_frozen`,
+  `probe_frozen_flow_inhabits_forced_clauses`).
+- Forces are per-mode continuous in time; `L¹` or merely measurable
+  forcing is out of scope. No `H¹` or sup-norm bound on the force is
+  needed at the capstone level, and none is exported. No decay of the
+  force, no attractor, and no forced Sobolev, smooth or classical layer.
+- The thresholds are of explicit form, exported as compiled existentials,
+  not numbers: `κ_forced = 8·K` is a closed formula up to the
+  lattice-kernel sum, and the force thresholds `ν²·Es`, `ν²·Zs/8` are
+  literal expressions. The `∃ κ` of the existence theorem and of the
+  corollary are unlinked by statement and linked by proof, the house
+  pattern.
+- No priority is claimed for any of it. Nothing in Tier 8a is new
+  mathematics: it is the classical forced small-data (small Grashof
+  number) theory carried through a Galerkin approximation. Textbook
+  sources, named as references and not verified against, chapter numbers
+  unverified: Temam, Navier-Stokes Equations, Ch. III;
+  Robinson-Rodrigo-Sadowski, The Three-Dimensional Navier-Stokes
+  Equations, Ch. 6-7; Constantin-Foias, Navier-Stokes Equations, Ch. 10;
+  Foias-Manley-Rosa-Temam, Navier-Stokes Equations and Turbulence, Ch. II.
+  The forced file headers themselves disagree on two of these
+  (`ForcedTrap`, `ForcedGalerkin` and `ForcedGalerkinFlow` cite
+  Robinson-Rodrigo-Sadowski Ch. 6, the latter two also Constantin-Foias
+  Ch. 6; `ForcedTheoremB` and `ForcedUnique` cite Ch. 6-7 and Ch. 10).
+
+Relation to OpenAI's forced blow-up (8 Sep 2026; see "Related
+machine-checked work"): the two results are complementary halves of the
+forced periodic picture in the informal sense only. Theirs, as its authors present it, is that a
+force can drive a periodic Navier-Stokes solution to breakdown; ours is
+that a small force cannot drive small data out of the trap, and the
+breakdown threshold is the quantitative form of the sentence "the force
+has to push the fluid out of the trap": from trap-class data, a forced
+breakdown in our class has to be driven past `ν²·Es` or `ν²·Zs/8` in force
+energy at some time. Said plainly, the two live in different vocabularies,
+their real-space community solution class against our coefficient system,
+and they have NOT been composed: no statement in this tree mentions their
+class, their force or their blow-up, and no statement of theirs has been
+derived from, refuted by or aligned with ours. The 9 Sep cross-check
+(their periodic class elaborates at our pin) is the whole of the contact.
+
+Verification of the tier: every wave F0 to F4 passed two independent
+adversarial readers BEFORE its commit, the rule Tier 7 did not meet (the
+record is the commit messages; the persisted audit directories hold gate
+reruns and probe files, not verdict files); the
+readers' probes are persisted outside the tree and the essential ones are
+now compiled in `ForcedProbe.lean`. Tags: `t8a-forced-trap-green` (waves
+F0 and F1, `b25367e`), `t8a-forced-B-green` (F3, with the two F4 capstones
+`theorem_B_unique_forced` and `ns_full_global_flow_forced` delivered early
+in `ForcedTheoremB.lean`, `eda7da6`), `t8a-complete` (to be laid on the
+F5 commit; not yet laid when this was written). Gate GREEN 226/226.
+
 ## Scope, verification, and tags
 
 What is STILL not claimed, precisely:
@@ -367,14 +548,17 @@ What is STILL not claimed, precisely:
   times; two-sided derivatives only at interior times.
 
 Verification discipline: a deterministic gate accepts the build only if
-`#print axioms` for all 186 audited declarations reports at most
+`#print axioms` for all 226 audited declarations reports at most
 `propext, Classical.choice, Quot.sound` and no `sorryAx`; statements
 frozen at declaration, every strengthening landing as a new sibling with
 the frozen statement re-verified byte-identical. Independent adversarial
 audits (three to six parallel auditors) preceded every tag through Tier 6
 wave 4; the Tier 6 classical layer and all of Tier 7 were self-audited by
 their builders at tag time and independently audited post-tag on
-2 Sep 2026. The audits drew blood at every stage, by design: M4 (a
+2 Sep 2026. Tier 8a returned to the pre-commit rule: every wave F0 to F4
+passed two independent adversarial readers before its commit, with the
+probes persisted outside the tree and the essential ones compiled in
+`ForcedProbe.lean`. The audits drew blood at every stage, by design: M4 (a
 pressureless-class scoping, answered in-wave with the Leray layer);
 Tier 3 (the capstone discarding its own summability certificates — the
 fix later powered Tier 4); Tier 4 and Tier 5 (the same composition-gap
@@ -392,7 +576,11 @@ Repository tags: `m1-green` → `m2-complete` → `m3-conditional-green` →
 `t5-polish-green` → `t6-sobolev-green` → `t6-smooth-green` →
 `t6-classical-green` → `t7-bandwidth-green` → `t7-modes-green` →
 `t7-complete` → `t7-audited-green` (2 Sep 2026: the post-tag audit's
-fixes; `t7-bandwidth-green` re-laid on the corrected statement). Priority, in its
+fixes; `t7-bandwidth-green` re-laid on the corrected statement) →
+`t8a-forced-trap-green` → `t8a-forced-B-green` → `t8a-complete` (9 Sep
+2026: Tier 8a, the forced trap; `t8a-complete` is to be laid on the F5
+commit, which adds `ForcedProbe.lean`, and was not yet laid when this
+was written). Priority, in its
 only defensible form: to our knowledge (reconnaissance 26 Aug to 2 Sep
 2026) the first kernel-checked small-data GLOBAL well-posedness — strong
 class, unique in the bounded-enstrophy class on every finite horizon —

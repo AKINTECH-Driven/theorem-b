@@ -53,6 +53,7 @@ import TheoremB.ForcedGalerkin
 import TheoremB.ForcedGalerkinFlow
 import TheoremB.ForcedTheoremB
 import TheoremB.ForcedUnique
+import TheoremB.ForcedProbe
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -271,3 +272,12 @@ import TheoremB.ForcedUnique
 #print axioms TheoremB.ns_full_global_flow_forced
 #print axioms TheoremB.forced_breakdown_threshold
 #print axioms TheoremB.forced_breakdown_threshold'
+#print axioms TheoremB.probe_forced_joint_hypotheses_strict
+#print axioms TheoremB.probe_forced_capstones_fire_jointly
+#print axioms TheoremB.probe_line_force_fails_only_certificate
+#print axioms TheoremB.probe_constant_witness_fails_equation_clauses
+#print axioms TheoremB.probe_constant_witness_fails_ode_unforced
+#print axioms TheoremB.probe_no_confined_flow_inhabited
+#print axioms TheoremB.forced_breakdown_threshold_without_budget_fails
+#print axioms TheoremB.eternal_forced_flows_agree
+#print axioms TheoremB.eternal_forced_witnesses_agree
