@@ -43,15 +43,17 @@ and prints `#print axioms` for every audited declaration. It passes if and only 
 line reports at most `propext`, `Classical.choice`, `Quot.sound` and no `sorryAx`. The
 script reports; it never repairs.
 
-Expected result: the final line `GATE: GREEN`, preceded by the output of the 265
+Expected result: the final line `GATE: GREEN`, preceded by the output of the 283
 `#print axioms` commands in `AxiomCheck.lean` (theorems, one definition, and the
 compiled non-vacuity probes), each on exactly the three kernel axioms. Any other outcome
 is `GATE: RED` with exit status 1. In the campaign notes this state is written
-"GREEN 265/265"; it was recorded on 9 Sep 2026 at the Tier 8b wave W2 state, the gate
+"GREEN 283/283"; it was recorded on 9 Sep 2026 at the Tier 8b wave W3 state, the gate
 having read 186/186 at `82a9ab6` (tag `t7-audited-green`, 2 Sep 2026), grown by one
 Tier 8a wave at a time (190, 199, 208, 215, 217, 226 at `2a4036b`, tag `t8a-complete`),
 by the Tier 8b wave W1 (22 frozen theorems and 3 chain-pinning probes, 251 at `0efba80`,
-tag `t8b-time-smooth-green`), and by the Tier 8b wave W2 (14 frozen theorems, 265).
+tag `t8b-time-smooth-green`), by the Tier 8b wave W2 (14 frozen theorems, 265 at
+`e5a8755`, tag `t8b-joint-smooth-green`), and by the Tier 8b wave W3 (13 frozen theorems
+and 5 datum-side probes, 283).
 
 ## Capstone theorems
 
@@ -107,8 +109,11 @@ comes from `pressureCoeff`.
   (`ForcedTrap`, `ForcedGalerkin`, `ForcedGalerkinFlow`, `ForcedTheoremB`, `ForcedUnique`,
   and the gated probes `ForcedProbe`); Tier 8b, time-smoothness of the eternal flow
   (`TimeSmooth`, wave W1), the Mathlib-only within-convex series engine (`WithinSeries`,
-  wave W2, a PR candidate) and joint smoothness on the closed slab (`JointSmooth`, W2).
-- `AxiomCheck.lean`: the audited-declaration ledger (265 `#print axioms` lines).
+  wave W2, a PR candidate), joint smoothness on the closed slab (`JointSmooth`, W2), and
+  the community class (`CommunityClass`: the six community definitions copied into
+  `TheoremB.Community`, the real-part bridge, the datum-side conditions; W3, with the
+  capstones to follow in W4).
+- `AxiomCheck.lean`: the audited-declaration ledger (283 `#print axioms` lines).
 - `scripts/check_axioms.sh`: the gate.
 - `context/`: campaign blueprints (`rung*-blueprint.md`), the announcement draft, the
   upstreaming dossier, and the discrete-twin skeleton (`NSSkeleton.lean`).
@@ -263,6 +268,19 @@ on `ℝ³`. No mathematical priority is claimed for any layer, and none for the 
   the commit, both CLEAN with minors only; the seam probe to the community class
   (clause 24 composed with the real part and the clock gives the community's
   `velocity_smooth` shape) persisted outside the tree. Tag `t8b-joint-smooth-green`.
+- **Tier 8b wave W3, 9 Sep 2026.** `TheoremB/CommunityClass.lean` part 1: the six
+  definitions of the community's periodic solution class byte-copied into
+  `TheoremB.Community` (identical to the persisted copy of OpenAI's Comparator wording
+  declaration by declaration with comments stripped; the only differences from the
+  upstream file are the namespace and the `local notation` for the divergence), the
+  bridge objects `vReal`, `pReal`, `u₀Real`, the coordinate-derivative and Laplacian
+  bridges for the lifts, the reality and periodicity lemmas, the divergence-free and
+  smoothness conditions on the real datum, the zero force's condition, and five
+  registered datum-side probes (a nonzero admissible datum, its nonzero real value, the
+  rest pair failing the class, the constant flow failing the mode equation). 16 frozen
+  W3 items and the 8 community declarations byte-identical (builder, both readers,
+  orchestrator); two independent readers CLEAN before the commit. Nothing is inhabited
+  in this wave; no tag (the ladder tags after W4).
 - **Cross-check, 9 Sep 2026.** OpenAI's Comparator (D) statement, in the community
   Formal Conjectures wording, was reproduced verbatim and compiled against this pin
   (Mathlib `15a89b24`, Lean `v4.31.0-rc2`): it elaborates (exit 0, the (D) statement

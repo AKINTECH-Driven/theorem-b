@@ -57,3 +57,4 @@ import TheoremB.ForcedProbe
 import TheoremB.TimeSmooth
 import TheoremB.WithinSeries
 import TheoremB.JointSmooth
+import TheoremB.CommunityClass

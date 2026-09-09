@@ -7,8 +7,9 @@ Status: **Tier 8a COMPLETE at the F5 commit** (9 Sep 2026; the tag
 2026: `TheoremB/TimeSmooth.lean`, gate GREEN 251/251, tag
 `t8b-time-smooth-green`; `TheoremB/WithinSeries.lean` and
 `TheoremB/JointSmooth.lean`, gate GREEN 265/265, tag `t8b-joint-smooth-green`;
-W3 and W4 remain PLANNING). The BUILD LOG below records waves F0 to F5, W1
-and W2. The paragraph that follows is the original planning status
+`TheoremB/CommunityClass.lean` part 1 for W3, gate GREEN 283/283, no tag;
+W4 remains PLANNING). The BUILD LOG below records waves F0 to F5, W1, W2 and
+W3. The paragraph that follows is the original planning status
 of 9 Sep 2026, kept as written.
 
 Original status: PLANNING (9 Sep 2026): **nothing built; gate untouched at
@@ -277,6 +278,49 @@ real-part derivative, the clock transport, the `toLp` packing and `C^∞` of
 `u₀Real` have compiled shapes; the W4 capstone's frozen text (the `[clauses
 1–20 …]` placeholder of §4b resolved from the recheck skeleton) is kept as
 `recon-w3/expected_theorem_B_community_periodic_flow.txt`.
+
+9 Sep 2026, Tier 8b wave W3 BUILT: `TheoremB/CommunityClass.lean` part 1
+(1,095 lines): the six community definitions of §2a byte-copied into
+`namespace TheoremB.Community` (the block is byte-identical to the recheck
+skeleton's, and identical declaration by declaration with comments stripped
+to the persisted `ProbeOpenAIStatement.lean`; the upstream half of the §2a
+diff record, the `NavierStokes` namespace and the global `@[inherit_doc]`
+notation, is inherited from this file and NOT re-measured, since no copy of
+the upstream file is on disk); the 16 frozen W3 items of the W3/W4 block
+(`vReal`, `pReal`, `u₀Real`; `fderiv_uLift_single`, `laplacian_uLift`,
+`fderiv_pLift_single`, `convFull_neg_of_realField`,
+`pressureCoeff_neg_of_realField`, `im_uLift_eq_zero`, `im_pLift_eq_zero`,
+`isOnePeriodic_uLift`, `isOnePeriodic_pLift`, `divergence_uReal_eq_zero`,
+`initialVelocityConditionPeriodic_u₀Real`, `forceConditionPeriodic_zero`,
+and `force_zero_spelling_rfl` from the W4 tail) byte-identical, checked by the
+builder, both readers and the orchestrator; every proof closed; 13 ledger
+lines for the frozen theorems plus 5 for the registered §6b probes
+(`W3Probe.exists_nonzero_admissible_datum`, `uLift_testDatum_zero` with the
+true value `2ε`, `u₀Real_testDatum_ne_zero`, `rest_pair_fails_class`,
+`const_flow_fails_ode`); gate GREEN 283/283 (builder, both readers,
+orchestrator). Two independent readers CLEAN (0 blockers, 0 majors) BEFORE
+the commit. Recorded facts: (1) the W3 reconnaissance (`audit-tier8b/recon-w3/`)
+compiled the community block in the tree context, proved
+`force_zero_spelling_rfl` and `forceConditionPeriodic_zero`, and gave the
+Mathlib-side shapes of the trace divergence, the Laplacian, the line
+derivative, the real-part derivative, the clock and the `toLp` packing.
+(2) STATEMENT OBSERVATIONS, not drift: the frozen `im_uLift_eq_zero` does not
+need its `h0` (conjugation passes through the unconditional tsum by
+`Complex.conjCLE.map_tsum`), and `divergence_uReal_eq_zero` does not need
+`hreal` (only `DivFree` enters); both statements are kept byte-identical and
+the docstrings say so; W4 must not "fix" them. (3) Routes: `laplacian_uLift`
+closes by `exact laplacian_charSum …` at `z := fun l => (x l : AddCircle 1)`
+(the torus-side Laplacian of Calibration.lean transports by defeq);
+`fderiv_uLift_single` and `fderiv_pLift_single` share a scalar
+`fderiv_charSeries_single` through the line derivative and `hasDerivAt_tsum`.
+(4) Pin traps measured: `Complex.conjCLE.map_tsum` needs
+`(L := SummationFilter.unconditional _)` pinned; `innerSL_apply_apply` (not
+`innerSL_apply`); `iteratedFDerivWithin_fun_zero` (the recon's
+`iteratedFDerivWithin_zero_fun` is deprecated); `(x + s • single i 1) l`
+needs a type ascription on the sum; no `timeout` binary on this Mac. (5) The
+header's DIFF RECORD sentence was rephrased before the commit so that the
+banned-phrase grep of §7 rule 2 is clean (it had quoted the false phrase in
+order to deny it). No tag (ladder §5b: `t8b-community-green` after W4).
 
 Pin: Lean `4.31.0-rc2`, Mathlib `15a89b24`. Where the two critics of a
 design disagreed, this file takes the more conservative reading and says
@@ -2146,8 +2190,8 @@ blueprint takes and what remains the user's call:
    declarations already PROVED in the probe; one session; gate-checkable
    immediately). 8b W1 may start in a SEPARATE session. Neither in the
    same chat. What remains is 8b: W1 built 9 Sep 2026
-   (`t8b-time-smooth-green`), W2 built 9 Sep 2026 (`t8b-joint-smooth-green`);
-   W3 and W4 unbuilt.
+   (`t8b-time-smooth-green`), W2 built 9 Sep 2026 (`t8b-joint-smooth-green`),
+   W3 built 9 Sep 2026 (no tag); W4 unbuilt.
 10. **Mean-zero / RealField / DivFree of `D n`** — not exported; add only
     if the pressure chain or an audit wants reality of `D n`.
 
@@ -2172,3 +2216,11 @@ part 1: the six community definitions byte-copied from §2a, the bridge
 objects, the reality and periodicity lemmas, the datum-side conditions, the
 CheapWitness probes), then W4 (the two capstones), tag `t8b-community-green`
 after W4 only.
+
+UPDATE (W3, 9 Sep 2026): W3 is built and committed (gate GREEN 283/283, no
+tag). The smallest next move is W4: append to `TheoremB/CommunityClass.lean`
+the frozen `hasDerivWithinAt_charSum_zero`, `derivWithin_vReal_Ici`,
+`theorem_B_community_periodic_flow` (its frozen text is the recheck
+skeleton's, kept as `recon-w3/expected_theorem_B_community_periodic_flow.txt`)
+and `theorem_B_community_periodic`, plus the capstone-level probes; then the
+tag `t8b-community-green`.

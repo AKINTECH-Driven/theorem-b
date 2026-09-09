@@ -57,6 +57,7 @@ import TheoremB.ForcedProbe
 import TheoremB.TimeSmooth
 import TheoremB.WithinSeries
 import TheoremB.JointSmooth
+import TheoremB.CommunityClass
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -323,3 +324,21 @@ import TheoremB.JointSmooth
 #print axioms TheoremB.exists_mode_majorant_of_windowBound
 #print axioms TheoremB.contDiffOn_lift_slab
 #print axioms TheoremB.theorem_B_joint_smooth
+#print axioms TheoremB.fderiv_uLift_single
+#print axioms TheoremB.laplacian_uLift
+#print axioms TheoremB.fderiv_pLift_single
+#print axioms TheoremB.convFull_neg_of_realField
+#print axioms TheoremB.pressureCoeff_neg_of_realField
+#print axioms TheoremB.im_uLift_eq_zero
+#print axioms TheoremB.im_pLift_eq_zero
+#print axioms TheoremB.isOnePeriodic_uLift
+#print axioms TheoremB.isOnePeriodic_pLift
+#print axioms TheoremB.divergence_uReal_eq_zero
+#print axioms TheoremB.initialVelocityConditionPeriodic_u₀Real
+#print axioms TheoremB.forceConditionPeriodic_zero
+#print axioms TheoremB.force_zero_spelling_rfl
+#print axioms TheoremB.W3Probe.exists_nonzero_admissible_datum
+#print axioms TheoremB.W3Probe.uLift_testDatum_zero
+#print axioms TheoremB.W3Probe.u₀Real_testDatum_ne_zero
+#print axioms TheoremB.W3Probe.rest_pair_fails_class
+#print axioms TheoremB.W3Probe.const_flow_fails_ode
