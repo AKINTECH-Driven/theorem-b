@@ -51,6 +51,7 @@ import TheoremB.DecayFlow
 import TheoremB.ForcedTrap
 import TheoremB.ForcedGalerkin
 import TheoremB.ForcedGalerkinFlow
+import TheoremB.ForcedTheoremB
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -260,3 +261,10 @@ import TheoremB.ForcedGalerkinFlow
 #print axioms TheoremB.ns_galerkin_unique_around_forced
 #print axioms TheoremB.ns_galerkin_global_wellposed_forced
 #print axioms TheoremB.ns_galerkin_global_flow_forced
+#print axioms TheoremB.flow_mode_mem_modeSet_forced
+#print axioms TheoremB.integral_equation_limit_forced
+#print axioms TheoremB.galerkin_family_forced
+#print axioms TheoremB.theorem_B_forced
+#print axioms TheoremB.probe_frozen_flow_inhabits_forced_clauses
+#print axioms TheoremB.theorem_B_unique_forced
+#print axioms TheoremB.ns_full_global_flow_forced

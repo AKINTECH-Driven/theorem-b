@@ -85,6 +85,24 @@ the flow nor the `√G` sup bound on the force; both are two-line derivations
 from the exported clauses and the F1 propagations. No tag (next: F3 →
 `t8a-forced-B-green`).
 
+9 Sep 2026, wave F3 BUILT: `TheoremB/ForcedTheoremB.lean` (1,259 lines): the
+four frozen F3 statements AND the two F4 capstones (`theorem_B_unique_forced`,
+`ns_full_global_flow_forced`) byte-identical to §4a (F3 and F4 blocks; both
+readers and the orchestrator checked), delivered together because the eternal
+splice needs uniqueness. PLACEMENT DEVIATION recorded: the two F4 capstones
+live in ForcedTheoremB.lean, marked "F4 (delivered early)"; wave F4 must NOT
+restate them and `ForcedUnique.lean` now owns only `forced_breakdown_threshold`
+and its primed form. The pre-authorised `_cert` sibling was NOT needed: the
+frozen capstones already carry `Summable (fun l => ‖g t l‖ ^ 2)` on the force
+(the certificate is load-bearing: the readers' line-force probe passes every
+other hypothesis and fails only this one). Gate GREEN 215/215 (builder, both
+readers, orchestrator). Two readers CLEAN (0 blockers, 0 majors). The
+in-tree probe `probe_frozen_flow_inhabits_forced_clauses` (frozen ⇒ forced
+clause list at g = 0; NOT a strengthening) is registered as an extra ledger
+line. The F3-to-F4 seam is compiled by the shape reader
+(`audit-shape/D_Readmission.lean`: two eternal forced flows with the exported
+clauses agree on every horizon). Tag `t8a-forced-B-green` laid here.
+
 Pin: Lean `4.31.0-rc2`, Mathlib `15a89b24`. Where the two critics of a
 design disagreed, this file takes the more conservative reading and says
 why (§5, §7).
