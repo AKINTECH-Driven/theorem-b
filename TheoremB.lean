@@ -52,3 +52,4 @@ import TheoremB.ForcedTrap
 import TheoremB.ForcedGalerkin
 import TheoremB.ForcedGalerkinFlow
 import TheoremB.ForcedTheoremB
+import TheoremB.ForcedUnique

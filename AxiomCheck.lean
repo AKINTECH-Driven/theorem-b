@@ -52,6 +52,7 @@ import TheoremB.ForcedTrap
 import TheoremB.ForcedGalerkin
 import TheoremB.ForcedGalerkinFlow
 import TheoremB.ForcedTheoremB
+import TheoremB.ForcedUnique
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -268,3 +269,5 @@ import TheoremB.ForcedTheoremB
 #print axioms TheoremB.probe_frozen_flow_inhabits_forced_clauses
 #print axioms TheoremB.theorem_B_unique_forced
 #print axioms TheoremB.ns_full_global_flow_forced
+#print axioms TheoremB.forced_breakdown_threshold
+#print axioms TheoremB.forced_breakdown_threshold'
