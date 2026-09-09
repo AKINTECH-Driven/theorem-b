@@ -395,9 +395,11 @@ noncomputable def gfieldForced (ν : ℝ) (S : Finset (Fin 3 → ℤ))
 
 /-- **F2, local existence for the forced Galerkin field, with a step uniform
 in the initial bound and the force bound.**  Picard-Lindelof in the pin's
-time-dependent form; the step `ε` depends only on `ν`, the box `S`, the
-norm bound `B` and the force sup bound `Gs` — not on the initial state, the
-centre time, or the force itself.  Per-mode continuity of the force in
+time-dependent form; the CONSTRUCTED step `ε` depends only on `ν`, the box
+`S`, the norm bound `B` and the force sup bound `Gs`, not on the initial
+state or the centre time. The frozen statement quantifies the force before
+`∃ ε`, so a consumer may not assume independence from the force beyond what
+the statement says.  Per-mode continuity of the force in
 time is the continuity field of `IsPicardLindelof`. -/
 theorem gflow_local_exists_forced {ν : ℝ} (hν : 0 < ν) (S : Finset (Fin 3 → ℤ))
     (B Gs : ℝ) (hB : 0 ≤ B) (hGs : 0 ≤ Gs)
@@ -537,7 +539,8 @@ theorem gflow_to_coeff_forced {ν : ℝ} {S : Finset (Fin 3 → ℤ)}
 /-- **F2, uniform-step local existence in coefficient language, under
 forcing.**  From any supported datum with coefficients bounded by `B`, at
 any centre time, a coefficient flow of the forced Galerkin system exists on
-the open window of half-width `ε`, and `ε` depends only on `(ν, S, B, Gs)`. -/
+the open window of half-width `ε`; the constructed `ε` depends only on
+`(ν, S, B, Gs)`, while the statement itself quantifies `g` before `∃ ε`. -/
 theorem ns_galerkin_local_existence_forced {ν : ℝ} (hν : 0 < ν)
     (S : Finset (Fin 3 → ℤ)) (B Gs : ℝ) (hB : 0 ≤ B) (hGs : 0 ≤ Gs)
     {g : ℝ → (Fin 3 → ℤ) → Vel} (hgsupp : ∀ (t : ℝ) k, k ∉ S → g t k = 0)
@@ -676,8 +679,8 @@ theorem ns_galerkin_unique_around_forced {ν a b : ℝ} (hν : 0 ≤ ν) (ha : a
 
 /-- **F2, global well-posedness of the forced Galerkin system inside the
 box.**  Under the forced thresholds, for every symmetric zero-free box `S`,
-every supported, real, divergence-free, per-mode continuous force of L2
-size at most `G`, and every supported real divergence-free datum inside the
+every supported, real, divergence-free, per-mode continuous force of
+energy (squared ℓ² norm) at most `G`, and every supported real divergence-free datum inside the
 box `(Es, Zs)`: on EVERY horizon `[0, T]` a coefficient flow of the forced
 Galerkin system exists, stays inside the box, and is the UNIQUE such flow.
 Existence is by seam-gluing induction on uniform-step local solutions
