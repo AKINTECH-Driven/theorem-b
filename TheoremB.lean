@@ -55,3 +55,5 @@ import TheoremB.ForcedTheoremB
 import TheoremB.ForcedUnique
 import TheoremB.ForcedProbe
 import TheoremB.TimeSmooth
+import TheoremB.WithinSeries
+import TheoremB.JointSmooth

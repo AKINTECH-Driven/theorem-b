@@ -3,10 +3,12 @@
 Status: **Tier 8a COMPLETE at the F5 commit** (9 Sep 2026; the tag
 `t8a-complete` was laid on the F5 commit `2a4036b`; the commit adds
 `TheoremB/ForcedProbe.lean` and registers its nine probes; gate GREEN
-226/226, re-run by the F5 prose pass). **Tier 8b wave W1 BUILT** (9 Sep
-2026, `TheoremB/TimeSmooth.lean`, gate GREEN 251/251, tag
-`t8b-time-smooth-green`; W2 to W4 remain PLANNING). The BUILD LOG below
-records waves F0 to F5 and W1. The paragraph that follows is the original planning status
+226/226, re-run by the F5 prose pass). **Tier 8b waves W1 and W2 BUILT** (9 Sep
+2026: `TheoremB/TimeSmooth.lean`, gate GREEN 251/251, tag
+`t8b-time-smooth-green`; `TheoremB/WithinSeries.lean` and
+`TheoremB/JointSmooth.lean`, gate GREEN 265/265, tag `t8b-joint-smooth-green`;
+W3 and W4 remain PLANNING). The BUILD LOG below records waves F0 to F5, W1
+and W2. The paragraph that follows is the original planning status
 of 9 Sep 2026, kept as written.
 
 Original status: PLANNING (9 Sep 2026): **nothing built; gate untouched at
@@ -213,6 +215,68 @@ chain, empty-window facts, the mode-zero lemma non-tautological, satisfiability
 by the zero datum) are persisted under `audit-tier8b/build-w1/audit-shape/`
 and `audit-proof/`; the §6b CheapWitness items land in W3/W4's probe file as
 planned. Tag `t8b-time-smooth-green` laid here (ladder §5b).
+
+9 Sep 2026, Tier 8b wave W2 BUILT: `TheoremB/WithinSeries.lean` (232 lines,
+`import Mathlib` only, the PR candidate of §8 item 3) and
+`TheoremB/JointSmooth.lean` (873 lines): the 16 frozen W2 items of §4b (the
+two-line `variable` block and the six engine statements; the defs `pLift`,
+`pressureBil` with their bodies; the seven other JointSmooth theorems; and the
+capstone `theorem_B_joint_smooth`, whose frozen text is NOT written out in
+this file and was ASSEMBLED as the `theorem_B_time_smooth` statement with
+` ∧` after clause 22 followed by the fenced clauses 23 to 25 verbatim, kept as
+`audit-tier8b/recon-w2/expected_theorem_B_joint_smooth.txt` in the session
+directory and checked by `tools/check_joint_capstone.py`) byte-identical,
+checked by the builder, both readers and the orchestrator with independent
+extractors; every proof closed; 14 ledger lines (the six engine theorems and
+the eight JointSmooth theorems), gate GREEN 265/265 (builder, both readers,
+orchestrator). Two independent readers CLEAN (0 blockers, 0 majors) BEFORE
+the commit. Recorded facts: (1) reconnaissance before the wave re-proved the
+six engine statements outside the tree (one reader CLEAN; the blueprint's
+`feas-b/F1_WithinEngine.lean` is not on disk anywhere) and compiled the
+slab-side idioms (`audit-tier8b/recon-w2/`), including the frozen
+`iteratedDerivWithin_eq_chain` and `exists_mode_majorant_of_windowBound` and
+the lost feas-b/F2 `snd`-factor bound; the engine landed verbatim. (2) STATEMENT
+OBSERVATION, not drift: the frozen `exists_mode_majorant_of_windowBound`
+(orders 0 and 4) is too weak for the slab lemma at mixed order `m` with `i`
+time-derivatives (the majorant `‖k‖^(m-i)·A_i(k)` is summable only from
+window order `m - i + 4`); it is proved as the instance `p := 4` of a
+non-frozen general-order sibling, and the slab lemma consumes the sibling
+(`hbound` supplies every order, so no statement changes). (3) Route deviations
+without statement effect: `summable_freq_pow_pressureCoeff` uses the coarser
+termwise bound `‖p̂_k‖ ≤ ‖B_k‖` (the route note's `‖k‖^(p-1)‖B_k‖/(2π)` is
+not needed); the pressure chain of clause 25 goes through a non-frozen linear
+functional `pressureFun` on the exported `S` rather than through
+`hasDerivAt_pressureBil_flow`, which is proved and registered but not
+consumed by the capstone; the endpoint derivative of the pressure chain at
+`t = 0` is derived by the endpoint tool (clause 21 exports no endpoint
+derivative for `S`). (4) The §6b MUST-HOLD item is discharged:
+`contDiff_tsum_of_convex_univ` recovers Mathlib's `contDiff_tsum` shape at
+`s = univ`; the prose check that `hs`/`hs'` cannot be dropped is recorded in
+the builder's report (a two-point set defeats the transfer of summability; a
+non-unique-differential set makes `iteratedFDerivWithin` junk). (5) The seam
+to W4 is compiled by the shape reader: clause 24 composed with `Complex.reCLM`
+and the clock `τ ↦ 2πτ` gives the community's `velocity_smooth` shape
+(`audit-tier8b/build-w2/audit-shape/`). (6) Pin traps measured: in binders over
+the complement subtype write `↥((↑T : Set ι)ᶜ)` explicitly (a bare `((↑T : Set ι)ᶜ)`
+fails with `Compl (Type _)`); `Summable.mul_right`/`HasSum.mul_right` carry a
+`SummationFilter` argument at this pin (the default instantiation works);
+`hasDerivWithinAt_iff_hasFDerivWithinAt` is `Iff.rfl` with `toSpanSingleton`;
+`contDiffOn_iff_continuousOn_differentiableOn` is stated at `n : ℕ∞` and
+matches `N : ℕ∞` without a cast, while the `WithTop ℕ∞` bounds of
+`ContDiffOn.differentiableOn_iteratedFDerivWithin` need `exact_mod_cast`;
+`ContDiff.differentiable` takes `n ≠ 0`; a bare `lt_add_one _` does not
+elaborate as `q.2 ∈ Iio (q.2 + 1)`; `ContinuousLinearMap.iteratedFDerivWithin_comp_right`
+returns a `compContinuousLinearMap` whose norm is bounded by
+`ContinuousMultilinearMap.norm_compContinuousLinearMap_le` with `‖snd‖ ≤ 1`
+from `opNorm_le_bound` and `norm_snd_le`. Tag `t8b-joint-smooth-green` laid
+here (ladder §5b). W3/W4 reconnaissance (`audit-tier8b/recon-w3/`): the six
+community definitions compile in `TheoremB.Community`; `force_zero_spelling_rfl`
+and `forceConditionPeriodic_zero` are proved; the rest state inhabits the class;
+the trace divergence, the Laplacian reduction, the line derivative, the
+real-part derivative, the clock transport, the `toLp` packing and `C^∞` of
+`u₀Real` have compiled shapes; the W4 capstone's frozen text (the `[clauses
+1–20 …]` placeholder of §4b resolved from the recheck skeleton) is kept as
+`recon-w3/expected_theorem_B_community_periodic_flow.txt`.
 
 Pin: Lean `4.31.0-rc2`, Mathlib `15a89b24`. Where the two critics of a
 design disagreed, this file takes the more conservative reading and says
@@ -2082,7 +2146,8 @@ blueprint takes and what remains the user's call:
    declarations already PROVED in the probe; one session; gate-checkable
    immediately). 8b W1 may start in a SEPARATE session. Neither in the
    same chat. What remains is 8b: W1 built 9 Sep 2026
-   (`t8b-time-smooth-green`); W2 to W4 unbuilt.
+   (`t8b-time-smooth-green`), W2 built 9 Sep 2026 (`t8b-joint-smooth-green`);
+   W3 and W4 unbuilt.
 10. **Mean-zero / RealField / DivFree of `D n`** — not exported; add only
     if the pressure chain or an audit wants reality of `D n`.
 
@@ -2100,3 +2165,10 @@ UPDATE (W1, 9 Sep 2026): W1 is built and tagged `t8b-time-smooth-green`
 (gate GREEN 251/251). The smallest next move is W2: land the re-proved
 engine probe verbatim as `TheoremB/WithinSeries.lean`, then build
 `TheoremB/JointSmooth.lean` against §4b W2.
+
+UPDATE (W2, 9 Sep 2026): W2 is built and tagged `t8b-joint-smooth-green`
+(gate GREEN 265/265). The smallest next move is W3 (`TheoremB/CommunityClass.lean`
+part 1: the six community definitions byte-copied from §2a, the bridge
+objects, the reality and periodicity lemmas, the datum-side conditions, the
+CheapWitness probes), then W4 (the two capstones), tag `t8b-community-green`
+after W4 only.

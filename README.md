@@ -43,14 +43,15 @@ and prints `#print axioms` for every audited declaration. It passes if and only 
 line reports at most `propext`, `Classical.choice`, `Quot.sound` and no `sorryAx`. The
 script reports; it never repairs.
 
-Expected result: the final line `GATE: GREEN`, preceded by the output of the 251
+Expected result: the final line `GATE: GREEN`, preceded by the output of the 265
 `#print axioms` commands in `AxiomCheck.lean` (theorems, one definition, and the
 compiled non-vacuity probes), each on exactly the three kernel axioms. Any other outcome
 is `GATE: RED` with exit status 1. In the campaign notes this state is written
-"GREEN 251/251"; it was recorded on 9 Sep 2026 at the Tier 8b wave W1 state, the gate
+"GREEN 265/265"; it was recorded on 9 Sep 2026 at the Tier 8b wave W2 state, the gate
 having read 186/186 at `82a9ab6` (tag `t7-audited-green`, 2 Sep 2026), grown by one
 Tier 8a wave at a time (190, 199, 208, 215, 217, 226 at `2a4036b`, tag `t8a-complete`),
-and by the Tier 8b wave W1 (22 frozen theorems and 3 chain-pinning probes, 251).
+by the Tier 8b wave W1 (22 frozen theorems and 3 chain-pinning probes, 251 at `0efba80`,
+tag `t8b-time-smooth-green`), and by the Tier 8b wave W2 (14 frozen theorems, 265).
 
 ## Capstone theorems
 
@@ -72,6 +73,7 @@ coefficient field is `(Fin 3 → ℤ) → Vel`, `freq k` is the raw lattice vect
 | `theorem_B_smooth_classical` | `TheoremB/TheoremBSmooth.lean` | For data summable at every Sobolev level: the eternal flow's `ℤ³`-periodic lift is `C^p` in space for every `p`, differentiable in time at every point for `t > 0` with continuous time derivative, has second spatial fiber derivatives, the viscous term is `(ν/(2π)²)·Δu`, the pressure is `ℓ¹` with one weighted order, the Leray projection is convection minus pressure gradient mode by mode, and the convection is `−(1/2π)(u·∇)u` (nineteen clauses). |
 | `theorem_B_smooth_classical_eq` | `TheoremB/ClassicalEquation.lean` | The same flow, all nineteen clauses re-exported, satisfies at every component `j`, torus point `x`, and `t > 0`, as one `HasDerivAt` in time: `∂ₜu_j = (ν/(2π)²)(Σᵢ ∂ᵢ²u)_j − (1/2π)(Σᵢ uᵢ ∂ᵢu_j) − ∂_j p`, each piece spelled out in full. |
 | `theorem_B_time_smooth` | `TheoremB/TimeSmooth.lean` | The same flow, all twenty clauses of `theorem_B_smooth_classical_eq` re-exported verbatim, plus (clause 21) a derivative chain `D` with `D 0 = c`, the Leibniz recurrence `D (n+1) = −ν‖k‖²·D n + P_k (S n)` with `S n = Σ_{i+j=n} C(n,i)·convBil (D i) (D j)` exported alongside, each `D n` differentiating to `D (n+1)` on `t > 0`, with the right derivative `D (n+1) 0` within `Ici 0`, continuous on `Ici 0`, and in every weighted-ℓ¹ window class at every order (the same for `S n`); and (clause 22) every mode `t ↦ c t k` is `C^∞` in time on the CLOSED half-line `Ici 0`. Time only: joint smoothness in `(x, t)` is not claimed here. `∞` is `(⊤ : ℕ∞)`, not `ω`: no analyticity. |
+| `theorem_B_joint_smooth` | `TheoremB/JointSmooth.lean` | The same flow, all twenty-two clauses of `theorem_B_time_smooth` re-exported verbatim, plus (clause 23) the pressure coefficients have every weighted-ℓ¹ order at every `t ≥ 0`, (clause 24) for every component `j` the velocity lift `(x, t) ↦ uLift j (c t) x` is `C^∞` jointly in `(x, t)` on the CLOSED slab `ℝ³ × [0, ∞)` (`ContDiffOn ℝ ∞ … (univ ×ˢ Ici 0)`), and (clause 25) the pressure lift `(x, t) ↦ pLift (c t) x` is `C^∞` jointly on the same closed slab. The engine is the Mathlib-only within-convex tsum theory of `TheoremB/WithinSeries.lean` (absent from Mathlib at the pin, grep-verified, not new mathematics). `∞` is `(⊤ : ℕ∞)`, not `ω`: no analyticity. |
 | `ns_full_global_flow_decay` | `TheoremB/DecayFlow.lean` | The eternal flow additionally satisfies `en (c t) ≤ en c₀ · exp(−2νt)` for every `t ≥ 0`. The upper bound is compiled; sharpness is not. |
 | `theorem_B_bandwidth` | `TheoremB/Bandwidth.lean` | The eternal flow, all seven clauses quoted, additionally has energy outside the cube `‖k‖_∞ ≤ N` at most `ens c₀ / N²`, for every `N > 0` and every `t ≥ 0`. |
 | `theorem_B_modes` | `TheoremB/DeterminingModes.lean` | Determining modes: for class budgets `(ν, E, Z)` there is one `K > 0`, fixed before any horizon, tolerance, or pair of flows, such that for every `N` with `2ν + K < νN²`, two enstrophy-bounded flows (different data allowed) whose low-mode defect stays at most `δ` on `[0, T]` satisfy `en(u−v)(t) ≤ en(u−v)(0)·exp(−(νN² − K)t) + νN²/(νN² − K)·δ`. |
@@ -103,9 +105,10 @@ comes from `pressureCoeff`.
   `Bandwidth`, `WindowDecay`, `EnergyIntegrable`, `ModesWindow`, `DeterminingModes`,
   `ModesFlow`, `ModesProbe`, `GalerkinDecay`, `DecayFlow`); Tier 8a, the forced trap
   (`ForcedTrap`, `ForcedGalerkin`, `ForcedGalerkinFlow`, `ForcedTheoremB`, `ForcedUnique`,
-  and the gated probes `ForcedProbe`); Tier 8b wave W1, time-smoothness of the eternal
-  flow (`TimeSmooth`).
-- `AxiomCheck.lean`: the audited-declaration ledger (251 `#print axioms` lines).
+  and the gated probes `ForcedProbe`); Tier 8b, time-smoothness of the eternal flow
+  (`TimeSmooth`, wave W1), the Mathlib-only within-convex series engine (`WithinSeries`,
+  wave W2, a PR candidate) and joint smoothness on the closed slab (`JointSmooth`, W2).
+- `AxiomCheck.lean`: the audited-declaration ledger (265 `#print axioms` lines).
 - `scripts/check_axioms.sh`: the gate.
 - `context/`: campaign blueprints (`rung*-blueprint.md`), the announcement draft, the
   upstreaming dossier, and the discrete-twin skeleton (`NSSkeleton.lean`).
@@ -249,6 +252,17 @@ on `ℝ³`. No mathematical priority is claimed for any layer, and none for the 
   other probes (nonzero admissible datum, constant witness against clause 6, the
   rest-state chain, empty-window facts) persisted outside the tree. Tag
   `t8b-time-smooth-green`.
+- **Tier 8b wave W2, 9 Sep 2026.** `TheoremB/WithinSeries.lean` (the six frozen engine
+  statements, `import Mathlib` only) and `TheoremB/JointSmooth.lean` (the nine frozen
+  slab and pressure statements and the capstone `theorem_B_joint_smooth`): the 16 frozen
+  W2 items byte-identical to the blueprint (the capstone to its assembled text, since the
+  blueprint spells it as "clauses 1 to 22 plus 23 to 25"), checked by the builder, both
+  readers and the orchestrator with independent extractors; the engine and the slab-side
+  idioms were re-proved as reconnaissance probes outside the tree before the wave; two
+  independent adversarial readers (statement shape and vacuity; proof and pin) BEFORE
+  the commit, both CLEAN with minors only; the seam probe to the community class
+  (clause 24 composed with the real part and the clock gives the community's
+  `velocity_smooth` shape) persisted outside the tree. Tag `t8b-joint-smooth-green`.
 - **Cross-check, 9 Sep 2026.** OpenAI's Comparator (D) statement, in the community
   Formal Conjectures wording, was reproduced verbatim and compiled against this pin
   (Mathlib `15a89b24`, Lean `v4.31.0-rc2`): it elaborates (exit 0, the (D) statement
@@ -265,7 +279,7 @@ Repository tags, in order: `m1-green`, `m2-wave1-green`, `m2-complete`, `m3-cond
 `t4-wellposedness-green`, `t5-torus-green`, `t5-polish-green`, `t6-sobolev-green`,
 `t6-smooth-green`, `t6-classical-green`, `t7-bandwidth-green`, `t7-modes-green`,
 `t7-complete`, `t7-audited-green`, `t8a-forced-trap-green`, `t8a-forced-B-green`,
-`t8a-complete`, `t8b-time-smooth-green`.
+`t8a-complete`, `t8b-time-smooth-green`, `t8b-joint-smooth-green`.
 
 ## Credits
 

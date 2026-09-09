@@ -55,6 +55,8 @@ import TheoremB.ForcedTheoremB
 import TheoremB.ForcedUnique
 import TheoremB.ForcedProbe
 import TheoremB.TimeSmooth
+import TheoremB.WithinSeries
+import TheoremB.JointSmooth
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -307,3 +309,17 @@ import TheoremB.TimeSmooth
 #print axioms TheoremB.chain_unique
 #print axioms TheoremB.chain_unique_Ici
 #print axioms TheoremB.clause21_pinned
+#print axioms TheoremB.summable_of_summable_hasFDerivWithinAt_of_convex
+#print axioms TheoremB.hasFDerivWithinAt_tsum_of_convex
+#print axioms TheoremB.hasDerivWithinAt_tsum_of_convex
+#print axioms TheoremB.iteratedFDerivWithin_tsum_apply_of_convex
+#print axioms TheoremB.contDiffOn_tsum_of_convex
+#print axioms TheoremB.contDiff_tsum_of_convex_univ
+#print axioms TheoremB.pressureBil_self
+#print axioms TheoremB.summable_freq_pow_pressureCoeff
+#print axioms TheoremB.hasDerivAt_pressureBil_flow
+#print axioms TheoremB.norm_iteratedFDerivWithin_liftTerm_le
+#print axioms TheoremB.iteratedDerivWithin_eq_chain
+#print axioms TheoremB.exists_mode_majorant_of_windowBound
+#print axioms TheoremB.contDiffOn_lift_slab
+#print axioms TheoremB.theorem_B_joint_smooth
