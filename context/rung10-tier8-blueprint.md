@@ -44,6 +44,17 @@ no errors. So "COMPILED" is now re-established for all 88 frozen statements;
 RE-PROVED against the frozen statements (one builder session was launched for
 it at 13:2x under the doctrine below), not transcribed.
 
+**BUILD LOG.** 9 Sep 2026, wave F0 BUILT: `TheoremB/ForcedTrap.lean` (318
+lines; the four frozen declarations re-proved from the route notes, statements
+byte-identical to §4a F0), registered in `TheoremB.lean` and `AxiomCheck.lean`,
+gate GREEN 190/190 (builder, both readers, and the orchestrator each ran it),
+two independent readers CLEAN (0 blockers, 0 majors; minors were wording and
+observations). Reader observation carried forward to F3/F4: the force carries
+no summability certificate at F0, so a non-ℓ² force has junk `en (g t) = 0`
+and meets any budget — the capstones MUST export `Summable` for `g` (the
+Tier-3 lesson, again). Probes persisted under
+`audit-2026-09-02/tier8-build-f0/`. No tag until F1 (ladder §5a).
+
 Pin: Lean `4.31.0-rc2`, Mathlib `15a89b24`. Where the two critics of a
 design disagreed, this file takes the more conservative reading and says
 why (§5, §7).

@@ -48,6 +48,7 @@ import TheoremB.ModesFlow
 import TheoremB.ModesProbe
 import TheoremB.GalerkinDecay
 import TheoremB.DecayFlow
+import TheoremB.ForcedTrap
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -235,3 +236,7 @@ import TheoremB.DecayFlow
 #print axioms TheoremB.galerkin_family_decay
 #print axioms TheoremB.theorem_B_decay_cont
 #print axioms TheoremB.ns_full_global_flow_decay
+#print axioms TheoremB.barrier_forward_invariance
+#print axioms TheoremB.forced_trap_forward_invariance
+#print axioms TheoremB.forced_conditional_trap
+#print axioms TheoremB.forced_thresholds_inhabited

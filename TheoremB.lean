@@ -48,3 +48,4 @@ import TheoremB.ModesFlow
 import TheoremB.ModesProbe
 import TheoremB.GalerkinDecay
 import TheoremB.DecayFlow
+import TheoremB.ForcedTrap
