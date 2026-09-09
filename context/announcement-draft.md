@@ -89,8 +89,8 @@ predates ours by ten days. The bare sentences "first machine-checked 3D
 NS uniqueness / existence in any proof assistant" are therefore FALSE
 and must not be used.
 
-Related machine-checked work (as located on 2 Sep 2026; none re-built
-by us, kernel status as reported by each author):
+Related machine-checked work (as located on 2 Sep 2026, two entries added
+9 Sep 2026; none re-built by us, kernel status as reported by each author):
 - **uda-lab/leray-hopf** (Tomoki Uda; Lean 4, same Mathlib pin
   `15a89b24`; Jul-Aug 2026): Leray-Hopf weak existence on `T³` and `ℝ³`,
   finite-horizon and global; kernel-only per its README; explicitly
@@ -111,6 +111,29 @@ by us, kernel status as reported by each author):
 - **Armstrong-Kempe, De Giorgi-Nash-Moser in Lean** (arXiv 2604.05984,
   Apr 2026): elliptic regularity, kernel-axiom-only; not NS, but the
   earlier PDE regularity formalization.
+- **Alpöge-Buckmaster(-Coiculescu), forced Euler / Boussinesq / IPM
+  blow-up** (Lean 4; made public 8 Sep 2026; located 9 Sep 2026):
+  machine-checked finite-time singularity formation for FORCED equations
+  of the Euler, Boussinesq and incompressible-porous-media family. Not
+  Navier-Stokes, not small data, and the opposite direction to ours
+  (blow-up under forcing, not unforced global regularity); kernel status
+  as reported by its authors.
+- **OpenAI, NavierStokesAndEuler** (Lean 4; public 8 Sep 2026;
+  self-assessed certificate; located 9 Sep 2026): FORCED Navier-Stokes
+  blow-up presented as answering the Clay statements (C)/(D) in the
+  community Formal Conjectures wording, plus unforced Euler blow-up. The
+  authors' assessment is their own; no independent audit is known to us,
+  and we have not re-built it. Disjoint from this campaign in direction
+  and in data class. Its periodic solution class
+  (`NavierStokesExistenceAndSmoothnessPeriodic`) was reproduced verbatim
+  on 9 Sep 2026 and elaborates at our pin (probe exit 0, the (D)
+  statement itself left `sorry`); the rest state inhabits the class, so
+  it is not cheaply empty. Inhabiting its `f = 0` case with
+  `theorem_B_smooth_classical_eq` is NOT done: it needs the clock
+  `τ = 2πt` (their `nu` is our `ν/(2π)`), a real-part bridge for our
+  ℂ-valued lift, joint `C^∞` in `(x, t)` on `[0, ∞)` where we have `C^p`
+  in `x` at each `t` and `C¹` in `t` on `t > 0` only, and a `derivWithin`
+  at `t = 0`.
 - **navier-stokes.dev** (undated; 12 postulated axioms; no repository
   located): seen, not verifiable, not counted as prior art either way.
 - Statement-only: google-deepmind/formal-conjectures PR #1457 (the
