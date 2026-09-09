@@ -69,6 +69,22 @@ non-constant flow; `audit-2026-09-02/tier8-build-f1/audit-shape/`); the
 capstone-level form stays with F5. Tag `t8a-forced-trap-green` laid on this
 commit per the ladder.
 
+9 Sep 2026, wave F2 BUILT: `TheoremB/ForcedGalerkinFlow.lean` (1,061 lines):
+all ten frozen F2 declarations byte-identical to §4a F2 (the definition
+`gfieldForced` including its body), the fourteen private field-bound helpers
+cloned as private `ffd*` declarations (GalerkinFlow.lean untouched), forced
+local existence by the time-dependent Picard-Lindelöf at the pin with a step
+uniform in the datum and the time origin, the seam-gluing induction with the
+FORCED trap re-securing every seam, one forced eternal Galerkin flow per box.
+Gate GREEN 208/208 (builder, both readers, orchestrator). Two readers CLEAN
+(0 blockers, 0 majors); two docstring inaccuracies fixed before commit (the
+step-size independence is a property of the constructed witness, not of the
+frozen statement; "energy (squared ℓ² norm)" for the force budget). F3 supply
+note from the shape reader: F2 exports neither reality/divergence-freeness of
+the flow nor the `√G` sup bound on the force; both are two-line derivations
+from the exported clauses and the F1 propagations. No tag (next: F3 →
+`t8a-forced-B-green`).
+
 Pin: Lean `4.31.0-rc2`, Mathlib `15a89b24`. Where the two critics of a
 design disagreed, this file takes the more conservative reading and says
 why (§5, §7).

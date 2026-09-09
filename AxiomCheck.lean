@@ -50,6 +50,7 @@ import TheoremB.GalerkinDecay
 import TheoremB.DecayFlow
 import TheoremB.ForcedTrap
 import TheoremB.ForcedGalerkin
+import TheoremB.ForcedGalerkinFlow
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -250,3 +251,12 @@ import TheoremB.ForcedGalerkin
 #print axioms TheoremB.ns_galerkin_forced_trap_icc
 #print axioms TheoremB.ns_galerkin_unique_on_forced
 #print axioms TheoremB.probe_forced_zero_feeds_frozen
+#print axioms TheoremB.gfield_norm_le_ball
+#print axioms TheoremB.gfield_lip_ball
+#print axioms TheoremB.gflow_local_exists_forced
+#print axioms TheoremB.gflow_to_coeff_forced
+#print axioms TheoremB.ns_galerkin_local_existence_forced
+#print axioms TheoremB.coeff_shift_forced
+#print axioms TheoremB.ns_galerkin_unique_around_forced
+#print axioms TheoremB.ns_galerkin_global_wellposed_forced
+#print axioms TheoremB.ns_galerkin_global_flow_forced

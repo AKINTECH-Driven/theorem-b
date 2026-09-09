@@ -50,3 +50,4 @@ import TheoremB.GalerkinDecay
 import TheoremB.DecayFlow
 import TheoremB.ForcedTrap
 import TheoremB.ForcedGalerkin
+import TheoremB.ForcedGalerkinFlow
