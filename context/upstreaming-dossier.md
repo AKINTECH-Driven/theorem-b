@@ -1,6 +1,7 @@
 # Mathlib upstreaming dossier
 
-Prepared 29 Aug 2026, at tag `t5-torus-green` (101 audited theorems).
+Prepared 29 Aug 2026, at tag `t5-torus-green` (101 audited theorems);
+Unit 7 added 12 Sep 2026 at tag `t8b-community-green` (294 audited declarations).
 Purpose: the campaign built several layers that are library-grade and
 absent from Mathlib at pin `15a89b24`. This dossier lists them in
 PR-ready units, with the generalization each would want before submission.
@@ -92,6 +93,49 @@ operator; the general form falls out by `repr` surjectivity).
   auto-generated local-instance names collide across files on double
   import (we now name them explicitly per file).
 - No named δ-integral lemma `∫ mFourier n = if n = 0 then 1 else 0`.
+
+## Unit 7 — the within-convex Weierstrass M-test for series of functions
+**File**: `TheoremB/WithinSeries.lean` (Tier 8b wave W2, tag
+`t8b-joint-smooth-green`; `import Mathlib` only, 234 lines, six theorems,
+all gated).
+**Content**: on a convex set `s`, a series of functions with a summable
+uniform bound on the within-derivatives is differentiable within `s`
+with derivative the sum of the derivatives
+(`summable_of_summable_hasFDerivWithinAt_of_convex`,
+`hasFDerivWithinAt_tsum_of_convex`, `hasDerivWithinAt_tsum_of_convex`),
+and is `C^N` within `s` when the iterated within-derivatives carry summable
+uniform bounds, given unique differentials on `s`
+(`iteratedFDerivWithin_tsum_apply_of_convex`, `contDiffOn_tsum_of_convex`);
+at `s = univ` the engine recovers the shape of Mathlib's `contDiff_tsum`
+(`contDiff_tsum_of_convex_univ`).
+**Why Mathlib wants it**: `Analysis/Calculus/UniformLimitsDeriv.lean` proves
+`hasFDerivAt_of_tendstoUniformlyOn` on OPEN sets only and
+`Analysis/Calculus/SmoothSeries.lean` has `hasFDerivAt_tsum_of_isPreconnected`,
+`contDiff_tsum` and their relatives on open preconnected sets or `univ`;
+neither file has a `Within` or `On`-a-subset variant. Measured twice: at
+the pin `15a89b24` (grep, two independent readers, 9 Sep 2026) and on
+Mathlib master (the two files fetched from GitHub on 12 Sep 2026: seventeen
+and eighteen declarations respectively, none with `Within` in its name or
+a within-set hypothesis). Closed slabs `E × [0, ∞)` are the use case:
+smoothness up to a boundary in time cannot be reached from the open-set
+theorems. Not new mathematics: a direct ε/3 argument through the mean value
+inequality `Convex.norm_image_sub_le_of_norm_hasFDerivWithin_le` for the
+first-order half, and the `SmoothSeries` induction with `fderivWithin_congr`
+transporting the pointwise-on-`s` induction hypothesis for the iterated half.
+**Generalization before PR**: state the first-order half for an arbitrary
+`NontriviallyNormedField` with `IsRCLikeNormedField` as `SmoothSeries` does
+(ours is over `ℝ`, which is what the mean value inequality needs; the
+convexity hypothesis is real by nature); consider the `TendstoUniformlyOn`
+formulation of `UniformLimitsDeriv` as the primitive and derive the tsum
+forms from it, as Mathlib does for the open case; name per Mathlib's
+`_of_convex` / `Within` conventions. Sharp edges measured at the pin, to
+mention in the PR: binders over the complement subtype must be written
+`↥((↑T : Set ι)ᶜ)`; `tendsto_tsum_compl_atTop_zero` and
+`Summable.sum_add_tsum_compl` use two spellings of the same subtype (defeq);
+`contDiffOn_iff_continuousOn_differentiableOn` is stated at `ℕ∞` while the
+iterated-derivative lemmas take `WithTop ℕ∞`. Subject to Mathlib's 2026
+policy on LLM-generated code, as every unit here; opening the PR is the
+user's call.
 
 ## Housekeeping notes recorded by the Tier-5 audit (repo-internal)
 - `calibrated_integral_equation`/`calibrated_trap` (TorusStructure) are
