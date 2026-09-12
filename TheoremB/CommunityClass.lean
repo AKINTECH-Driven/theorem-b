@@ -1,13 +1,11 @@
 /-
   TheoremB/CommunityClass.lean
-  Tier 8b, wave W3 (Theorem B campaign, 9 Sep 2026): OUR COPY of the community
-  solution class, and the datum-side bridge into it.  Part 1 of the file; wave
-  W4 appends the clock-transported derivative lemmas
-  (`hasDerivWithinAt_charSum_zero`, `derivWithin_vReal_Ici`) and the two
-  capstones (`theorem_B_community_periodic_flow`, `theorem_B_community_periodic`)
-  to this same file.
+  Tier 8b, waves W3 and W4 (Theorem B campaign, 9 Sep 2026): OUR COPY of the
+  community solution class, the datum-side bridge into it (W3, part 1), and the
+  inhabitation of the class by the eternal flow (W4, part 2, appended at the end
+  of this file after the W3 probe section).
 
-  WHAT IS DELIVERED HERE.
+  WHAT IS DELIVERED HERE (W3, part 1).
   * `TheoremB.Community`: OUR COPY of the community definitions (two `def`s,
     `divergence` and `IsOnePeriodic`, and the six structures
     `InitialVelocityCondition`, `InitialVelocityConditionPeriodic`,
@@ -47,25 +45,98 @@
     datum-side conditions `initialVelocityConditionPeriodic_u₀Real`,
     `forceConditionPeriodic_zero` (force spelled `(f := 0)` as upstream;
     `force_zero_spelling_rfl` records that `fun _ _ => 0` is the same term).
-  * A registered probe section (non-frozen, section 6b of the blueprint): the
-    nonzero shear datum `testDatum ε` meets every capstone hypothesis
-    (`exists_nonzero_admissible_datum`), its lift is nonzero
+  * A registered probe section `W3Probe` (non-frozen, section 6b of the
+    blueprint): the nonzero shear datum `testDatum ε` meets every capstone
+    hypothesis (`exists_nonzero_admissible_datum`), its lift is nonzero
     (`uLift_testDatum_zero`, `u₀Real_testDatum_ne_zero`), the rest pair is not
     a witness of the class for it (`rest_pair_fails_class`), and the
     time-constant coefficient flow fails the mode equation
     (`const_flow_fails_ode`).
 
-  HONEST SCOPE.  Nothing is inhabited in this wave: no theorem here produces a
-  member of `NavierStokesExistenceAndSmoothnessPeriodic`; that is W4's work.
-  The upstream file carries the positive statement
-  `navier_stokes_existence_and_smoothness_periodic` and the breakdown
-  statement `navier_stokes_breakdown_periodic`; this file touches neither and
-  says nothing about either.  The real-part bridge and the clock change are
-  textbook; nothing here is new mathematics.  Smoothness means `C^∞` with
-  `∞ = (⊤ : ℕ∞)`; analyticity is not claimed.  Private declarations of frozen
-  files (PeriodicLift's term lemmas, NSGalerkin/RealityProp's `conjVel`/`dotR`
-  algebra, TimeSmooth's `norm_convTerm_le`, ForcedProbe's pair-mode datum) are
-  CLONED here with a `cc` prefix, never un-privated.
+  WHAT IS DELIVERED HERE (W4, part 2; section 8 of this file).
+  * `hasDerivWithinAt_charSum_zero` (frozen): the right derivative at `t = 0`,
+    within `Ici 0`, of the torus character sum `s ↦ Σ_k c_s(k)_j e_k(x)`, with
+    the spectral right-hand side as its value.  Route: the W2 within-convex
+    engine `hasDerivWithinAt_tsum_of_convex` at `E = ℝ` on `Ico 0 b`, the
+    per-mode derivatives being the chain's endpoint derivative at `0` and the
+    mode equation on `t > 0`, the majorant being the window majorant of the
+    first chain element; then `mono_of_mem_nhdsWithin`.
+  * `derivWithin_vReal_Ici` (frozen): the within-derivative on `Ici 0` of the
+    real velocity in the community clock is `2π` times the real part of the
+    lift of the spectral right-hand side at `2πτ`.  Route: the clock
+    `HasDerivWithinAt.scomp_of_eq`, the real part through `Complex.reCLM`, the
+    packing through `hasDerivWithinAt_pi` and `PiLp.continuousLinearEquiv`, and
+    `HasDerivWithinAt.derivWithin` with the unique differentials of `Ici 0`.
+  * `theorem_B_community_periodic_flow` (frozen, the pinned capstone): the
+    twenty classical clauses of `theorem_B_smooth_classical_eq`, verbatim, plus
+    clause 21: OUR COPY of the class
+    `NavierStokesExistenceAndSmoothnessPeriodic (ν/(2π)) (u₀Real c₀) 0 (vReal c) (pReal c)`
+    is inhabited by the eternal flow, at `f = 0`.  Route: the component
+    identity `navier_stokes_component_spectral` (non-frozen; the spectral
+    right-hand side decomposed by clause 18 into viscous, convective and
+    pressure series, the viscous series identified with the Laplacian bridge,
+    the convective series with clause 19 through the reality of the factors,
+    the pressure series with the pressure bridge, and the `2π` arithmetic
+    `2π·ν/(2π)² = ν/(2π)`, `2π·(1/(2π)) = 1`), the operator reductions
+    `gradient_apply_eq_fderiv_single`, `fderiv_apply_expand`,
+    `laplacian_apply_component`, `laplacian_re` (Mathlib-side), the seam
+    `velocity_smooth_of_clause24` / `pressure_smooth_of_clause25` (clauses 24
+    and 25 composed with `Complex.reCLM` and the clock CLM `(x, τ) ↦ (x, 2πτ)`),
+    `divergence_uReal_eq_zero`, `chain_one_eq` (the first chain element is the
+    spectral right-hand side), and the two frozen lemmas above.
+  * `theorem_B_community_periodic` (frozen, the bare capstone, the community's
+    own shape): the composition of the pinned capstone with the two datum-side
+    conditions at `ν := 2π·ν'` (`mul_div_cancel_left₀`).
+  * A registered probe section `W4Probe` (non-frozen, section 6b): for every
+    `ν' > 0` the bare capstone fires on a NONZERO admissible datum
+    (`capstones_fire_on_nonzero_datum`, and with the datum explicit,
+    `capstone_fires_on_testDatum`); the rest velocity is not a witness whenever
+    the real datum is nonzero (`rest_state_not_witness_of_ne_zero`,
+    `rest_state_not_witness_for_nonzero`); and under `velocity_smooth` the
+    class's `derivWithin` and `fderiv` are genuine derivatives, not junk values
+    (`differentiableWithinAt_time_slice_of_velocity_smooth`,
+    `differentiableAt_space_slice_of_velocity_smooth`).  The time-constant
+    witness `v x t := u₀Real c₀ x` for the bare class on the shear datum is
+    EXCLUDED by the registered probe `TimeConstantWitness.const_witness_fails`
+    (section 10 of this file, the blueprint's former NOT-PROBED item): for every
+    `ν' ≠ 0` and every pressure it fails the class's `navier_stokes` clause,
+    through `laplacian_uLift`, `fderiv_uLift_single` and one-periodicity of
+    the pressure; `ν' ≠ 0` is necessary (at `ν' = 0` the stationary shear with
+    `p = 0` is an Euler solution).
+
+  HONEST SCOPE (binding wording, section 7 of the blueprint).
+  * The upstream file carries the positive statement
+    `navier_stokes_existence_and_smoothness_periodic` and the breakdown
+    statement `navier_stokes_breakdown_periodic`.  The bare capstone
+    `theorem_B_community_periodic` is exactly the positive statement's
+    CONCLUSION restricted to the data class `u₀ = u₀Real c₀` with
+    `κ·en c₀·ens c₀ < (2πν')⁴` at `f = 0`; it says nothing about the positive
+    statement for general data and nothing about the breakdown statement.  Both
+    upstream `sorry`s are untouched.  The class is inhabited for trap-class
+    data at `f = 0` only and says nothing beyond that.
+  * OUR COPY of the community class is inhabited; the external file is not
+    imported.
+  * Existence only: the class has no uniqueness clause.  Uniqueness of the
+    coefficient flow behind `vReal c` is `theorem_B_unique`, whose hypothesis
+    set is exactly clauses 1-7 of the pinned form.
+  * The rest state is not a witness for nonzero data
+    (`W3Probe.rest_pair_fails_class`); at `c₀ = 0` it is, as it must be.
+  * `κ` is of explicit form, exported as a compiled existential; the window
+    constants of the time-derivative chain and the majorants (`WindowL1`, the
+    `u`-majorants of `hasDerivWithinAt_charSum_zero`) are UNTRACKED
+    existentials.  No numeric value of any constant is claimed.
+  * The real-part bridge and the clock change are textbook; nothing here is
+    new mathematics.  Smoothness means `C^∞` with `∞ = (⊤ : ℕ∞)`; analyticity
+    is not claimed.  Priority is not claimed for anything.  The machine-checked
+    Navier-Stokes work this file sits beside is named in the announcement and
+    the README (uda-lab/leray-hopf, HeliCorgi's ns-mns2-flowmap-bridge, Miller,
+    OpenAI's forced-breakdown certificate, Alpöge and Buckmaster); none of it
+    is composed with, reproduced by, or superseded by anything here.
+  * Private declarations of frozen files (PeriodicLift's term lemmas,
+    NSGalerkin/RealityProp's `conjVel`/`dotR` algebra, TimeSmooth's
+    `norm_convTerm_le`, ForcedProbe's pair-mode datum) are CLONED here with a
+    `cc` prefix, never un-privated; the W4 probe section uses the W3 probe
+    section's private datum lemmas within this same file.
 
   STATUS: claimed only insofar as scripts/check_axioms.sh reports GREEN on
   the target machine.
@@ -1095,5 +1166,980 @@ theorem const_flow_fails_ode {ν : ℝ} (hν : 0 < ν) {ε : ℝ} (hε : ε ≠ 
 end
 
 end W3Probe
+
+
+noncomputable section
+
+/-! ## 8. Wave W4: the clock-transported derivatives and the two capstones
+
+The endpoint derivative at `t = 0` of the character sum, the within-derivative of the
+real velocity in the community clock, the per-component spectral identity behind the
+`navier_stokes` clause, the Mathlib-side operator reductions (recon G1 to G4), the seam
+of clauses 24/25 into the two smoothness fields, and the two capstones. -/
+
+/-- **The endpoint derivative of the character sum** (frozen W4): within `Ici 0` at
+`t = 0`, `s ↦ Σ_k c_s(k)_j e_k(x)` has the spectral right-hand side as derivative.  The
+W2 engine `hasDerivWithinAt_tsum_of_convex` at `E = ℝ` on `Ico 0 b` (per-mode
+derivatives from `hzero` at `0` and `hchain` on `t > 0`, majorant `u`, summability at
+the base point `0`), then `mono_of_mem_nhdsWithin` with `Ico 0 b ∈ 𝓝[≥] 0`. -/
+theorem hasDerivWithinAt_charSum_zero {ν : ℝ} {c : ℝ → (Fin 3 → ℤ) → Vel}
+    (hzero : ∀ k, HasDerivWithinAt (fun s => c s k)
+      ((-(ν * ‖freq k‖ ^ 2)) • c 0 k + lerayProj k (convFull (c 0) k)) (Ici (0:ℝ)) 0)
+    (hchain : ∀ t ∈ Ioi (0:ℝ), ∀ k, HasDerivAt (fun s => c s k)
+      ((-(ν * ‖freq k‖ ^ 2)) • c t k + lerayProj k (convFull (c t) k)) t)
+    {b : ℝ} (hb : 0 < b) {u : (Fin 3 → ℤ) → ℝ} (hu : Summable u)
+    (hmaj : ∀ t ∈ Icc (0:ℝ) b, ∀ k,
+      ‖(-(ν * ‖freq k‖ ^ 2)) • c t k + lerayProj k (convFull (c t) k)‖ ≤ u k)
+    (hs₀ : Summable fun k => ‖c 0 k‖) (j : Fin 3) (x : UnitAddTorus (Fin 3)) :
+    HasDerivWithinAt (fun s => ∑' k, c s k j * mFourier k x)
+      (∑' k, ((-(ν * ‖freq k‖ ^ 2)) • c 0 k
+        + lerayProj k (convFull (c 0) k)) j * mFourier k x) (Ici (0:ℝ)) 0 := by
+  -- the per-mode within-derivatives on `Ico 0 b`
+  have hIco : ∀ k, ∀ s ∈ Ico (0:ℝ) b,
+      HasDerivWithinAt (fun s => c s k j * mFourier k x)
+        (((-(ν * ‖freq k‖ ^ 2)) • c s k + lerayProj k (convFull (c s) k)) j * mFourier k x)
+        (Ico (0:ℝ) b) s := by
+    intro k s hs
+    rcases eq_or_lt_of_le hs.1 with h | h
+    · subst h
+      have h1 := ((EuclideanSpace.proj (𝕜 := ℂ) j).restrictScalars ℝ).hasFDerivAt
+        |>.comp_hasDerivWithinAt (0:ℝ) (hzero k)
+      exact (h1.mul_const (mFourier k x)).mono Ico_subset_Ici_self
+    · have h1 := ((EuclideanSpace.proj (𝕜 := ℂ) j).restrictScalars ℝ).hasFDerivAt
+        |>.comp_hasDerivAt s (hchain s h k)
+      exact (h1.mul_const (mFourier k x)).hasDerivWithinAt
+  -- the majorant
+  have hbound : ∀ k, ∀ s ∈ Ico (0:ℝ) b,
+      ‖((-(ν * ‖freq k‖ ^ 2)) • c s k + lerayProj k (convFull (c s) k)) j * mFourier k x‖
+        ≤ u k := by
+    intro k s hs
+    rw [norm_mul, norm_mFourier_apply, mul_one]
+    exact le_trans (PiLp.norm_apply_le _ j) (hmaj s ⟨hs.1, hs.2.le⟩ k)
+  -- summability at the base point
+  have hs0 : Summable fun k => c 0 k j * mFourier k x := by
+    refine Summable.of_norm (hs₀.of_nonneg_of_le (fun _ => norm_nonneg _) fun k => ?_)
+    rw [norm_mul, norm_mFourier_apply, mul_one]
+    exact PiLp.norm_apply_le _ j
+  have h := hasDerivWithinAt_tsum_of_convex (convex_Ico (0:ℝ) b) hu hIco hbound
+    (x₀ := 0) ⟨le_rfl, hb⟩ hs0 (x := 0) ⟨le_rfl, hb⟩
+  exact h.mono_of_mem_nhdsWithin (Ico_mem_nhdsGE hb)
+
+/-- **The within-derivative of the real velocity in the community clock** (frozen W4):
+on `Ici 0` at `τ ≥ 0` it is `2π` times the real part of the lift of `g (2πτ)`, packed
+into `ℝ³`.  The clock `HasDerivWithinAt.scomp_of_eq` (its point is the first explicit
+argument), the real part through `Complex.reCLM`, the packing through
+`hasDerivWithinAt_pi` and `PiLp.continuousLinearEquiv`, and `HasDerivWithinAt.derivWithin`
+with the unique differentials of `Ici 0` (`uniqueDiffOn_Ici`), uniformly in `τ`. -/
+theorem derivWithin_vReal_Ici {c : ℝ → (Fin 3 → ℤ) → Vel} {g : ℝ → (Fin 3 → ℤ) → Vel}
+    (hpos : ∀ (j : Fin 3) (x : ℝ³), ∀ t ∈ Ioi (0:ℝ),
+      HasDerivAt (fun s => uLift j (c s) x) (uLift j (g t) x) t)
+    (hzero : ∀ (j : Fin 3) (x : ℝ³),
+      HasDerivWithinAt (fun s => uLift j (c s) x) (uLift j (g 0) x) (Ici (0:ℝ)) 0)
+    (x : ℝ³) {τ : ℝ} (hτ : 0 ≤ τ) :
+    derivWithin (vReal c x ·) (Ici (0:ℝ)) τ
+      = WithLp.toLp 2 fun j : Fin 3 =>
+          (2 * Real.pi) * (uLift j (g (2 * Real.pi * τ)) x).re := by
+  -- the within-derivative of each real component in the clock
+  have hcomp : ∀ j : Fin 3,
+      HasDerivWithinAt (fun σ : ℝ => (uLift j (c (2 * Real.pi * σ)) x).re)
+        ((2 * Real.pi) * (uLift j (g (2 * Real.pi * τ)) x).re) (Ici (0:ℝ)) τ := by
+    intro j
+    have hw : HasDerivWithinAt (fun s => uLift j (c s) x) (uLift j (g (2 * Real.pi * τ)) x)
+        (Ici (0:ℝ)) (2 * Real.pi * τ) := by
+      rcases eq_or_lt_of_le hτ with h | h
+      · subst h
+        rw [mul_zero]
+        exact hzero j x
+      · exact (hpos j x _ (mem_Ioi.mpr (by positivity))).hasDerivWithinAt
+    have hh : HasDerivWithinAt (fun σ : ℝ => 2 * Real.pi * σ) (2 * Real.pi) (Ici (0:ℝ)) τ := by
+      simpa using ((hasDerivWithinAt_id τ (Ici (0:ℝ))).const_mul (2 * Real.pi))
+    have hmaps : MapsTo (fun σ : ℝ => 2 * Real.pi * σ) (Ici (0:ℝ)) (Ici (0:ℝ)) := by
+      intro σ hσ
+      exact mul_nonneg (by positivity) (mem_Ici.mp hσ)
+    have hclock : HasDerivWithinAt (fun σ : ℝ => uLift j (c (2 * Real.pi * σ)) x)
+        ((2 * Real.pi) • uLift j (g (2 * Real.pi * τ)) x) (Ici (0:ℝ)) τ :=
+      HasDerivWithinAt.scomp_of_eq τ hw hh hmaps rfl
+    have hre : HasDerivWithinAt (fun σ : ℝ => Complex.reCLM (uLift j (c (2 * Real.pi * σ)) x))
+        (Complex.reCLM ((2 * Real.pi) • uLift j (g (2 * Real.pi * τ)) x)) (Ici (0:ℝ)) τ :=
+      Complex.reCLM.hasFDerivAt.comp_hasDerivWithinAt τ hclock
+    have hval : Complex.reCLM ((2 * Real.pi) • uLift j (g (2 * Real.pi * τ)) x)
+        = (2 * Real.pi) * (uLift j (g (2 * Real.pi * τ)) x).re := by
+      rw [Complex.reCLM_apply, Complex.smul_re, smul_eq_mul]
+    rw [hval] at hre
+    exact hre
+  have hpi : HasDerivWithinAt
+      (fun σ : ℝ => fun j : Fin 3 => (uLift j (c (2 * Real.pi * σ)) x).re)
+      (fun j : Fin 3 => (2 * Real.pi) * (uLift j (g (2 * Real.pi * τ)) x).re) (Ici (0:ℝ)) τ :=
+    hasDerivWithinAt_pi.mpr hcomp
+  have hpack : HasDerivWithinAt (vReal c x ·)
+      (WithLp.toLp 2 fun j : Fin 3 => (2 * Real.pi) * (uLift j (g (2 * Real.pi * τ)) x).re)
+      (Ici (0:ℝ)) τ :=
+    ((PiLp.continuousLinearEquiv 2 ℝ (fun _ : Fin 3 => ℝ)).symm : (Fin 3 → ℝ) →L[ℝ] ℝ³)
+      |>.hasFDerivAt.comp_hasDerivWithinAt τ hpi
+  exact hpack.derivWithin (uniqueDiffOn_Ici 0 τ hτ)
+
+/-! ### The spectral component identity (non-frozen) -/
+
+/-- The fiber point of `x : ℝ³` on the torus (`uLift j d x` is the character sum at it,
+by `rfl`). -/
+def fiber (x : ℝ³) : UnitAddTorus (Fin 3) := fun l => ((x l : ℝ) : AddCircle (1 : ℝ))
+
+lemma uLift_eq_charSum_fiber (j : Fin 3) (d : (Fin 3 → ℤ) → Vel) (x : ℝ³) :
+    uLift j d x = ∑' k, d k j * mFourier k (fiber x) := rfl
+
+lemma pLift_eq_charSum_fiber (d : (Fin 3 → ℤ) → Vel) (x : ℝ³) :
+    pLift d x = ∑' k, pressureCoeff d k * mFourier k (fiber x) := rfl
+
+/-- **The per-component identity behind the class's `navier_stokes` clause**, at a fixed
+coefficient field `d` (later `c (2πτ)`): `2π·Re(u_j(RHS)) + Σᵢ Re(uᵢ)·Re(∂ᵢu_j)
+= (ν/(2π))·Re(Δu_j) − 2π·Re(∂_j p)`.  The spectral right-hand side is decomposed by
+clause 18 (`hleray`) into viscous, convective and pressure series; the viscous series is
+`(ν/(2π)²)` times the Laplacian bridge `laplacian_uLift`; the convective series is
+clause 19 (`hnl`) once the factors `uᵢ` are real (`im_uLift_eq_zero`); the pressure
+series is the bridge `fderiv_pLift_single`; the rest is the `2π` arithmetic. -/
+theorem navier_stokes_component_spectral {ν : ℝ} (hν : 0 < ν) {d : (Fin 3 → ℤ) → Vel}
+    (hreal : RealField d)
+    (hE : Summable fun l => ‖d l‖ ^ 2) (hZ : Summable fun l => ‖freq l‖ ^ 2 * ‖d l‖ ^ 2)
+    (h0 : Summable fun k => ‖d k‖) (h1 : Summable fun k => ‖freq k‖ * ‖d k‖)
+    (h2 : Summable fun k => ‖freq k‖ ^ 2 * ‖d k‖)
+    (hp0 : Summable fun k => ‖pressureCoeff d k‖)
+    (hp1 : Summable fun k => ‖freq k‖ * ‖pressureCoeff d k‖)
+    (hleray : ∀ (k : Fin 3 → ℤ) (j : Fin 3),
+      (lerayProj k (convFull d k)) j
+        = convFull d k j - (2 * Real.pi * Complex.I * ((k j : ℤ) : ℂ)) * pressureCoeff d k)
+    (hnl : ∀ (j : Fin 3) (z : UnitAddTorus (Fin 3)),
+      (∑ i : Fin 3, (∑' l, d l i * mFourier l z) *
+          (∑' m, (2 * Real.pi * Complex.I * ((m i : ℤ) : ℂ)) * d m j * mFourier m z))
+        = ((-(2 * Real.pi) : ℝ) : ℂ) * ∑' k, convFull d k j * mFourier k z)
+    (x : ℝ³) (j : Fin 3) :
+    (2 * Real.pi) *
+        (uLift j (fun k => (-(ν * ‖freq k‖ ^ 2)) • d k + lerayProj k (convFull d k)) x).re
+      + ∑ i : Fin 3, (uLift i d x).re * (fderiv ℝ (uLift j d) x (EuclideanSpace.single i 1)).re
+      = (ν / (2 * Real.pi)) * (Δ (uLift j d) x).re
+        - (2 * Real.pi) * (fderiv ℝ (pLift d) x (EuclideanSpace.single j 1)).re := by
+  -- the four series at the fiber point
+  have hDi : ∀ i : Fin 3, fderiv ℝ (uLift j d) x (EuclideanSpace.single i 1)
+      = ∑' k, (2 * Real.pi * Complex.I * ((k i : ℤ) : ℂ)) * d k j * mFourier k (fiber x) := by
+    intro i
+    rw [fderiv_uLift_single i j d h0 h1 x]
+    rfl
+  have hL : Δ (uLift j d) x
+      = ∑' k, (((-((2 * Real.pi) ^ 2 * ‖freq k‖ ^ 2)) : ℝ) : ℂ) * d k j * mFourier k (fiber x) := by
+    rw [laplacian_uLift j d h0 h1 h2 x]
+    rfl
+  have hGr : fderiv ℝ (pLift d) x (EuclideanSpace.single j 1)
+      = ∑' k, (2 * Real.pi * Complex.I * ((k j : ℤ) : ℂ)) * pressureCoeff d k
+          * mFourier k (fiber x) := by
+    rw [fderiv_pLift_single j d hp0 hp1 x]
+    rfl
+  have hRHS : uLift j (fun k => (-(ν * ‖freq k‖ ^ 2)) • d k + lerayProj k (convFull d k)) x
+      = ∑' k, ((-(ν * ‖freq k‖ ^ 2)) • d k + lerayProj k (convFull d k)) j
+          * mFourier k (fiber x) := rfl
+  -- summability of the three pieces (the ClassicalEquation recipe)
+  have hV : Summable fun k =>
+      (((-(ν * ‖freq k‖ ^ 2) : ℝ) : ℂ) * d k j) * mFourier k (fiber x) := by
+    refine Summable.of_norm ((h2.mul_left ν).of_nonneg_of_le
+      (fun _ => norm_nonneg _) fun k => ?_)
+    have hr : ‖(((-(ν * ‖freq k‖ ^ 2) : ℝ) : ℂ))‖ = ν * ‖freq k‖ ^ 2 := by
+      rw [Complex.norm_real, Real.norm_eq_abs, abs_neg, abs_of_nonneg (by positivity)]
+    rw [norm_mul, norm_mFourier_apply, mul_one, norm_mul, hr]
+    calc ν * ‖freq k‖ ^ 2 * ‖d k j‖ ≤ ν * ‖freq k‖ ^ 2 * ‖d k‖ := by
+          gcongr; exact PiLp.norm_apply_le (d k) j
+      _ = ν * (‖freq k‖ ^ 2 * ‖d k‖) := by ring
+  have hC : Summable fun k => convFull d k j * mFourier k (fiber x) := by
+    refine Summable.of_norm ((summable_norm_convFull hE hZ h0 h1)
+      |>.of_nonneg_of_le (fun _ => norm_nonneg _) fun k => ?_)
+    rw [norm_mul, norm_mFourier_apply, mul_one]
+    exact PiLp.norm_apply_le (convFull d k) j
+  have hG : Summable fun k =>
+      (2 * Real.pi * Complex.I * ((k j : ℤ) : ℂ)) * pressureCoeff d k * mFourier k (fiber x) := by
+    refine Summable.of_norm ((hp1.mul_left (2 * Real.pi)).of_nonneg_of_le
+      (fun _ => norm_nonneg _) fun k => ?_)
+    have e : ‖(2 * Real.pi * Complex.I * ((k j : ℤ) : ℂ))‖ = 2 * Real.pi * |(k j : ℝ)| := by
+      rw [norm_mul, norm_mul, norm_mul, Complex.norm_I]
+      have e1 : ‖(2 : ℂ)‖ = 2 := by simp
+      have e2 : ‖((Real.pi : ℝ) : ℂ)‖ = Real.pi := by simp [Real.pi_nonneg]
+      have e4 : ‖((k j : ℤ) : ℂ)‖ = |(k j : ℝ)| := by simp
+      rw [e1, e2, e4]; ring
+    rw [norm_mul, norm_mFourier_apply, mul_one, norm_mul, e]
+    calc 2 * Real.pi * |(k j : ℝ)| * ‖pressureCoeff d k‖
+        ≤ 2 * Real.pi * ‖freq k‖ * ‖pressureCoeff d k‖ := by
+          gcongr; exact abs_coord_le_norm_freq k j
+      _ = 2 * Real.pi * (‖freq k‖ * ‖pressureCoeff d k‖) := by ring
+  -- term-wise decomposition of the spectral right-hand side (clause 18)
+  have hterm : ∀ k, ((-(ν * ‖freq k‖ ^ 2)) • d k + lerayProj k (convFull d k)) j
+        * mFourier k (fiber x)
+      = (((-(ν * ‖freq k‖ ^ 2) : ℝ) : ℂ) * d k j) * mFourier k (fiber x)
+        + convFull d k j * mFourier k (fiber x)
+        - (2 * Real.pi * Complex.I * ((k j : ℤ) : ℂ)) * pressureCoeff d k
+            * mFourier k (fiber x) := by
+    intro k
+    rw [PiLp.add_apply, PiLp.smul_apply, hleray k j, Complex.real_smul]
+    ring
+  have hsplit : (∑' k, ((-(ν * ‖freq k‖ ^ 2)) • d k + lerayProj k (convFull d k)) j
+        * mFourier k (fiber x))
+      = (∑' k, (((-(ν * ‖freq k‖ ^ 2) : ℝ) : ℂ) * d k j) * mFourier k (fiber x))
+        + (∑' k, convFull d k j * mFourier k (fiber x))
+        - ∑' k, (2 * Real.pi * Complex.I * ((k j : ℤ) : ℂ)) * pressureCoeff d k
+            * mFourier k (fiber x) := by
+    rw [tsum_congr hterm, Summable.tsum_sub (hV.add hC) hG, Summable.tsum_add hV hC]
+  -- the viscous series is the scaled Laplacian series
+  have hVL : (∑' k, (((-(ν * ‖freq k‖ ^ 2) : ℝ) : ℂ) * d k j) * mFourier k (fiber x))
+      = ((ν / (2 * Real.pi) ^ 2 : ℝ) : ℂ) *
+          ∑' k, (((-((2 * Real.pi) ^ 2 * ‖freq k‖ ^ 2)) : ℝ) : ℂ) * d k j
+            * mFourier k (fiber x) := by
+    rw [← tsum_mul_left]
+    refine tsum_congr fun k => ?_
+    have hπ : (Real.pi : ℂ) ≠ 0 := by exact_mod_cast Real.pi_ne_zero
+    push_cast
+    field_simp
+  -- the convection: real factors
+  have him : ∀ i : Fin 3, (uLift i d x).im = 0 := fun i => im_uLift_eq_zero hreal h0 i x
+  have hprod : (∑ i : Fin 3, (uLift i d x).re
+        * (fderiv ℝ (uLift j d) x (EuclideanSpace.single i 1)).re)
+      = (∑ i : Fin 3, uLift i d x * fderiv ℝ (uLift j d) x (EuclideanSpace.single i 1)).re := by
+    rw [Complex.re_sum]
+    refine Finset.sum_congr rfl fun i _ => ?_
+    rw [Complex.mul_re, him i, zero_mul, sub_zero]
+  have hnl' : (∑ i : Fin 3, uLift i d x * fderiv ℝ (uLift j d) x (EuclideanSpace.single i 1))
+      = ((-(2 * Real.pi) : ℝ) : ℂ) * ∑' k, convFull d k j * mFourier k (fiber x) := by
+    rw [← hnl j (fiber x)]
+    refine Finset.sum_congr rfl fun i _ => ?_
+    rw [hDi i, uLift_eq_charSum_fiber]
+  rw [hprod, hnl', hRHS, hsplit, hVL, hL, hGr, Complex.re_ofReal_mul, Complex.sub_re,
+    Complex.add_re, Complex.re_ofReal_mul]
+  have hπ : Real.pi ≠ 0 := Real.pi_ne_zero
+  field_simp
+  ring
+
+/-! ### The Mathlib-side operator reductions (recon G1 to G4) and the bridges on the
+packed real fields -/
+
+/-- G1: the gradient's components are the coordinate directional derivatives. -/
+theorem gradient_apply_eq_fderiv_single {f : ℝ³ → ℝ} {x : ℝ³} (hf : DifferentiableAt ℝ f x)
+    (i : Fin 3) :
+    (gradient f x) i = fderiv ℝ f x (EuclideanSpace.single i 1) := by
+  have hg : HasGradientAt f (gradient f x) x := hf.hasGradientAt
+  have hfd : HasFDerivAt f ((toDual ℝ ℝ³) (gradient f x)) x := hasGradientAt_iff_hasFDerivAt.mp hg
+  rw [hfd.fderiv]
+  rw [InnerProductSpace.toDual_apply_apply, EuclideanSpace.inner_single_right]
+  simp
+
+/-- G2: a directional derivative expands along the coordinate basis, component `j`. -/
+theorem fderiv_apply_expand {V : ℝ³ → ℝ³} {x : ℝ³} (w : ℝ³) (j : Fin 3) :
+    (fderiv ℝ V x w) j
+      = ∑ i : Fin 3, w i * (fderiv ℝ V x (EuclideanSpace.single i 1)) j := by
+  have hw : w = ∑ i : Fin 3, w i • EuclideanSpace.single i (1:ℝ) := by
+    ext j
+    simp [Pi.single_apply]
+  conv_lhs => rw [hw]
+  rw [map_sum]
+  simp [map_smul]
+
+/-- G3: the Laplacian of a packed field, component by component. -/
+theorem laplacian_apply_component {V : ℝ³ → ℝ³} {x : ℝ³} (hV : ContDiffAt ℝ 2 V x) (j : Fin 3) :
+    (Δ V x) j = Δ (fun y => V y j) x := by
+  have h := ContDiffAt.laplacian_CLM_comp_left (l := EuclideanSpace.proj (𝕜 := ℝ) j) hV
+  exact h.symm
+
+/-- G4: the Laplacian commutes with the real part. -/
+theorem laplacian_re {g : ℝ³ → ℂ} {x : ℝ³} (hg : ContDiffAt ℝ 2 g x) :
+    Δ (fun y => (g y).re) x = (Δ g x).re := by
+  have h := ContDiffAt.laplacian_CLM_comp_left (l := Complex.reCLM) hg
+  exact h
+
+/-- The convection term of the packed real field, component `j`: `Σᵢ Re(uᵢ)·Re(∂ᵢu_j)`
+(`fderiv_apply_expand`, `fderiv_toLp_apply`, `fderiv_re_apply`). -/
+theorem vReal_convection_apply (d : (Fin 3 → ℤ) → Vel)
+    (h0 : Summable fun k => ‖d k‖) (h1 : Summable fun k => ‖freq k‖ * ‖d k‖)
+    (x : ℝ³) (j : Fin 3) :
+    (fderiv ℝ (fun y : ℝ³ => (WithLp.toLp 2 fun i : Fin 3 => (uLift i d y).re : ℝ³)) x
+        (WithLp.toLp 2 fun i : Fin 3 => (uLift i d x).re)) j
+      = ∑ i : Fin 3, (uLift i d x).re
+          * (fderiv ℝ (uLift j d) x (EuclideanSpace.single i 1)).re := by
+  rw [fderiv_apply_expand]
+  have hU : ∀ i : Fin 3, DifferentiableAt ℝ (uLift i d) x := fun i =>
+    ((contDiff_one_uLift i d h0 h1).differentiable one_ne_zero) x
+  have hF : ∀ i : Fin 3, DifferentiableAt ℝ (fun y : ℝ³ => (uLift i d y).re) x := fun i =>
+    Complex.reCLM.differentiableAt.comp x (hU i)
+  refine Finset.sum_congr rfl fun i _ => ?_
+  rw [fderiv_toLp_apply (F := fun j y => (uLift j d y).re) hF (EuclideanSpace.single i 1) j,
+    fderiv_re_apply (hU j)]
+
+/-- The Laplacian of the packed real field, component `j`, is `Re(Δu_j)` (G3, G4). -/
+theorem vReal_laplacian_apply (d : (Fin 3 → ℤ) → Vel)
+    (h0 : Summable fun k => ‖d k‖) (h1 : Summable fun k => ‖freq k‖ * ‖d k‖)
+    (h2 : Summable fun k => ‖freq k‖ ^ 2 * ‖d k‖) (x : ℝ³) (j : Fin 3) :
+    (Δ (fun y : ℝ³ => (WithLp.toLp 2 fun i : Fin 3 => (uLift i d y).re : ℝ³)) x) j
+      = (Δ (uLift j d) x).re := by
+  have hV : ContDiffAt ℝ 2 (fun y : ℝ³ => (WithLp.toLp 2 fun i : Fin 3 => (uLift i d y).re : ℝ³)) x := by
+    refine ContDiff.contDiffAt ?_
+    rw [contDiff_euclidean]
+    intro i
+    exact Complex.reCLM.contDiff.comp (contDiff_two_uLift i d h0 h1 h2)
+  rw [laplacian_apply_component hV j]
+  exact laplacian_re (contDiff_two_uLift j d h0 h1 h2).contDiffAt
+
+/-- The gradient of `2π·Re p`, component `j`, is `2π·Re(∂_j p)` (G1, `fderiv_const_mul`,
+`fderiv_re_apply`). -/
+theorem pReal_gradient_apply (d : (Fin 3 → ℤ) → Vel)
+    (hp0 : Summable fun k => ‖pressureCoeff d k‖)
+    (hp1 : Summable fun k => ‖freq k‖ * ‖pressureCoeff d k‖) (x : ℝ³) (j : Fin 3) :
+    (gradient (fun y : ℝ³ => (2 * Real.pi) * (pLift d y).re) x) j
+      = (2 * Real.pi) * (fderiv ℝ (pLift d) x (EuclideanSpace.single j 1)).re := by
+  have hP : DifferentiableAt ℝ (pLift d) x :=
+    ((contDiff_one_pLift d hp0 hp1).differentiable one_ne_zero) x
+  have hR : DifferentiableAt ℝ (fun y : ℝ³ => (pLift d y).re) x :=
+    Complex.reCLM.differentiableAt.comp x hP
+  have hf : DifferentiableAt ℝ (fun y : ℝ³ => (2 * Real.pi) * (pLift d y).re) x :=
+    hR.const_mul _
+  rw [gradient_apply_eq_fderiv_single hf j, fderiv_const_mul hR, ContinuousLinearMap.smul_apply,
+    smul_eq_mul, fderiv_re_apply hP]
+
+/-! ## The clock CLM and the two smoothness fields (the W2 seam, reused) -/
+
+/-- The clock CLM `(x, τ) ↦ (x, 2πτ)`. -/
+def clockCLM : ℝ³ × ℝ →L[ℝ] ℝ³ × ℝ :=
+  (ContinuousLinearMap.fst ℝ ℝ³ ℝ).prod ((2 * Real.pi) • ContinuousLinearMap.snd ℝ ℝ³ ℝ)
+
+lemma clockCLM_apply (q : ℝ³ × ℝ) : clockCLM q = (q.1, 2 * Real.pi * q.2) := rfl
+
+lemma clockCLM_mapsTo :
+    MapsTo clockCLM ((univ : Set ℝ³) ×ˢ Ici (0:ℝ)) ((univ : Set ℝ³) ×ˢ Ici (0:ℝ)) := by
+  intro q hq
+  refine ⟨mem_univ _, ?_⟩
+  show (0:ℝ) ≤ 2 * Real.pi * q.2
+  have := mem_Ici.mp hq.2
+  positivity
+
+/-- Clause 24 composed with `Complex.reCLM` and the clock gives `velocity_smooth`. -/
+theorem velocity_smooth_of_clause24 {c : ℝ → (Fin 3 → ℤ) → Vel}
+    (h24 : ∀ j : Fin 3, ContDiffOn ℝ ∞
+      (fun q : ℝ³ × ℝ => uLift j (c q.2) q.1) ((univ : Set ℝ³) ×ˢ Ici (0:ℝ))) :
+    ContDiffOn ℝ ∞ (↿(vReal c)) (Set.univ ×ˢ Set.Ici 0) := by
+  rw [contDiffOn_euclidean]
+  intro j
+  have h : ContDiffOn ℝ ∞
+      ((Complex.reCLM ∘ (fun q : ℝ³ × ℝ => uLift j (c q.2) q.1)) ∘ clockCLM)
+      ((univ : Set ℝ³) ×ˢ Ici (0:ℝ)) :=
+    (Complex.reCLM.contDiff.comp_contDiffOn (h24 j)).comp clockCLM.contDiff.contDiffOn
+      clockCLM_mapsTo
+  exact h
+
+/-- Clause 25 composed with `2π • Complex.reCLM` and the clock gives `pressure_smooth`. -/
+theorem pressure_smooth_of_clause25 {c : ℝ → (Fin 3 → ℤ) → Vel}
+    (h25 : ContDiffOn ℝ ∞
+      (fun q : ℝ³ × ℝ => pLift (c q.2) q.1) ((univ : Set ℝ³) ×ˢ Ici (0:ℝ))) :
+    ContDiffOn ℝ ∞ (↿(pReal c)) (Set.univ ×ˢ Set.Ici 0) := by
+  have h : ContDiffOn ℝ ∞
+      (((2 * Real.pi) • Complex.reCLM) ∘ (fun q : ℝ³ × ℝ => pLift (c q.2) q.1) ∘ clockCLM)
+      ((univ : Set ℝ³) ×ˢ Ici (0:ℝ)) :=
+    ((2 * Real.pi) • Complex.reCLM).contDiff.comp_contDiffOn
+      (h25.comp clockCLM.contDiff.contDiffOn clockCLM_mapsTo)
+  exact h
+
+/-! ## The first chain element is the spectral right-hand side -/
+
+/-- `D 1 = RHS(c)` on `Ici 0`: the recurrence at `n = 0` with `antidiagonal 0 = {(0,0)}`,
+`choose 0 0 = 1` and `convBil_self`. -/
+theorem chain_one_eq {ν : ℝ} {c : ℝ → (Fin 3 → ℤ) → Vel} {D S : ℕ → ℝ → (Fin 3 → ℤ) → Vel}
+    (hD0 : D 0 = c)
+    (hSdef : ∀ (n : ℕ) (t : ℝ) (k : Fin 3 → ℤ),
+      S n t k = ∑ ij ∈ Finset.antidiagonal n,
+        n.choose ij.1 • convBil (D ij.1 t) (D ij.2 t) k)
+    (hDrec : ∀ n : ℕ, ∀ t ∈ Ici (0:ℝ), ∀ k,
+      D (n + 1) t k = (-(ν * ‖freq k‖ ^ 2)) • D n t k + lerayProj k (S n t k))
+    {t : ℝ} (ht : t ∈ Ici (0:ℝ)) (k : Fin 3 → ℤ) :
+    D 1 t k = (-(ν * ‖freq k‖ ^ 2)) • c t k + lerayProj k (convFull (c t) k) := by
+  have hS : S 0 t k = convFull (c t) k := by
+    rw [hSdef, Finset.Nat.antidiagonal_zero, Finset.sum_singleton]
+    simp only [Nat.choose_zero_right, one_smul, hD0]
+    rfl
+  have h : D 1 t k = (-(ν * ‖freq k‖ ^ 2)) • D 0 t k + lerayProj k (S 0 t k) := hDrec 0 t ht k
+  rw [h, hS, hD0]
+
+/-! ## The bridges stated on `vReal` / `pReal` (the class's own shapes) -/
+
+/-- `vReal_convection_apply` in the class's own shape `fderiv ℝ (v · τ) x (v x τ)`. -/
+theorem vReal_convection_apply' (c : ℝ → (Fin 3 → ℤ) → Vel) (τ : ℝ)
+    (h0 : Summable fun k => ‖c (2 * Real.pi * τ) k‖)
+    (h1 : Summable fun k => ‖freq k‖ * ‖c (2 * Real.pi * τ) k‖) (x : ℝ³) (j : Fin 3) :
+    (fderiv ℝ (fun y => vReal c y τ) x (vReal c x τ)) j
+      = ∑ i : Fin 3, (uLift i (c (2 * Real.pi * τ)) x).re
+          * (fderiv ℝ (uLift j (c (2 * Real.pi * τ))) x (EuclideanSpace.single i 1)).re :=
+  vReal_convection_apply (c (2 * Real.pi * τ)) h0 h1 x j
+
+/-- `vReal_laplacian_apply` in the class's own shape `Δ (v · τ) x`. -/
+theorem vReal_laplacian_apply' (c : ℝ → (Fin 3 → ℤ) → Vel) (τ : ℝ)
+    (h0 : Summable fun k => ‖c (2 * Real.pi * τ) k‖)
+    (h1 : Summable fun k => ‖freq k‖ * ‖c (2 * Real.pi * τ) k‖)
+    (h2 : Summable fun k => ‖freq k‖ ^ 2 * ‖c (2 * Real.pi * τ) k‖) (x : ℝ³) (j : Fin 3) :
+    (Δ (fun y => vReal c y τ) x) j = (Δ (uLift j (c (2 * Real.pi * τ))) x).re :=
+  vReal_laplacian_apply (c (2 * Real.pi * τ)) h0 h1 h2 x j
+
+/-- `pReal_gradient_apply` in the class's own shape `gradient (p · τ) x`. -/
+theorem pReal_gradient_apply' (c : ℝ → (Fin 3 → ℤ) → Vel) (τ : ℝ)
+    (hp0 : Summable fun k => ‖pressureCoeff (c (2 * Real.pi * τ)) k‖)
+    (hp1 : Summable fun k => ‖freq k‖ * ‖pressureCoeff (c (2 * Real.pi * τ)) k‖)
+    (x : ℝ³) (j : Fin 3) :
+    (gradient (fun y => pReal c y τ) x) j
+      = (2 * Real.pi) * (fderiv ℝ (pLift (c (2 * Real.pi * τ))) x (EuclideanSpace.single j 1)).re :=
+  pReal_gradient_apply (c (2 * Real.pi * τ)) hp0 hp1 x j
+
+/-! ### The pinned capstone -/
+
+/-- **THE PINNED CAPSTONE OF TIER 8b**: the twenty classical clauses of
+`theorem_B_smooth_classical_eq`, verbatim, and clause 21: OUR COPY of the community class
+`NavierStokesExistenceAndSmoothnessPeriodic (ν/(2π)) (u₀Real c₀) 0 (vReal c) (pReal c)`
+is inhabited by the eternal flow `c` of the twenty clauses, in the clock `τ = t/(2π)`,
+at `f = 0`.
+
+`navier_stokes` is proved component by component: the time derivative is
+`derivWithin_vReal_Ici` (clause 13 on `t > 0`; at `t = 0` the endpoint derivative
+`hasDerivWithinAt_charSum_zero` fed by the chain of clause 21 through `chain_one_eq` and
+the window majorant `WindowL1.majorant`), the convection, Laplacian and gradient are the
+three bridges on the packed real fields, and the identity is
+`navier_stokes_component_spectral` (clauses 18 and 19 and the `2π` arithmetic).
+`div_free` is `divergence_uReal_eq_zero`; `initial_condition` is `2π·0 = 0` and
+`c 0 = c₀`; `velocity_smooth`/`pressure_smooth` are clauses 24/25 composed with
+`Complex.reCLM` and the clock CLM; periodicity is `isOnePeriodic_uLift`/`_pLift`.
+
+The rest state is not a witness for nonzero data (`W3Probe.exists_nonzero_admissible_datum`
+and `W3Probe.rest_pair_fails_class`, compiled); at `c₀ = 0` it is, as it must be.  The
+class carries no uniqueness clause: uniqueness of the coefficient flow behind `vReal c` is
+`theorem_B_unique`, whose hypothesis set is exactly clauses 1-7 of this pinned form.
+`κ` is that of `theorem_B_joint_smooth`, of explicit form and exported as a compiled
+existential; the window constants and majorants are untracked existentials.  The class is
+inhabited for trap-class data at `f = 0` only and says nothing beyond that; the external
+file is not imported; nothing here is new mathematics. -/
+theorem theorem_B_community_periodic_flow :
+    ∃ κ, 0 < κ ∧ ∀ {ν : ℝ}, 0 < ν → ∀ {c₀ : (Fin 3 → ℤ) → Vel},
+      (∀ m : ℕ, Summable fun l => ‖freq l‖ ^ (2 * m) * ‖c₀ l‖ ^ 2) →
+      c₀ 0 = 0 → RealField c₀ → DivFree c₀ → κ * en c₀ * ens c₀ < ν ^ 4 →
+      ∃ c : ℝ → (Fin 3 → ℤ) → Vel,
+
+        c 0 = c₀ ∧
+        (∀ t ∈ Ici (0:ℝ), RealField (c t) ∧ DivFree (c t)) ∧
+        (∀ t ∈ Ici (0:ℝ), Summable (fun l => ‖c t l‖ ^ 2) ∧
+          Summable (fun l => ‖freq l‖ ^ 2 * ‖c t l‖ ^ 2)) ∧
+        (∀ k, ContinuousOn (fun s => c s k) (Ici (0:ℝ))) ∧
+        (∀ t ∈ Ici (0:ℝ), ∀ k, c t k = c₀ k + ∫ s in (0:ℝ)..t,
+          ((-(ν * ‖freq k‖ ^ 2)) • c s k + lerayProj k (convFull (c s) k))) ∧
+        (∀ t ∈ Ioi (0:ℝ), ∀ k, HasDerivAt (fun s => c s k)
+          ((-(ν * ‖freq k‖ ^ 2)) • c t k + lerayProj k (convFull (c t) k)) t) ∧
+        (∀ t ∈ Ici (0:ℝ), en (c t) ≤ en c₀ ∧ ens (c t) ≤ ens c₀ ∧
+          κ * en (c t) * ens (c t) < ν ^ 4) ∧
+        -- every Sobolev level survives, for THIS one flow
+        (∀ (m : ℕ), ∀ t ∈ Ici (0:ℝ),
+          Summable fun l => ‖freq l‖ ^ (2 * m) * ‖c t l‖ ^ 2) ∧
+        -- the flow stays mean-zero
+        (∀ t ∈ Ici (0:ℝ), c t 0 = 0) ∧
+        -- weighted ℓ¹ at every order
+        (∀ t ∈ Ici (0:ℝ), ∀ p : ℕ, Summable fun l => ‖freq l‖ ^ p * ‖c t l‖) ∧
+        -- SPACE: the periodic lift is C^p for every p, and ℤ³-periodic
+        (∀ t ∈ Ici (0:ℝ), ∀ (j : Fin 3) (p : ℕ),
+          ContDiff ℝ (p : ℕ∞) (uLift j (c t))) ∧
+        (∀ t ∈ Ici (0:ℝ), ∀ (j : Fin 3) (g : Fin 3 → ℤ)
+            (x : EuclideanSpace ℝ (Fin 3)),
+          uLift j (c t) (x + freq g) = uLift j (c t) x) ∧
+        -- TIME: the spectral Navier-Stokes equation, pointwise on the torus
+        (∀ (j : Fin 3) (x : UnitAddTorus (Fin 3)), ∀ t ∈ Ioi (0:ℝ),
+          HasDerivAt (fun s => ∑' k, c s k j * mFourier k x)
+            (∑' k, ((-(ν * ‖freq k‖ ^ 2)) • c t k
+              + lerayProj k (convFull (c t) k)) j * mFourier k x) t) ∧
+        -- C¹ IN TIME: that derivative is itself continuous on `t > 0`
+        (∀ (j : Fin 3) (x : UnitAddTorus (Fin 3)),
+          ContinuousOn (fun s => ∑' k, ((-(ν * ‖freq k‖ ^ 2)) • c s k
+            + lerayProj k (convFull (c s) k)) j * mFourier k x) (Ioi (0:ℝ))) ∧
+        -- the SECOND spatial fiber derivatives exist, with symbol (2πi·kᵢ)²
+        (∀ t ∈ Ici (0:ℝ), ∀ (i j : Fin 3) (y : UnitAddTorus (Fin 2)) (s : ℝ),
+          HasDerivAt
+            (fun r : ℝ => ∑' k, ((2 * Real.pi * Complex.I * (k i : ℂ)) * c t k j) •
+              mFourier k (i.insertNth (↑r : UnitAddCircle) y))
+            (∑' k, ((2 * Real.pi * Complex.I * (k i : ℂ)) ^ 2 * c t k j) •
+              mFourier k (i.insertNth (↑s : UnitAddCircle) y)) s) ∧
+        -- CALIBRATION: the viscous term IS the Laplacian, scaled by ν/(2π)²
+        (∀ t ∈ Ici (0:ℝ), ∀ (j : Fin 3) (z : UnitAddTorus (Fin 3)),
+          (∑' k, (((-(ν * ‖freq k‖ ^ 2) : ℝ) : ℂ) * c t k j) • mFourier k z)
+            = ((ν / (2 * Real.pi) ^ 2 : ℝ) : ℂ) *
+              (∑ i : Fin 3, ∑' k,
+                ((2 * Real.pi * Complex.I * (k i : ℂ)) ^ 2 * c t k j) • mFourier k z)) ∧
+        -- the PRESSURE is ℓ¹ (continuous) AND has one weighted order, so
+        -- its gradient ∇p is a genuine object
+        (∀ t ∈ Ici (0:ℝ), (Summable fun k => ‖pressureCoeff (c t) k‖) ∧
+          Summable fun k => ‖freq k‖ * ‖pressureCoeff (c t) k‖) ∧
+        -- the Leray projection is the convection MINUS a pressure gradient
+        (∀ t ∈ Ici (0:ℝ), ∀ (k : Fin 3 → ℤ) (j : Fin 3),
+          (lerayProj k (convFull (c t) k)) j
+            = convFull (c t) k j
+              - (2 * Real.pi * Complex.I * ((k j : ℤ) : ℂ)) * pressureCoeff (c t) k) ∧
+        -- and the convection itself IS the classical (u·∇)u
+        (∀ t ∈ Ici (0:ℝ), ∀ (j : Fin 3) (x : UnitAddTorus (Fin 3)),
+          (∑ i : Fin 3, (∑' l, c t l i * mFourier l x) *
+              (∑' m, (2 * Real.pi * Complex.I * ((m i : ℤ) : ℂ)) * c t m j
+                * mFourier m x))
+            = ((-(2 * Real.pi) : ℝ) : ℂ) * ∑' k, convFull (c t) k j * mFourier k x) ∧
+        -- THE CLASSICAL EQUATION, pointwise:
+        --   ∂ₜu_j = (ν/(2π)²)·(Δu)_j − (1/2π)·((u·∇)u)_j − ∂_j p
+        (∀ (j : Fin 3) (x : UnitAddTorus (Fin 3)), ∀ t ∈ Ioi (0:ℝ),
+          HasDerivAt (fun s => ∑' k, c s k j * mFourier k x)
+            (((ν / (2 * Real.pi) ^ 2 : ℝ) : ℂ) *
+                (∑ i : Fin 3, ∑' k,
+                  ((2 * Real.pi * Complex.I * (k i : ℂ)) ^ 2 * c t k j) • mFourier k x)
+              - ((1 / (2 * Real.pi) : ℝ) : ℂ) *
+                (∑ i : Fin 3, (∑' l, c t l i * mFourier l x) *
+                  (∑' m, (2 * Real.pi * Complex.I * ((m i : ℤ) : ℂ)) * c t m j
+                    * mFourier m x))
+              - ∑' k, (2 * Real.pi * Complex.I * ((k j : ℤ) : ℂ)) * pressureCoeff (c t) k
+                  * mFourier k x) t) ∧
+        -- 21. THE COMMUNITY CLASS, inhabited by this flow
+        NavierStokesExistenceAndSmoothnessPeriodic (n := 3) (ν / (2 * Real.pi))
+          (u₀Real c₀) (f := 0) (vReal c) (pReal c) := by
+  obtain ⟨κ, hκ, H⟩ := theorem_B_joint_smooth
+  refine ⟨κ, hκ, ?_⟩
+  intro ν hν c₀ hall hmean0 hreal hdiv hsmall
+  obtain ⟨c, hc0, hstruct, hsum, hcont, hinteq, hode, htrap, hlevel, hmean, hl1,
+    hspace, hper, htime, htimecont, hsecond, hcalib, hpress, hleray, hnl, hclassical,
+    hchain21, hCinf, hpl1, h24, h25⟩ := H hν hall hmean0 hreal hdiv hsmall
+  obtain ⟨D, S, hD0, hSdef, hDrec, hDder, hDzero, hDcont, hDwin, hSder, hScont, hSwin⟩ :=
+    hchain21
+  -- re-export clauses 1-20 verbatim; only the class remains
+  refine ⟨c, hc0, hstruct, hsum, hcont, hinteq, hode, htrap, hlevel, hmean, hl1,
+    hspace, hper, htime, htimecont, hsecond, hcalib, hpress, hleray, hnl, hclassical, ?_⟩
+  -- ℓ¹ certificates at every time (clause 10)
+  have h0 : ∀ t ∈ Ici (0:ℝ), Summable fun k => ‖c t k‖ := fun t ht => by
+    simpa using hl1 t ht 0
+  have h1 : ∀ t ∈ Ici (0:ℝ), Summable fun k => ‖freq k‖ * ‖c t k‖ := fun t ht => by
+    simpa using hl1 t ht 1
+  have h2 : ∀ t ∈ Ici (0:ℝ), Summable fun k => ‖freq k‖ ^ 2 * ‖c t k‖ := fun t ht =>
+    hl1 t ht 2
+  have hτt : ∀ τ : ℝ, 0 ≤ τ → 2 * Real.pi * τ ∈ Ici (0:ℝ) := fun τ hτ =>
+    mem_Ici.mpr (by positivity)
+  -- the time-derivative data of `derivWithin_vReal_Ici`: clause 13 on `t > 0`,
+  -- and the endpoint derivative at `0` from the chain and the W2 engine
+  have hpos : ∀ (j : Fin 3) (x : ℝ³), ∀ t ∈ Ioi (0:ℝ),
+      HasDerivAt (fun s => uLift j (c s) x)
+        (uLift j (fun k => (-(ν * ‖freq k‖ ^ 2)) • c t k + lerayProj k (convFull (c t) k)) x)
+        t :=
+    fun j x t ht => htime j (fiber x) t ht
+  have hzero : ∀ (j : Fin 3) (x : ℝ³),
+      HasDerivWithinAt (fun s => uLift j (c s) x)
+        (uLift j (fun k => (-(ν * ‖freq k‖ ^ 2)) • c 0 k + lerayProj k (convFull (c 0) k)) x)
+        (Ici (0:ℝ)) 0 := by
+    intro j x
+    have hz : ∀ k, HasDerivWithinAt (fun s => c s k)
+        ((-(ν * ‖freq k‖ ^ 2)) • c 0 k + lerayProj k (convFull (c 0) k)) (Ici (0:ℝ)) 0 := by
+      intro k
+      have h := hDzero 0 k
+      rw [chain_one_eq hD0 hSdef hDrec self_mem_Ici k, hD0] at h
+      exact h
+    obtain ⟨A, hA, -, hAle⟩ := WindowL1.majorant (hDwin 1 1)
+    have hmaj : ∀ t ∈ Icc (0:ℝ) 1, ∀ k,
+        ‖(-(ν * ‖freq k‖ ^ 2)) • c t k + lerayProj k (convFull (c t) k)‖ ≤ A k := by
+      intro t ht k
+      rw [← chain_one_eq hD0 hSdef hDrec (mem_Ici.mpr ht.1) k]
+      exact hAle t ht k
+    exact hasDerivWithinAt_charSum_zero hz hode one_pos hA hmaj (h0 0 self_mem_Ici) j (fiber x)
+  refine ⟨⟨?_, ?_, ?_, velocity_smooth_of_clause24 h24, pressure_smooth_of_clause25 h25⟩,
+    ?_, ?_⟩
+  · -- navier_stokes, component by component
+    intro x τ hτ
+    have ht := hτt τ hτ
+    ext j
+    rw [derivWithin_vReal_Ici hpos hzero x hτ]
+    simp only [PiLp.add_apply, PiLp.sub_apply, PiLp.smul_apply, Pi.zero_apply, add_zero,
+      smul_eq_mul]
+    rw [vReal_convection_apply' c τ (h0 _ ht) (h1 _ ht) x j,
+      vReal_laplacian_apply' c τ (h0 _ ht) (h1 _ ht) (h2 _ ht) x j,
+      pReal_gradient_apply' c τ (hpress _ ht).1 (hpress _ ht).2 x j]
+    exact navier_stokes_component_spectral hν (hstruct _ ht).1 (hsum _ ht).1 (hsum _ ht).2
+      (h0 _ ht) (h1 _ ht) (h2 _ ht) (hpress _ ht).1 (hpress _ ht).2 (hleray _ ht) (hnl _ ht) x j
+  · -- div_free
+    intro x t ht
+    have ht' := hτt t ht
+    exact divergence_uReal_eq_zero (hstruct _ ht').1 (hstruct _ ht').2 (h0 _ ht') (h1 _ ht') x
+  · -- initial_condition: `2π·0 = 0` and `c 0 = c₀`
+    intro x
+    show (WithLp.toLp 2 fun j : Fin 3 => (uLift j (c (2 * Real.pi * 0)) x).re : ℝ³)
+      = WithLp.toLp 2 fun j : Fin 3 => (uLift j c₀ x).re
+    rw [mul_zero, hc0]
+  · -- isOnePeriodic_velocity
+    intro t _ x i
+    show (WithLp.toLp 2 fun j : Fin 3 =>
+        (uLift j (c (2 * Real.pi * t)) (x + EuclideanSpace.single i 1)).re : ℝ³)
+      = WithLp.toLp 2 fun j : Fin 3 => (uLift j (c (2 * Real.pi * t)) x).re
+    congr 1
+    funext j
+    rw [isOnePeriodic_uLift j _ x i]
+  · -- isOnePeriodic_pressure
+    intro t _ x i
+    show (2 * Real.pi) * (pLift (c (2 * Real.pi * t)) (x + EuclideanSpace.single i 1)).re
+      = (2 * Real.pi) * (pLift (c (2 * Real.pi * t)) x).re
+    rw [isOnePeriodic_pLift _ x i]
+
+/-! ### The bare capstone (the community's own shape) -/
+
+/-- **THE BARE CAPSTONE OF TIER 8b**, in the community's own shape.  The proposed
+announcement wording (blueprint section 7, rule 6; the user's call, not made here): "for
+data in the campaign's small class, OUR copy of the community's periodic solution class
+`NavierStokesExistenceAndSmoothnessPeriodic (ν/(2π)) u₀ 0 v p` is inhabited by the
+eternal flow (compiled); this is the conclusion of the upstream positive statement
+restricted to that data class with `f = 0`; both upstream statements are untouched."
+
+Precisely: the upstream file carries the positive statement
+`navier_stokes_existence_and_smoothness_periodic` and the breakdown statement
+`navier_stokes_breakdown_periodic`; this theorem is exactly the positive statement's
+CONCLUSION restricted to the data class `u₀ = u₀Real c₀` with `κ·en c₀·ens c₀ < (2πν')⁴`
+at `f = 0` (`ν' > 0` arbitrary); it says nothing about the positive statement for general
+data and nothing about the breakdown statement; both upstream `sorry`s are untouched.
+Existence only: the class has no uniqueness clause; uniqueness of the coefficient flow
+behind `vReal c` is `theorem_B_unique` through clauses 1-7 of the pinned form.  The rest
+state is not a witness for nonzero data (`W3Probe.rest_pair_fails_class`); at `c₀ = 0` it
+is.  Proof: the pinned capstone at `ν := 2π·ν'` (the class at `(2πν')/(2π)` is the class
+at `ν'`, `mul_div_cancel_left₀`), with `initialVelocityConditionPeriodic_u₀Real` and
+`forceConditionPeriodic_zero`. -/
+theorem theorem_B_community_periodic :
+    ∃ κ, 0 < κ ∧ ∀ {ν' : ℝ}, 0 < ν' → ∀ {c₀ : (Fin 3 → ℤ) → Vel},
+      (∀ m : ℕ, Summable fun l => ‖freq l‖ ^ (2 * m) * ‖c₀ l‖ ^ 2) →
+      c₀ 0 = 0 → RealField c₀ → DivFree c₀ →
+      κ * en c₀ * ens c₀ < (2 * Real.pi * ν') ^ 4 →
+      InitialVelocityConditionPeriodic (n := 3) (u₀Real c₀) ∧
+      ForceConditionPeriodic (n := 3) (f := 0) ∧
+      ∃ (v : ℝ³ → ℝ → ℝ³) (p : ℝ³ → ℝ → ℝ),
+        NavierStokesExistenceAndSmoothnessPeriodic (n := 3) ν' (u₀Real c₀)
+          (f := 0) v p := by
+  obtain ⟨κ, hκ, H⟩ := theorem_B_community_periodic_flow
+  refine ⟨κ, hκ, ?_⟩
+  intro ν' hν' c₀ hall hmean0 hreal hdiv hsmall
+  have hν : 0 < 2 * Real.pi * ν' := by positivity
+  obtain ⟨c, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, hclass⟩ :=
+    H hν hall hmean0 hreal hdiv hsmall
+  refine ⟨initialVelocityConditionPeriodic_u₀Real hall hmean0 hreal hdiv,
+    forceConditionPeriodic_zero, vReal c, pReal c, ?_⟩
+  have h2π : (2 * Real.pi : ℝ) ≠ 0 := by positivity
+  rwa [mul_div_cancel_left₀ _ h2π] at hclass
+
+end
+
+/-! ## 9. Probe section (non-frozen, registered): the capstones at work
+
+Section 6b of the blueprint at capstone level: the bare capstone fires on a NONZERO
+admissible datum for every `ν' > 0`; the rest velocity is not a witness whenever the real
+datum is nonzero; and under `velocity_smooth` the class's `derivWithin`/`fderiv` are
+genuine derivatives (SLICE GENUINENESS).  The time-constant witness for the bare class is
+NOT probed (see the header). -/
+
+namespace W4Probe
+
+noncomputable section
+
+
+/-- MUST INHABIT at capstone level: for every `ν' > 0` there is a NONZERO datum meeting
+the community initial condition on which the bare capstone produces a member of the
+class (`W3Probe.exists_nonzero_admissible_datum` at `κ` and `ν := 2πν'`). -/
+theorem capstones_fire_on_nonzero_datum {ν' : ℝ} (hν' : 0 < ν') :
+    ∃ c₀ : (Fin 3 → ℤ) → Vel, c₀ ≠ 0 ∧
+      InitialVelocityConditionPeriodic (n := 3) (u₀Real c₀) ∧
+      ∃ (v : ℝ³ → ℝ → ℝ³) (p : ℝ³ → ℝ → ℝ),
+        NavierStokesExistenceAndSmoothnessPeriodic (n := 3) ν' (u₀Real c₀) (f := 0) v p := by
+  obtain ⟨κ, hκ, H⟩ := theorem_B_community_periodic
+  have hν : 0 < 2 * Real.pi * ν' := by positivity
+  obtain ⟨c₀, hne, hall, hmean0, hreal, hdiv, hsmall⟩ :=
+    W3Probe.exists_nonzero_admissible_datum hκ hν
+  obtain ⟨hinit, -, v, p, hclass⟩ := H hν' hall hmean0 hreal hdiv hsmall
+  exact ⟨c₀, hne, hinit, v, p, hclass⟩
+
+/-- MUST INHABIT with the datum EXPLICIT: for every `ν' > 0` the bare capstone fires on
+the shear datum `testDatum ε` with `ε = 2πν'/(κ+3) ≠ 0`, whose real datum is nonzero, and
+the rest velocity is not a witness for it (the W3 probe's arithmetic at `ν := 2πν'`). -/
+theorem capstone_fires_on_testDatum {ν' : ℝ} (hν' : 0 < ν') :
+    ∃ ε : ℝ, ε ≠ 0 ∧ u₀Real (W3Probe.testDatum ε) ≠ 0 ∧
+      (∃ (v : ℝ³ → ℝ → ℝ³) (p : ℝ³ → ℝ → ℝ),
+        NavierStokesExistenceAndSmoothnessPeriodic (n := 3) ν' (u₀Real (W3Probe.testDatum ε))
+          (f := 0) v p) ∧
+      ∀ p : ℝ³ → ℝ → ℝ,
+        ¬ NavierStokesExistenceAndSmoothnessPeriodic (n := 3) ν' (u₀Real (W3Probe.testDatum ε))
+          (f := 0) (fun _ _ => 0) p := by
+  obtain ⟨κ, hκ, H⟩ := theorem_B_community_periodic
+  set r : ℝ := (2 * Real.pi * ν') / (κ + 3) with hr
+  have hrpos : 0 < r := by positivity
+  have hsmall : κ * en (W3Probe.testDatum r) * ens (W3Probe.testDatum r)
+      < (2 * Real.pi * ν') ^ 4 := by
+    show κ * en (W3Probe.pairDatum (W3Probe.probeVec r))
+      * ens (W3Probe.pairDatum (W3Probe.probeVec r)) < (2 * Real.pi * ν') ^ 4
+    rw [W3Probe.en_pairDatum, W3Probe.ens_pairDatum, W3Probe.norm_probeVec, sq_abs]
+    have h1 : 4 * κ < (κ + 3) ^ 2 := by nlinarith [sq_nonneg (κ - 1)]
+    have h2 : (κ + 3) ^ 2 ≤ (κ + 3) ^ 4 := pow_le_pow_right₀ (by linarith) (by norm_num)
+    have hν4 : 0 < (2 * Real.pi * ν') ^ 4 := by positivity
+    have hkey : κ * (2 * r ^ 2) * (2 * r ^ 2)
+        = 4 * κ * (2 * Real.pi * ν') ^ 4 / (κ + 3) ^ 4 := by
+      rw [hr]; field_simp; ring
+    rw [hkey, div_lt_iff₀ (by positivity)]
+    nlinarith [mul_lt_mul_of_pos_right (lt_of_lt_of_le h1 h2) hν4]
+  obtain ⟨-, -, v, p, hclass⟩ := H hν' (W3Probe.summable_wsq_pairDatum_all _)
+    (W3Probe.pairDatum_zero_mode _) (W3Probe.realField_pairDatum_probeVec r)
+    (W3Probe.divFree_pairDatum_probeVec r) hsmall
+  exact ⟨r, hrpos.ne', W3Probe.u₀Real_testDatum_ne_zero hrpos.ne', ⟨v, p, hclass⟩,
+    fun p => W3Probe.rest_pair_fails_class hrpos.ne' ν' 0 p⟩
+
+/-- MUST FAIL: whenever the real datum is nonzero, the rest velocity fails the class's
+`initial_condition` for every viscosity, force and pressure. -/
+theorem rest_state_not_witness_of_ne_zero {c₀ : (Fin 3 → ℤ) → Vel} (h : u₀Real c₀ ≠ 0)
+    (nu : ℝ) (f : ℝ³ → ℝ → ℝ³) (p : ℝ³ → ℝ → ℝ) :
+    ¬ NavierStokesExistenceAndSmoothnessPeriodic (n := 3) nu (u₀Real c₀) f
+        (fun _ _ => 0) p := by
+  intro hc
+  apply h
+  funext x
+  exact (hc.initial_condition x).symm
+
+/-- MUST FAIL, against the capstone's own datum and force spelling: for the shear datum
+`testDatum ε`, `ε ≠ 0`, the rest velocity is not a witness at `f := 0` for any `ν'`, `p`
+(`W3Probe.rest_pair_fails_class` restated). -/
+theorem rest_state_not_witness_for_nonzero {ε : ℝ} (hε : ε ≠ 0) (ν' : ℝ) (p : ℝ³ → ℝ → ℝ) :
+    ¬ NavierStokesExistenceAndSmoothnessPeriodic (n := 3) ν' (u₀Real (W3Probe.testDatum ε))
+        (f := 0) (fun _ _ => 0) p :=
+  W3Probe.rest_pair_fails_class hε ν' 0 p
+
+/-- SLICE GENUINENESS (time): under `velocity_smooth`, `t ↦ v x t` is differentiable
+within `Ici 0` at every `t ≥ 0`, so the class's `derivWithin` is a genuine derivative. -/
+theorem differentiableWithinAt_time_slice_of_velocity_smooth {v : ℝ³ → ℝ → ℝ³}
+    (hv : ContDiffOn ℝ ∞ (↿v) (Set.univ ×ˢ Set.Ici 0)) (x : ℝ³) {t : ℝ} (ht : 0 ≤ t) :
+    DifferentiableWithinAt ℝ (v x ·) (Ici (0:ℝ)) t := by
+  have hD : DifferentiableOn ℝ (↿v) ((univ : Set ℝ³) ×ˢ Ici (0:ℝ)) :=
+    hv.differentiableOn (by simp)
+  have hslice : DifferentiableWithinAt ℝ (fun s : ℝ => ((x, s) : ℝ³ × ℝ)) (Ici (0:ℝ)) t :=
+    (DifferentiableAt.prodMk (differentiableAt_const _) differentiableAt_id).differentiableWithinAt
+  have hmaps : MapsTo (fun s : ℝ => ((x, s) : ℝ³ × ℝ)) (Ici (0:ℝ))
+      ((univ : Set ℝ³) ×ˢ Ici (0:ℝ)) := fun s hs => ⟨mem_univ _, hs⟩
+  exact (hD (x, t) ⟨mem_univ _, ht⟩).comp t hslice hmaps
+
+/-- SLICE GENUINENESS (space): under `velocity_smooth`, `x ↦ v x t` is differentiable at
+every `x` for `t ≥ 0`, so the class's `fderiv` is a genuine derivative. -/
+theorem differentiableAt_space_slice_of_velocity_smooth {v : ℝ³ → ℝ → ℝ³}
+    (hv : ContDiffOn ℝ ∞ (↿v) (Set.univ ×ˢ Set.Ici 0)) {t : ℝ} (ht : 0 ≤ t) (x : ℝ³) :
+    DifferentiableAt ℝ (v · t) x := by
+  have hD : DifferentiableOn ℝ (↿v) ((univ : Set ℝ³) ×ˢ Ici (0:ℝ)) :=
+    hv.differentiableOn (by simp)
+  have hslice : DifferentiableWithinAt ℝ (fun y : ℝ³ => ((y, t) : ℝ³ × ℝ)) univ x :=
+    (DifferentiableAt.prodMk differentiableAt_id (differentiableAt_const _)).differentiableWithinAt
+  have hmaps : MapsTo (fun y : ℝ³ => ((y, t) : ℝ³ × ℝ)) univ
+      ((univ : Set ℝ³) ×ˢ Ici (0:ℝ)) := fun y _ => ⟨mem_univ _, ht⟩
+  have h := (hD (x, t) ⟨mem_univ _, ht⟩).comp x hslice hmaps
+  rw [differentiableWithinAt_univ] at h
+  exact h
+
+end
+
+end W4Probe
+
+
+/-! ## 10. Audit probe: the time-constant witness is excluded (blueprint 6b, the NOT-PROBED item)
+
+For the BARE class on the nonzero shear datum `W3Probe.testDatum ε` the time-constant
+velocity `v x t := u₀Real (testDatum ε) x` is NOT a witness, for every viscosity `ν' ≠ 0`
+and every pressure `p`: its time derivative vanishes while `ν'·Δv` does not, and the
+pressure gradient cannot compensate because `p` is one-periodic along `e₂` with a
+constant line derivative there.  The hypothesis `ν' ≠ 0` is necessary (at `ν' = 0` the
+stationary shear with `p = 0` is an Euler solution).  Proof by the W4 statement-shape
+reader (probe `ShapeB.lean`, persisted in the session audit directory), landed verbatim;
+it uses `laplacian_uLift`, `fderiv_uLift_single` and one-periodicity of the pressure, not
+any symmetry of second derivatives.  Nothing here is new mathematics. -/
+
+noncomputable section
+namespace TimeConstantWitness
+
+/-- the character, as in `uLift_eq_charSeries` -/
+def cchar (k : Fin 3 → ℤ) (x : ℝ³) : ℂ :=
+  ∏ l : Fin 3, fourier (k l) ((x l : ℝ) : AddCircle (1 : ℝ))
+
+lemma uLift_eq (j : Fin 3) (d : (Fin 3 → ℤ) → Vel) (x : ℝ³) :
+    uLift j d x = ∑' k, d k j * cchar k x := rfl
+
+def ccpe1 : Fin 3 → ℤ := ![1, 0, 0]
+
+lemma ccpe1_ne_neg : ccpe1 ≠ -ccpe1 := by
+  intro h
+  have := congrFun h 0
+  simp [ccpe1] at this
+
+lemma ccpe1_one : ccpe1 1 = 0 := by simp [ccpe1]
+lemma neg_ccpe1_one : (-ccpe1) 1 = 0 := by simp [ccpe1]
+
+lemma norm_freq_ccpe1 : ‖freq ccpe1‖ = 1 := by
+  rw [norm_freq]
+  simp [ccpe1, Fin.sum_univ_three]
+
+lemma norm_freq_neg_ccpe1 : ‖freq (-ccpe1)‖ = 1 := by
+  rw [norm_freq]
+  simp [ccpe1, Fin.sum_univ_three]
+
+def ccBox : Finset (Fin 3 → ℤ) := {ccpe1, -ccpe1}
+
+def ccVec (r : ℝ) : Vel := EuclideanSpace.single 1 (r : ℂ)
+
+def ccPair (v : Vel) : (Fin 3 → ℤ) → Vel :=
+  fun k => if k = ccpe1 ∨ k = -ccpe1 then v else 0
+
+lemma ccPair_eq_zero {v : Vel} {k : Fin 3 → ℤ} (hk : k ∉ ccBox) : ccPair v k = 0 := by
+  simp only [ccBox, Finset.mem_insert, Finset.mem_singleton, not_or] at hk
+  simp [ccPair, hk.1, hk.2]
+
+/-- the W3 test datum IS the clone (definitional) -/
+lemma testDatum_eq (ε : ℝ) : W3Probe.testDatum ε = ccPair (ccVec ε) := rfl
+
+lemma summ0 (v : Vel) : Summable fun k => ‖ccPair v k‖ :=
+  summable_of_ne_finset_zero (s := ccBox) fun k hk => by rw [ccPair_eq_zero hk, norm_zero]
+
+lemma summ1 (v : Vel) : Summable fun k => ‖freq k‖ * ‖ccPair v k‖ :=
+  summable_of_ne_finset_zero (s := ccBox) fun k hk => by
+    rw [ccPair_eq_zero hk, norm_zero, mul_zero]
+
+lemma summ2 (v : Vel) : Summable fun k => ‖freq k‖ ^ 2 * ‖ccPair v k‖ :=
+  summable_of_ne_finset_zero (s := ccBox) fun k hk => by
+    rw [ccPair_eq_zero hk, norm_zero, mul_zero]
+
+lemma pair_tsum (w : (Fin 3 → ℤ) → ℂ) (v : Vel) (j : Fin 3) (x : ℝ³) :
+    ∑' k, w k * ccPair v k j * cchar k x
+      = (w ccpe1 * cchar ccpe1 x + w (-ccpe1) * cchar (-ccpe1) x) * v j := by
+  have hsupp : ∀ k ∉ ccBox, w k * ccPair v k j * cchar k x = 0 := by
+    intro k hk
+    rw [ccPair_eq_zero hk]
+    simp
+  rw [tsum_eq_sum hsupp]
+  simp only [ccBox]
+  rw [Finset.sum_pair ccpe1_ne_neg]
+  simp [ccPair, ccpe1_ne_neg, ccpe1_ne_neg.symm]
+  ring
+
+lemma uLift_pair (v : Vel) (j : Fin 3) (x : ℝ³) :
+    uLift j (ccPair v) x = (cchar ccpe1 x + cchar (-ccpe1) x) * v j := by
+  rw [uLift_eq]
+  have := pair_tsum (fun _ => 1) v j x
+  simp only [one_mul] at this
+  rw [this]
+
+lemma ccVec_apply (r : ℝ) (j : Fin 3) : (ccVec r) j = if j = 1 then (r : ℂ) else 0 := by
+  simp [ccVec, EuclideanSpace.single_apply]
+
+lemma uLift_pair_ne_one (r : ℝ) (j : Fin 3) (hj : j ≠ 1) (x : ℝ³) :
+    uLift j (ccPair (ccVec r)) x = 0 := by
+  rw [uLift_pair, ccVec_apply, if_neg hj, mul_zero]
+
+lemma fderiv_pair_single_one (v : Vel) (j : Fin 3) (x : ℝ³) :
+    fderiv ℝ (uLift j (ccPair v)) x (EuclideanSpace.single 1 1) = 0 := by
+  rw [fderiv_uLift_single 1 j (ccPair v) (summ0 v) (summ1 v) x]
+  have := pair_tsum (fun k => 2 * Real.pi * Complex.I * ((k 1 : ℤ) : ℂ)) v j x
+  simp only [cchar] at this
+  rw [this]
+  simp [ccpe1_one]
+
+lemma laplacian_pair (v : Vel) (j : Fin 3) (x : ℝ³) :
+    Δ (uLift j (ccPair v)) x = ((-((2 * Real.pi) ^ 2) : ℝ) : ℂ) * uLift j (ccPair v) x := by
+  rw [laplacian_uLift j (ccPair v) (summ0 v) (summ1 v) (summ2 v) x, uLift_pair]
+  have := pair_tsum (fun k => (((-((2 * Real.pi) ^ 2 * ‖freq k‖ ^ 2)) : ℝ) : ℂ)) v j x
+  simp only [cchar] at this ⊢
+  rw [this, norm_freq_ccpe1, norm_freq_neg_ccpe1]
+  push_cast
+  ring
+
+lemma cchar_shift (k : Fin 3 → ℤ) (hk : k 1 = 0) (x : ℝ³) (s : ℝ) :
+    cchar k (x + s • EuclideanSpace.single 1 1) = cchar k x := by
+  unfold cchar
+  rw [char_line]
+  simp [hk]
+
+lemma uLift_pair_line (v : Vel) (j : Fin 3) (s : ℝ) :
+    uLift j (ccPair v) (s • EuclideanSpace.single 1 1) = uLift j (ccPair v) 0 := by
+  have h := congrArg (uLift j (ccPair v)) (zero_add (s • EuclideanSpace.single 1 (1:ℝ) : ℝ³))
+  rw [← h, uLift_pair, uLift_pair, cchar_shift _ ccpe1_one, cchar_shift _ neg_ccpe1_one]
+
+/-- the two W4 bridges, restated on `u₀Real` (definitional) -/
+lemma conv_U (v : Vel) (y : ℝ³) (j : Fin 3) :
+    (fderiv ℝ (fun x => u₀Real (ccPair v) x) y (u₀Real (ccPair v) y)) j
+      = ∑ i : Fin 3, (uLift i (ccPair v) y).re
+          * (fderiv ℝ (uLift j (ccPair v)) y (EuclideanSpace.single i 1)).re :=
+  vReal_convection_apply (ccPair v) (summ0 v) (summ1 v) y j
+
+lemma lap_U (v : Vel) (y : ℝ³) (j : Fin 3) :
+    (Δ (fun x => u₀Real (ccPair v) x) y) j = (Δ (uLift j (ccPair v)) y).re :=
+  vReal_laplacian_apply (ccPair v) (summ0 v) (summ1 v) (summ2 v) y j
+
+lemma conv_zero (r : ℝ) (y : ℝ³) (j : Fin 3) :
+    (fderiv ℝ (fun x => u₀Real (ccPair (ccVec r)) x) y (u₀Real (ccPair (ccVec r)) y)) j = 0 := by
+  rw [conv_U, Fin.sum_univ_three, uLift_pair_ne_one r 0 (by decide) y,
+    uLift_pair_ne_one r 2 (by decide) y, fderiv_pair_single_one]
+  simp
+
+lemma pressure_slice {p : ℝ³ → ℝ → ℝ}
+    (hp : ContDiffOn ℝ ∞ (↿p) (Set.univ ×ˢ Set.Ici 0)) {t : ℝ} (ht : 0 ≤ t) (x : ℝ³) :
+    DifferentiableAt ℝ (fun y => p y t) x := by
+  have h2 : DifferentiableWithinAt ℝ (↿p) ((univ : Set ℝ³) ×ˢ Ici (0:ℝ)) (x, t) :=
+    (hp (x, t) ⟨mem_univ _, ht⟩).differentiableWithinAt (by simp)
+  have hs : DifferentiableWithinAt ℝ (fun y : ℝ³ => ((y, t) : ℝ³ × ℝ)) univ x :=
+    (differentiableAt_id.prodMk (differentiableAt_const t)).differentiableWithinAt
+  have hm : MapsTo (fun y : ℝ³ => ((y, t) : ℝ³ × ℝ)) univ
+      ((univ : Set ℝ³) ×ˢ Ici (0:ℝ)) := fun y _ => ⟨mem_univ _, ht⟩
+  have h3 : DifferentiableWithinAt ℝ ((↿p) ∘ fun y : ℝ³ => ((y, t) : ℝ³ × ℝ)) univ x :=
+    h2.comp x hs hm
+  rw [differentiableWithinAt_univ] at h3
+  exact h3
+
+/-- MUST FAIL: the time-constant witness on the shear datum, for every `ν' ≠ 0` and every `p`. -/
+theorem const_witness_fails {ε : ℝ} (hε : ε ≠ 0) {ν' : ℝ} (hν' : ν' ≠ 0) (p : ℝ³ → ℝ → ℝ) :
+    ¬ NavierStokesExistenceAndSmoothnessPeriodic (n := 3) ν' (u₀Real (W3Probe.testDatum ε))
+        (f := 0) (fun x _ => u₀Real (W3Probe.testDatum ε) x) p := by
+  rw [testDatum_eq]
+  intro hc
+  have hpdiff : ∀ y : ℝ³, DifferentiableAt ℝ (fun x => p x 0) y :=
+    fun y => pressure_slice hc.pressure_smooth le_rfl y
+  have h2ε : uLift 1 (ccPair (ccVec ε)) 0 = 2 * (ε : ℂ) := W3Probe.uLift_testDatum_zero ε
+  -- the e₂-component of the pressure gradient along the line `s·e₂` is the constant `A`
+  have hA : ∀ s : ℝ,
+      fderiv ℝ (fun x => p x 0) (s • EuclideanSpace.single 1 1) (EuclideanSpace.single 1 1)
+        = -ν' * (2 * Real.pi) ^ 2 * (uLift 1 (ccPair (ccVec ε)) 0).re := by
+    intro s
+    have heq := hc.navier_stokes (s • EuclideanSpace.single 1 1) 0 le_rfl
+    simp only [derivWithin_fun_const, Pi.zero_apply, zero_add, add_zero] at heq
+    have h1 := congrArg (fun w : ℝ³ => w 1) heq
+    simp only [PiLp.sub_apply, PiLp.smul_apply, smul_eq_mul] at h1
+    rw [conv_zero, lap_U, laplacian_pair, Complex.re_ofReal_mul, uLift_pair_line,
+      gradient_apply_eq_fderiv_single (hpdiff _) 1] at h1
+    linarith
+  -- the line function has constant derivative `A`, and is one-periodic: `A = 0`
+  set A : ℝ := -ν' * (2 * Real.pi) ^ 2 * (uLift 1 (ccPair (ccVec ε)) 0).re with hAdef
+  have hg : ∀ s : ℝ, HasDerivAt (fun s : ℝ => p (s • EuclideanSpace.single 1 1) 0) A s := by
+    intro s
+    have hline : HasDerivAt (fun s : ℝ => (s • EuclideanSpace.single 1 (1:ℝ) : ℝ³))
+        (EuclideanSpace.single 1 1) s := by
+      simpa using (hasDerivAt_id' s).smul_const (EuclideanSpace.single 1 (1:ℝ) : ℝ³)
+    have hp := (hpdiff (s • EuclideanSpace.single 1 1)).hasFDerivAt
+    have := hp.comp_hasDerivAt s hline
+    rw [hA s] at this
+    exact this
+  have hdiff : Differentiable ℝ (fun s : ℝ => p (s • EuclideanSpace.single 1 1) 0 - A * s) :=
+    fun s => ((hg s).sub ((hasDerivAt_id' s).const_mul A)).differentiableAt
+  have hzero : ∀ s : ℝ, deriv (fun s : ℝ => p (s • EuclideanSpace.single 1 1) 0 - A * s) s = 0 := by
+    intro s
+    have h : HasDerivAt (fun s : ℝ => p (s • EuclideanSpace.single 1 1) 0 - A * s) (A - A * 1) s :=
+      (hg s).sub ((hasDerivAt_id' s).const_mul A)
+    rw [h.deriv]
+    ring
+  have h10 := is_const_of_deriv_eq_zero hdiff hzero 1 0
+  simp only [one_smul, zero_smul, mul_one, mul_zero, sub_zero] at h10
+  have hper := hc.isOnePeriodic_pressure 0 le_rfl 0 1
+  simp only [zero_add] at hper
+  have hA0 : A = 0 := by linarith
+  rw [hAdef, h2ε] at hA0
+  simp only [Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im] at hA0
+  have hne : -ν' * (2 * Real.pi) ^ 2 * (2 * ε) ≠ 0 := by
+    have hπ : (2 * Real.pi) ^ 2 ≠ 0 := pow_ne_zero _ (by positivity)
+    exact mul_ne_zero (mul_ne_zero (neg_ne_zero.mpr hν') hπ) (mul_ne_zero two_ne_zero hε)
+  apply hne
+  simpa using hA0
+
+end TimeConstantWitness
+
+end
 
 end TheoremB

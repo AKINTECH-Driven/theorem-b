@@ -11,7 +11,9 @@ We have kernel-checked, in Lean 4 over Mathlib (pin `15a89b24`, toolchain
 `v4.31.0-rc2`), a small-data theory for the 3D incompressible
 Navier-Stokes equations on the 3-torus that runs from an *unconditional*
 existence-and-trapping theorem through uniqueness to a **classical,
-pointwise** solution — 226 audited declarations (the axiom ledger:
+pointwise** solution, jointly smooth on the closed slab `ℝ³ × [0, ∞)` and,
+for small data at `f = 0`, inhabiting our copy of the community's periodic
+solution class (Tier 8b): 294 audited declarations (the axiom ledger:
 theorems, one definition, and the compiled non-vacuity probes), every one
 on exactly `{propext, Classical.choice, Quot.sound}`, none on `sorryAx`.
 
@@ -511,12 +513,13 @@ that a small force cannot drive small data out of the trap, and the
 breakdown threshold is the quantitative form of the sentence "the force
 has to push the fluid out of the trap": from trap-class data, a forced
 breakdown in our class has to be driven past `ν²·Es` or `ν²·Zs/8` in force
-energy at some time. Said plainly, the two live in different vocabularies,
+energy at some time. Said plainly, at Tier 8a the two lived in different vocabularies,
 their real-space community solution class against our coefficient system,
-and they have NOT been composed: no statement in this tree mentions their
-class, their force or their blow-up, and no statement of theirs has been
-derived from, refuted by or aligned with ours. The 9 Sep cross-check
-(their periodic class elaborates at our pin) is the whole of the contact.
+and they had NOT been composed. Tier 8b (below) changes exactly one thing:
+the tree now carries OUR COPY of the community's periodic solution class
+and inhabits it at `f = 0` with the small-data flow. Nothing about their
+force, their blow-up or their breakdown statement is mentioned, derived,
+refuted or aligned; both upstream `sorry`s are untouched.
 
 Verification of the tier: every wave F0 to F4 passed two independent
 adversarial readers BEFORE its commit, the rule Tier 7 did not meet (the
@@ -527,7 +530,123 @@ now compiled in `ForcedProbe.lean`. Tags: `t8a-forced-trap-green` (waves
 F0 and F1, `b25367e`), `t8a-forced-B-green` (F3, with the two F4 capstones
 `theorem_B_unique_forced` and `ns_full_global_flow_forced` delivered early
 in `ForcedTheoremB.lean`, `eda7da6`), `t8a-complete` (to be laid on the
-F5 commit; not yet laid when this was written). Gate GREEN 226/226.
+F5 commit; laid on `2a4036b`). Gate GREEN 226/226 at that commit.
+
+## Tier 8b: time-smoothness, and the community class inhabited
+
+UPDATE (Tier 8b, 9 to 10 Sep 2026; PROPOSED WORDING, the user's call, per
+rule 6 of the Tier 8 blueprint's audit register): the eternal small-data
+flow is `C^∞` in time on the CLOSED half-line, jointly `C^∞` in `(x, t)`
+on the closed slab `ℝ³ × [0, ∞)` together with its pressure, and, read
+back as a real velocity and pressure in the clock `τ = t/(2π)`, it
+inhabits OUR COPY of the community's periodic solution class at `f = 0`:
+294 audited declarations, tags `t8b-time-smooth-green`,
+`t8b-joint-smooth-green`, `t8b-community-green`. Files
+`TheoremB/TimeSmooth.lean`, `WithinSeries.lean`, `JointSmooth.lean`,
+`CommunityClass.lean`.
+
+The proposed sentence: for data in the campaign's small class, OUR COPY of
+the community's periodic solution class
+`NavierStokesExistenceAndSmoothnessPeriodic (ν/(2π)) u₀ 0 v p` is
+inhabited by the eternal flow (compiled); this is the conclusion of the
+upstream positive statement restricted to that data class with `f = 0`;
+both upstream statements are untouched.
+
+What is proved, one line per wave:
+
+- **Time-smoothness** (`theorem_B_time_smooth`, wave W1): the twenty
+  clauses of the classical layer re-exported verbatim, plus a derivative
+  chain `D` with `D 0 = c`, the Leibniz recurrence
+  `D (n+1) = −ν‖k‖²·D n + P_k(S n)` with the Leibniz convection sums `S`
+  exported alongside, each `D n` differentiating to `D (n+1)` on `t > 0`
+  and having the right derivative `D (n+1) 0` within `[0, ∞)` at `t = 0`,
+  continuous and in every weighted-`ℓ¹` window class at every order; and
+  every mode `t ↦ cₖ(t)` is `C^∞` in time on the closed half-line. The
+  route is the textbook bootstrap (differentiate the mode equation; the
+  `n`-th derivative satisfies a Leibniz recurrence; weighted `ℓ¹` closes
+  under the three operations). `∞` is `(⊤ : ℕ∞)`, not `ω`: no
+  analyticity.
+- **Joint smoothness on the closed slab** (`theorem_B_joint_smooth`, wave
+  W2): the same flow, the twenty-two clauses re-exported, plus every
+  weighted-`ℓ¹` order of the pressure and joint `C^∞` in `(x, t)` on
+  `ℝ³ × [0, ∞)` (a `ContDiffOn` on the closed slab, not on its interior)
+  of the velocity lift, component by component, and of the pressure lift.
+  The engine is a within-convex Weierstrass M-test for series of functions
+  (`TheoremB/WithinSeries.lean`, `import Mathlib` only): Mathlib's
+  uniform-limit derivative theorem is open-set only at the pin, and no
+  within-set variant exists there (grep-verified); the within-set form is
+  absent from Mathlib, not new mathematics, and is a PR candidate.
+- **The community class** (`theorem_B_community_periodic_flow` and
+  `theorem_B_community_periodic`, waves W3 and W4): the six definitions of
+  the class are copied into `TheoremB.Community` in the wording of
+  google-deepmind/formal-conjectures as adapted in OpenAI's Comparator
+  file; declaration by declaration with comments stripped the copy is
+  identical to the upstream file except in exactly two places, the
+  namespace and the `local notation` for the divergence (a claim that the
+  namespace is the sole difference would be false and is not made); the
+  upstream file is not imported. The pinned capstone re-exports the twenty
+  classical clauses and adds one: the class at viscosity `ν/(2π)` is
+  inhabited by `vReal c := (x, τ) ↦ Re u(x, 2πτ)` and
+  `pReal c := (x, τ) ↦ 2π·Re p(x, 2πτ)` with the zero force. The bare
+  capstone is the community's own shape: for every `ν' > 0` and every
+  datum `u₀Real c₀` with `c₀` summable at every Sobolev level, mean-zero,
+  real, divergence-free and `κ·en c₀·ens c₀ < (2πν')⁴`, the datum meets
+  `InitialVelocityConditionPeriodic`, the zero force meets
+  `ForceConditionPeriodic`, and there exist `v`, `p` in
+  `NavierStokesExistenceAndSmoothnessPeriodic ν' (u₀Real c₀) 0 v p`.
+  Existence only: the class carries no uniqueness clause; uniqueness of
+  the coefficient flow behind `vReal c` is `theorem_B_unique`, through the
+  first seven clauses of the pinned form. The real-part bridge and the
+  clock change are textbook.
+
+What this does and does not say about the upstream file. The upstream
+file carries two statements, both `sorry`: the positive statement
+`navier_stokes_existence_and_smoothness_periodic` (for every `ν > 0` and
+every smooth, divergence-free, one-periodic datum there exist `v`, `p` in
+the class at `f = 0`) and the breakdown statement
+`navier_stokes_breakdown_periodic`. Our bare capstone is literally the
+positive statement's conclusion restricted to the data class
+`u₀ = u₀Real c₀` with the smallness condition above. It says nothing about
+the positive statement for general data, nothing about the breakdown
+statement, and it touches neither `sorry`. The class is inhabited for
+trap-class data at `f = 0` only.
+
+Probes in the tree (registered and gated): for every `ν' > 0` the bare
+capstone fires on a NONZERO admissible datum; the rest velocity is not a
+witness for nonzero data; under the class's `velocity_smooth` its
+`derivWithin` and `fderiv` are genuine derivatives, not junk values; the
+time-constant velocity `v x t := u₀ x` is excluded on the shear datum for
+every `ν' ≠ 0` (at `ν' = 0` the stationary shear with `p = 0` solves
+Euler, so the hypothesis is necessary); the derivative chain of the
+time-smoothness capstone is pinned by its clauses (at most one chain per
+flow); the within-convex engine recovers Mathlib's `contDiff_tsum` at
+`s = univ`.
+
+Constants: `κ` and the inherited Sobolev growth constants are of explicit
+form, exported as compiled existentials; the window constants of the
+time-derivative chain and the majorants of the slab lemma are untracked
+existentials produced by the Leibniz induction. No numeric value of any
+constant is claimed.
+
+Textbook sources for the bootstrap and the M-test, named as references and
+not verified against, chapter numbers unverified: Temam, Navier-Stokes
+Equations, Ch. III; Robinson-Rodrigo-Sadowski, The Three-Dimensional
+Navier-Stokes Equations, Ch. 6-7; Constantin-Foias, Navier-Stokes
+Equations, Ch. 10.
+
+Verification of the tier: every wave W1 to W4 passed two independent
+adversarial readers BEFORE its commit (statement shape and vacuity; proof
+and pin), with a reconnaissance probe compiled at the pin before each
+build, every frozen statement checked byte-identical to the blueprint by
+the builder, both readers and the orchestrator with independent
+extractors, and the readers' probes persisted outside the tree with the
+essential ones landed and gated. Gate GREEN 294/294 at the W4 commit.
+
+Priority is not claimed for anything in this tier; nothing here is new
+mathematics. The machine-checked Navier-Stokes work it sits beside is
+listed under "Related machine-checked work" (leray-hopf, HeliCorgi,
+Miller, OpenAI, Alpöge-Buckmaster); none of it is composed with,
+reproduced by, or superseded by anything here.
 
 ## Scope, verification, and tags
 
@@ -545,10 +664,13 @@ What is STILL not claimed, precisely:
   here go beyond leray-hopf, not beyond every prior formalization: see
   HeliCorgi under "Related machine-checked work".
 - Endpoint derivatives: the flow satisfies the integral equation at all
-  times; two-sided derivatives only at interior times.
+  times; two-sided derivatives only at interior times. At Tier 8b the
+  right derivative at `t = 0` within `[0, ∞)` is compiled for every mode
+  and for the lifted velocity (that is what the community class asks
+  for); nothing two-sided is claimed at the endpoint.
 
 Verification discipline: a deterministic gate accepts the build only if
-`#print axioms` for all 226 audited declarations reports at most
+`#print axioms` for all 294 audited declarations reports at most
 `propext, Classical.choice, Quot.sound` and no `sorryAx`; statements
 frozen at declaration, every strengthening landing as a new sibling with
 the frozen statement re-verified byte-identical. Independent adversarial
@@ -558,7 +680,9 @@ their builders at tag time and independently audited post-tag on
 2 Sep 2026. Tier 8a returned to the pre-commit rule: every wave F0 to F4
 passed two independent adversarial readers before its commit, with the
 probes persisted outside the tree and the essential ones compiled in
-`ForcedProbe.lean`. The audits drew blood at every stage, by design: M4 (a
+`ForcedProbe.lean`; Tier 8b kept that rule for every wave W1 to W4, with a
+reconnaissance probe compiled before each build. The audits drew blood at
+every stage, by design: M4 (a
 pressureless-class scoping, answered in-wave with the Leray layer);
 Tier 3 (the capstone discarding its own summability certificates — the
 fix later powered Tier 4); Tier 4 and Tier 5 (the same composition-gap
@@ -578,9 +702,11 @@ Repository tags: `m1-green` → `m2-complete` → `m3-conditional-green` →
 `t7-complete` → `t7-audited-green` (2 Sep 2026: the post-tag audit's
 fixes; `t7-bandwidth-green` re-laid on the corrected statement) →
 `t8a-forced-trap-green` → `t8a-forced-B-green` → `t8a-complete` (9 Sep
-2026: Tier 8a, the forced trap; `t8a-complete` is to be laid on the F5
-commit, which adds `ForcedProbe.lean`, and was not yet laid when this
-was written). Priority, in its
+2026: Tier 8a, the forced trap; laid on the F5 commit `2a4036b`, which
+adds `ForcedProbe.lean`) → `t8b-time-smooth-green` →
+`t8b-joint-smooth-green` → `t8b-community-green` (9 to 10 Sep 2026:
+Tier 8b, time-smoothness, joint smoothness on the closed slab, and the
+community class inhabited at `f = 0`). Priority, in its
 only defensible form: to our knowledge (reconnaissance 26 Aug to 2 Sep
 2026) the first kernel-checked small-data GLOBAL well-posedness — strong
 class, unique in the bounded-enstrophy class on every finite horizon —

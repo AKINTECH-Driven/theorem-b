@@ -342,3 +342,14 @@ import TheoremB.CommunityClass
 #print axioms TheoremB.W3Probe.u₀Real_testDatum_ne_zero
 #print axioms TheoremB.W3Probe.rest_pair_fails_class
 #print axioms TheoremB.W3Probe.const_flow_fails_ode
+#print axioms TheoremB.hasDerivWithinAt_charSum_zero
+#print axioms TheoremB.derivWithin_vReal_Ici
+#print axioms TheoremB.theorem_B_community_periodic_flow
+#print axioms TheoremB.theorem_B_community_periodic
+#print axioms TheoremB.W4Probe.capstones_fire_on_nonzero_datum
+#print axioms TheoremB.W4Probe.capstone_fires_on_testDatum
+#print axioms TheoremB.W4Probe.rest_state_not_witness_of_ne_zero
+#print axioms TheoremB.W4Probe.rest_state_not_witness_for_nonzero
+#print axioms TheoremB.W4Probe.differentiableWithinAt_time_slice_of_velocity_smooth
+#print axioms TheoremB.W4Probe.differentiableAt_space_slice_of_velocity_smooth
+#print axioms TheoremB.TimeConstantWitness.const_witness_fails

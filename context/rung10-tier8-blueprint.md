@@ -8,8 +8,9 @@ Status: **Tier 8a COMPLETE at the F5 commit** (9 Sep 2026; the tag
 `t8b-time-smooth-green`; `TheoremB/WithinSeries.lean` and
 `TheoremB/JointSmooth.lean`, gate GREEN 265/265, tag `t8b-joint-smooth-green`;
 `TheoremB/CommunityClass.lean` part 1 for W3, gate GREEN 283/283, no tag;
-W4 remains PLANNING). The BUILD LOG below records waves F0 to F5, W1, W2 and
-W3. The paragraph that follows is the original planning status
+part 2 for W4, gate GREEN 294/294, tag `t8b-community-green`). **Tier 8b is
+COMPLETE at the W4 commit (10 Sep 2026).** The BUILD LOG below records waves
+F0 to F5 and W1 to W4. The paragraph that follows is the original planning status
 of 9 Sep 2026, kept as written.
 
 Original status: PLANNING (9 Sep 2026): **nothing built; gate untouched at
@@ -321,6 +322,61 @@ needs a type ascription on the sum; no `timeout` binary on this Mac. (5) The
 header's DIFF RECORD sentence was rephrased before the commit so that the
 banned-phrase grep of §7 rule 2 is clean (it had quoted the false phrase in
 order to deny it). No tag (ladder §5b: `t8b-community-green` after W4).
+
+10 Sep 2026, Tier 8b wave W4 BUILT: `TheoremB/CommunityClass.lean` part 2
+(the file now 2,145 lines; the W3 part append-only, only the header
+docstring edited): the four frozen W4 statements byte-identical
+(`hasDerivWithinAt_charSum_zero`, `derivWithin_vReal_Ici`,
+`theorem_B_community_periodic` from the fences; `theorem_B_community_periodic_flow`
+to the recheck skeleton's spliced text kept as
+`audit-tier8b/recon-w3/expected_theorem_B_community_periodic_flow.txt`, since
+this file spells its classical block as the placeholder `[clauses 1–20 …]`;
+that text carries ClassicalEquation.lean's comment lines and one blank line
+after `∃ c …,` which the tree reproduces), checked by the builder, both readers
+and the orchestrator; every proof closed; 4 ledger lines for the frozen
+theorems plus 7 for the registered probes (`W4Probe.capstones_fire_on_nonzero_datum`,
+`capstone_fires_on_testDatum`, `rest_state_not_witness_of_ne_zero`,
+`rest_state_not_witness_for_nonzero`,
+`differentiableWithinAt_time_slice_of_velocity_smooth`,
+`differentiableAt_space_slice_of_velocity_smooth`, and
+`TimeConstantWitness.const_witness_fails`); gate GREEN 294/294 (builder,
+both readers, orchestrator). Two independent readers CLEAN (0 blockers,
+0 majors) BEFORE the commit and the tag. Recorded facts: (1) the W4
+reconnaissance (`audit-tier8b/recon-w4/`) compiled the gradient-component,
+basis-expansion, component-wise and real-part Laplacian, and `derivWithin`
+shapes. (2) Routes: the capstone destructures `theorem_B_joint_smooth`
+(25 clauses), re-exports clauses 1-20 verbatim, and builds the class with
+`derivWithin_vReal_Ici` (whose `hpos` is clause 13 at the fiber point by
+definitional transport and whose `hzero` is `hasDerivWithinAt_charSum_zero`
+fed by clause 21's endpoint derivative, the recurrence at `n = 0` and
+`WindowL1.majorant`), a non-frozen per-component spectral identity
+`navier_stokes_component_spectral` (the ClassicalEquation recipe with real
+parts through `im_uLift_eq_zero`/`im_pLift_eq_zero`), the three operator
+bridges, and the W2 shape reader's seam probe for `velocity_smooth` /
+`pressure_smooth`; the bare capstone is the composition at `ν := 2πν'`
+(`mul_div_cancel_left₀`). `derivWithin_vReal_Ici` takes ONE uniform route
+(`HasDerivWithinAt.derivWithin (uniqueDiffOn_Ici 0 τ hτ)`) rather than the
+route note's split; sound, statement identical. (3) The §6b NOT-PROBED item
+is now PROBED and in the tree: the time-constant velocity `v x t := u₀Real c₀ x`
+for the BARE class on the shear datum fails `navier_stokes` for every
+`ν' ≠ 0` and every pressure (`TimeConstantWitness.const_witness_fails`, the
+shape reader's probe landed verbatim; it uses `laplacian_uLift`,
+`fderiv_uLift_single` and one-periodicity of the pressure, NOT the symmetry
+of second derivatives the builder's first header claimed; `ν' ≠ 0` is
+necessary since at `ν' = 0` the stationary shear with `p = 0` solves Euler).
+(4) SLICE GENUINENESS of §6b is in the tree (the two `W4Probe.…_slice_…`
+theorems). (5) Pin facts: `Ico_mem_nhdsGE`; `DifferentiableAt.prodMk` (no
+`DifferentiableAt.prod` at the pin); `Complex.smul_re`; `fderiv_const_mul`;
+`contDiffOn_euclidean`; a membership goal `2πτ ∈ Ioi 0` is not a positivity
+goal (`mem_Ioi.mpr (by positivity)`); the gate log wraps long ledger names
+over three lines, so a one-line grep for the axiom triple flags them while
+`scripts/check_axioms.sh`'s own joined extraction reads them correctly.
+(6) Wording: the pinned capstone's docstring carries the statement critic's
+sentence (the rest state, `theorem_B_unique` through clauses 1-7); the bare
+capstone's docstring quotes rule 6's proposed announcement sentence as
+proposed wording, the user's call; both upstream statements are named and
+said to be untouched; existence only. Tag `t8b-community-green` laid here
+(ladder §5b). Tier 8b COMPLETE.
 
 Pin: Lean `4.31.0-rc2`, Mathlib `15a89b24`. Where the two critics of a
 design disagreed, this file takes the more conservative reading and says
@@ -1959,6 +2015,10 @@ Fallback ladder (each rung taggable and honest): 8b-v1 = W1
 - NOT PROBED (unverified): a time-constant NONZERO witness
   `v x t := u₀Real c₀ x` for the BARE class on the shear datum; ruling it
   out needs the Laplacian bridge. The pinned form excludes it via clause 6.
+  PROBED at W4 (10 Sep 2026): `TimeConstantWitness.const_witness_fails` in
+  `TheoremB/CommunityClass.lean`, registered and gated, excludes it for every
+  `ν' ≠ 0` and every pressure (the Laplacian bridge and one-periodicity of
+  the pressure; `ν' ≠ 0` is necessary).
 - KNOWN (from `ProbeOpenAIStatement.lean`): the rest state inhabits the
   class at `u₀ = 0`, so a capstone stated only for `u₀ = 0` would be
   empty; the frozen capstones quantify over an arbitrary admissible datum.
@@ -2191,7 +2251,9 @@ blueprint takes and what remains the user's call:
    immediately). 8b W1 may start in a SEPARATE session. Neither in the
    same chat. What remains is 8b: W1 built 9 Sep 2026
    (`t8b-time-smooth-green`), W2 built 9 Sep 2026 (`t8b-joint-smooth-green`),
-   W3 built 9 Sep 2026 (no tag); W4 unbuilt.
+   W3 built 9 Sep 2026 (no tag), W4 built 10 Sep 2026
+   (`t8b-community-green`). Tier 8b is COMPLETE; nothing of Tier 8 remains
+   unbuilt.
 10. **Mean-zero / RealField / DivFree of `D n`** — not exported; add only
     if the pressure chain or an audit wants reality of `D n`.
 
@@ -2224,3 +2286,10 @@ the frozen `hasDerivWithinAt_charSum_zero`, `derivWithin_vReal_Ici`,
 skeleton's, kept as `recon-w3/expected_theorem_B_community_periodic_flow.txt`)
 and `theorem_B_community_periodic`, plus the capstone-level probes; then the
 tag `t8b-community-green`.
+
+UPDATE (W4, 10 Sep 2026): W4 is built and tagged `t8b-community-green` (gate
+GREEN 294/294). Tier 8 is complete. What remains is prose and the user's
+decisions: the announcement's Tier 8b section (rule 6 of §7, drafted as
+proposed wording), the strike of the superseded header sentence in
+TheoremBSmooth (§7), the textbook theorem numbers (§8 item 8), and whether
+to quote the upstream commit hash (§8 item 1).

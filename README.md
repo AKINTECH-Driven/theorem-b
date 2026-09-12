@@ -43,17 +43,18 @@ and prints `#print axioms` for every audited declaration. It passes if and only 
 line reports at most `propext`, `Classical.choice`, `Quot.sound` and no `sorryAx`. The
 script reports; it never repairs.
 
-Expected result: the final line `GATE: GREEN`, preceded by the output of the 283
+Expected result: the final line `GATE: GREEN`, preceded by the output of the 294
 `#print axioms` commands in `AxiomCheck.lean` (theorems, one definition, and the
 compiled non-vacuity probes), each on exactly the three kernel axioms. Any other outcome
 is `GATE: RED` with exit status 1. In the campaign notes this state is written
-"GREEN 283/283"; it was recorded on 9 Sep 2026 at the Tier 8b wave W3 state, the gate
+"GREEN 294/294"; it was recorded on 10 Sep 2026 at the Tier 8b wave W4 state, the gate
 having read 186/186 at `82a9ab6` (tag `t7-audited-green`, 2 Sep 2026), grown by one
 Tier 8a wave at a time (190, 199, 208, 215, 217, 226 at `2a4036b`, tag `t8a-complete`),
 by the Tier 8b wave W1 (22 frozen theorems and 3 chain-pinning probes, 251 at `0efba80`,
 tag `t8b-time-smooth-green`), by the Tier 8b wave W2 (14 frozen theorems, 265 at
-`e5a8755`, tag `t8b-joint-smooth-green`), and by the Tier 8b wave W3 (13 frozen theorems
-and 5 datum-side probes, 283).
+`e5a8755`, tag `t8b-joint-smooth-green`), by the Tier 8b wave W3 (13 frozen theorems
+and 5 datum-side probes, 283 at `ade27c8`), and by the Tier 8b wave W4 (4 frozen
+theorems and 7 capstone-level probes, 294, tag `t8b-community-green`).
 
 ## Capstone theorems
 
@@ -76,6 +77,8 @@ coefficient field is `(Fin 3 → ℤ) → Vel`, `freq k` is the raw lattice vect
 | `theorem_B_smooth_classical_eq` | `TheoremB/ClassicalEquation.lean` | The same flow, all nineteen clauses re-exported, satisfies at every component `j`, torus point `x`, and `t > 0`, as one `HasDerivAt` in time: `∂ₜu_j = (ν/(2π)²)(Σᵢ ∂ᵢ²u)_j − (1/2π)(Σᵢ uᵢ ∂ᵢu_j) − ∂_j p`, each piece spelled out in full. |
 | `theorem_B_time_smooth` | `TheoremB/TimeSmooth.lean` | The same flow, all twenty clauses of `theorem_B_smooth_classical_eq` re-exported verbatim, plus (clause 21) a derivative chain `D` with `D 0 = c`, the Leibniz recurrence `D (n+1) = −ν‖k‖²·D n + P_k (S n)` with `S n = Σ_{i+j=n} C(n,i)·convBil (D i) (D j)` exported alongside, each `D n` differentiating to `D (n+1)` on `t > 0`, with the right derivative `D (n+1) 0` within `Ici 0`, continuous on `Ici 0`, and in every weighted-ℓ¹ window class at every order (the same for `S n`); and (clause 22) every mode `t ↦ c t k` is `C^∞` in time on the CLOSED half-line `Ici 0`. Time only: joint smoothness in `(x, t)` is not claimed here. `∞` is `(⊤ : ℕ∞)`, not `ω`: no analyticity. |
 | `theorem_B_joint_smooth` | `TheoremB/JointSmooth.lean` | The same flow, all twenty-two clauses of `theorem_B_time_smooth` re-exported verbatim, plus (clause 23) the pressure coefficients have every weighted-ℓ¹ order at every `t ≥ 0`, (clause 24) for every component `j` the velocity lift `(x, t) ↦ uLift j (c t) x` is `C^∞` jointly in `(x, t)` on the CLOSED slab `ℝ³ × [0, ∞)` (`ContDiffOn ℝ ∞ … (univ ×ˢ Ici 0)`), and (clause 25) the pressure lift `(x, t) ↦ pLift (c t) x` is `C^∞` jointly on the same closed slab. The engine is the Mathlib-only within-convex tsum theory of `TheoremB/WithinSeries.lean` (absent from Mathlib at the pin, grep-verified, not new mathematics). `∞` is `(⊤ : ℕ∞)`, not `ω`: no analyticity. |
+| `theorem_B_community_periodic_flow` | `TheoremB/CommunityClass.lean` | The same flow, all twenty clauses of `theorem_B_smooth_classical_eq` re-exported verbatim, plus (clause 21): OUR COPY of the community's periodic solution class `NavierStokesExistenceAndSmoothnessPeriodic (ν/(2π)) (u₀Real c₀) 0 (vReal c) (pReal c)` is inhabited by this flow read back as a real velocity and pressure in the clock `τ = t/(2π)`, with the zero force. The six class definitions are copied into `TheoremB.Community` from the community wording (google-deepmind/formal-conjectures as adapted in OpenAI's Comparator file); the copy differs from the upstream file only in the namespace and the `local notation` for the divergence; the upstream file is not imported. |
+| `theorem_B_community_periodic` | `TheoremB/CommunityClass.lean` | The community's own shape: for every `ν' > 0` and every datum `u₀Real c₀` with `c₀` summable at every Sobolev level, mean-zero, real, divergence-free and `κ · en c₀ · ens c₀ < (2πν')⁴`, the datum meets `InitialVelocityConditionPeriodic`, the zero force meets `ForceConditionPeriodic`, and there exist `v`, `p` with `NavierStokesExistenceAndSmoothnessPeriodic ν' (u₀Real c₀) 0 v p`. This is exactly the conclusion of the upstream positive statement `navier_stokes_existence_and_smoothness_periodic` restricted to that data class at `f = 0`; it says nothing about the positive statement for general data and nothing about `navier_stokes_breakdown_periodic`; both upstream `sorry`s are untouched. Existence only: the class has no uniqueness clause (uniqueness of the coefficient flow behind `vReal c` is `theorem_B_unique`). The rest state is not a witness for nonzero data (probe), and the time-constant velocity is excluded on the shear datum (probe). |
 | `ns_full_global_flow_decay` | `TheoremB/DecayFlow.lean` | The eternal flow additionally satisfies `en (c t) ≤ en c₀ · exp(−2νt)` for every `t ≥ 0`. The upper bound is compiled; sharpness is not. |
 | `theorem_B_bandwidth` | `TheoremB/Bandwidth.lean` | The eternal flow, all seven clauses quoted, additionally has energy outside the cube `‖k‖_∞ ≤ N` at most `ens c₀ / N²`, for every `N > 0` and every `t ≥ 0`. |
 | `theorem_B_modes` | `TheoremB/DeterminingModes.lean` | Determining modes: for class budgets `(ν, E, Z)` there is one `K > 0`, fixed before any horizon, tolerance, or pair of flows, such that for every `N` with `2ν + K < νN²`, two enstrophy-bounded flows (different data allowed) whose low-mode defect stays at most `δ` on `[0, T]` satisfy `en(u−v)(t) ≤ en(u−v)(0)·exp(−(νN² − K)t) + νN²/(νN² − K)·δ`. |
@@ -111,9 +114,9 @@ comes from `pressureCoeff`.
   (`TimeSmooth`, wave W1), the Mathlib-only within-convex series engine (`WithinSeries`,
   wave W2, a PR candidate), joint smoothness on the closed slab (`JointSmooth`, W2), and
   the community class (`CommunityClass`: the six community definitions copied into
-  `TheoremB.Community`, the real-part bridge, the datum-side conditions; W3, with the
-  capstones to follow in W4).
-- `AxiomCheck.lean`: the audited-declaration ledger (283 `#print axioms` lines).
+  `TheoremB.Community`, the real-part bridge, the datum-side conditions, and the two
+  capstones with their probes; W3 and W4).
+- `AxiomCheck.lean`: the audited-declaration ledger (294 `#print axioms` lines).
 - `scripts/check_axioms.sh`: the gate.
 - `context/`: campaign blueprints (`rung*-blueprint.md`), the announcement draft, the
   upstreaming dossier, and the discrete-twin skeleton (`NSSkeleton.lean`).
@@ -281,14 +284,29 @@ on `ℝ³`. No mathematical priority is claimed for any layer, and none for the 
   W3 items and the 8 community declarations byte-identical (builder, both readers,
   orchestrator); two independent readers CLEAN before the commit. Nothing is inhabited
   in this wave; no tag (the ladder tags after W4).
+- **Tier 8b wave W4, 10 Sep 2026.** `TheoremB/CommunityClass.lean` part 2: the endpoint
+  derivative of the character sum within `Ici 0`, the clock-transported `derivWithin` of
+  the real velocity, and the two capstones (`theorem_B_community_periodic_flow`, pinned
+  to the flow by the twenty classical clauses; `theorem_B_community_periodic`, the
+  community's own shape). Four frozen statements byte-identical (the pinned capstone to
+  the recheck skeleton's spliced text, since the blueprint spells its classical block as
+  a placeholder); two independent adversarial readers CLEAN before the commit; seven
+  registered capstone-level probes: the capstones fire on a nonzero datum (also with the
+  datum explicit), the rest velocity is not a witness for nonzero data, the class's
+  `derivWithin` and `fderiv` are genuine derivatives under `velocity_smooth`, and the
+  time-constant velocity is excluded on the shear datum for every `ν' ≠ 0` (the
+  statement-shape reader's probe, landed). Tag `t8b-community-green`. Tier 8b complete.
 - **Cross-check, 9 Sep 2026.** OpenAI's Comparator (D) statement, in the community
   Formal Conjectures wording, was reproduced verbatim and compiled against this pin
   (Mathlib `15a89b24`, Lean `v4.31.0-rc2`): it elaborates (exit 0, the (D) statement
   itself left `sorry`), and the rest state inhabits the periodic solution class, so the
-  class is not vacuous. Inhabiting its `f = 0` case with `theorem_B_smooth_classical_eq`
-  is not done: it would need the clock `τ = 2πt` (so their `nu` is our `ν/(2π)`), a
-  real-part bridge for our ℂ-valued lift, joint `C^∞` in `(x, t)` on `[0, ∞)`, and a
-  `derivWithin` at `t = 0`. An independent replay of this repository through
+  class is not vacuous. Inhabiting its `f = 0` case with the eternal flow is now done
+  (Tier 8b, 9 to 10 Sep 2026): the clock `τ = t/(2π)` (their `nu` is our `ν/(2π)`), the
+  real-part bridge for the ℂ-valued lift, joint `C^∞` in `(x, t)` on the closed slab and
+  the `derivWithin` at `t = 0` are all compiled, and `theorem_B_community_periodic`
+  inhabits OUR COPY of the class for trap-class data at `f = 0` (nothing beyond that
+  class of data is claimed; both upstream statements are untouched). An independent
+  replay of this repository through
   `lean4checker`, and registration of the frozen capstones, are pending; priority
   currently rests on git tags.
 
@@ -297,7 +315,7 @@ Repository tags, in order: `m1-green`, `m2-wave1-green`, `m2-complete`, `m3-cond
 `t4-wellposedness-green`, `t5-torus-green`, `t5-polish-green`, `t6-sobolev-green`,
 `t6-smooth-green`, `t6-classical-green`, `t7-bandwidth-green`, `t7-modes-green`,
 `t7-complete`, `t7-audited-green`, `t8a-forced-trap-green`, `t8a-forced-B-green`,
-`t8a-complete`, `t8b-time-smooth-green`, `t8b-joint-smooth-green`.
+`t8a-complete`, `t8b-time-smooth-green`, `t8b-joint-smooth-green`, `t8b-community-green`.
 
 ## Credits
 
