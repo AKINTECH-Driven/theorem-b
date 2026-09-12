@@ -305,10 +305,12 @@ on `ℝ³`. No mathematical priority is claimed for any layer, and none for the 
   real-part bridge for the ℂ-valued lift, joint `C^∞` in `(x, t)` on the closed slab and
   the `derivWithin` at `t = 0` are all compiled, and `theorem_B_community_periodic`
   inhabits OUR COPY of the class for trap-class data at `f = 0` (nothing beyond that
-  class of data is claimed; both upstream statements are untouched). An independent
-  replay of this repository through
-  `lean4checker`, and registration of the frozen capstones, are pending; priority
-  currently rests on git tags.
+  class of data is claimed; both upstream statements are untouched). An independent kernel replay of every imported module through the toolchain's
+  `leanchecker` was done on 12 Sep 2026 (60 of 60 modules, exit 0, empty output;
+  `scripts/replay_leanchecker.sh`, record in
+  `context/leanchecker-replay-2026-09-12.md`; the umbrella module, which declares
+  nothing, could not be loaded on this 16 GiB machine); registration of the frozen
+  capstones is pending; priority currently rests on git tags.
 
 Repository tags, in order: `m1-green`, `m2-wave1-green`, `m2-complete`, `m3-conditional-green`,
 `m4-wave1..4-green`, `m5-wave1/2-green`, `m5-complete`, `t3-theorem-b-green`,

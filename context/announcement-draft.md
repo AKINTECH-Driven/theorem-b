@@ -715,8 +715,12 @@ leray-hopf's earlier weak existence and HeliCorgi's earlier local mild
 uniqueness on `ℝ³`; corrections welcome. No mathematical priority is
 claimed for any layer, and none for the method. Before any outward
 claim: build HeliCorgi and run its axiom audit ourselves, and register
-the frozen capstones with Palomar or replay them through lean4checker —
-priority currently rests on private git tags.
+the frozen capstones with Palomar. The kernel replay through the
+toolchain's `leanchecker` is done (12 Sep 2026: all 60 imported modules,
+exit 0, empty output, per-module table in
+`context/leanchecker-replay-2026-09-12.md`; the imports are not replayed,
+and the umbrella module, which declares nothing, exceeded this machine's
+memory). Priority currently rests on private git tags.
 
 ## Notes for the long form (not yet written)
 
