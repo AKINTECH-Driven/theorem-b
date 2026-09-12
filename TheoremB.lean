@@ -58,3 +58,5 @@ import TheoremB.TimeSmooth
 import TheoremB.WithinSeries
 import TheoremB.JointSmooth
 import TheoremB.CommunityClass
+import TheoremB.Descent
+import TheoremB.DatumBridge

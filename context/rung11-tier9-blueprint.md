@@ -1,6 +1,11 @@
 # Rung 11 (Tier 9 blueprint): the community's statement shape over real-space data
 
-Status: PLANNING (13 Sep 2026): **nothing built; gate untouched at HEAD
+Status: **Tier 9 wave W1 BUILT** (13 Sep 2026: `TheoremB/Descent.lean` and
+`TheoremB/DatumBridge.lean`, gate GREEN 339/339, tag `t9-datum-bridge-green`; the BUILD LOG at
+the end of this file records it; the paragraph that follows is the planning status of the
+commit `1e971bd`, kept as written).
+
+Original status: PLANNING (13 Sep 2026): **nothing built; gate untouched at HEAD
 `03b1656`** (the leanchecker-replay commit, on top of the dossier Unit 7 commit
 `5dfce7a` and the Tier 8b tag `t8b-community-green` = `d59ddcd`; 28 tags; 67
 commits). The gate was RE-RUN by the orchestrator on 12/13 Sep 2026 at `5dfce7a`
@@ -1520,4 +1525,49 @@ import lines to `TheoremB.lean` and to `AxiomCheck.lean` with the 45 `#print axi
 triple), re-check byte-identity of every W1 statement against §4a of this file, and hand the
 wave to the two readers before any tag; `t9-datum-bridge-green` only after the fix pass.
 
-BUILD LOG: empty at the planning commit.
+UPDATE (W1, 13 Sep 2026): W1 is built and tagged `t9-datum-bridge-green` (gate GREEN
+339/339; §8 item 8 was done before the build; item 14's docstrings were written by the builder
+and read by both readers). The smallest next move is W2: `TheoremB/Galilean.lean` (section C of
+the probe, R4 verbatim, no measure instances) and `TheoremB/CommunityData.lean` (sections D and
+E, instances named `cd_*`, the capstone, the flow sibling, the consistency corollary and the
+sixteen `T9Probe` register theorems), 2 + 2 import lines and 52 ledger lines (expected gate
+391/391), two readers before the tag `t9-complete`.
+
+BUILD LOG (the planning commit `1e971bd` carried none).
+
+13 Sep 2026, Tier 9 wave W1 BUILT: `TheoremB/Descent.lean` (475 lines) and
+`TheoremB/DatumBridge.lean` (485 lines): the 52 frozen W1 declarations of §4a (the
+Descent block: 35 = 29 theorems + 6 defs; the DatumBridge block: 17 = 16 theorems + 1 def)
+byte-identical, checked by the builder, both readers and the orchestrator with
+`tools/byte_identity.py` (35/35 and 17/17); every proof closed with the design probe's own
+proof (`design/final/Tier9Final.lean` sections A and B); no sibling added, no spec drift, no
+earlier Lean file edited, no private lemma cloned; registered in `TheoremB.lean` and
+`AxiomCheck.lean` (2 import lines each, 45 ledger lines: the 29 + 16 frozen theorems).
+Gate GREEN 339/339 (builder, reader B independently, orchestrator twice; entries counted
+with wrapped lines joined; every entry exactly `[propext, Classical.choice, Quot.sound]`;
+no `sorryAx`). Two independent readers BEFORE the commit: reader A (statement shape and
+vacuity) 0 blockers, 0 majors, 3 minors, with twelve compiled probe theorems in
+`build-w1/reader-shape/ShapeW1.lean` (the inversion is not unconditional; the shear datum
+`u₀Real (W3Probe.testDatum ε)` is in the class and its coefficient field is the shear
+(the round trip); the shear's coefficients are nonzero; `datum_bridge` on the shear; the
+`DivFree` hypothesis is load-bearing; the fiber-slice brick needs periodicity; the sup
+bound holds for every `g` through the L¹ norm of the descent); reader B (proof and pin)
+CLEAN with 2 minors, an independent gate run (339), the double-import collision test
+(`build-w1/reader-proof/DoubleImport.lean`: DatumBridge with ContinuousRep, FourierDeriv
+and CoeffExtract, exit 0) and the inversion `u₀Real_coeff` RE-PROVED by the
+L²-injectivity route (`build-w1/reader-proof/ReproveInversion.lean`, standard three
+axioms). The minors (both headers said the probe had no placeholder-proof declaration,
+true of sections A and B only, the probe's section F carrying the two W3 candidates; one
+header said the upstream statements were "copied in CommunityClass.lean", which copies
+the class, not the statements; the sup-bound lemma's hypotheses are not load-bearing,
+now said in its docstring; an unconsumed helper `norm_freq_zero_rpow_neg_four` kept
+verbatim from the probe) were fixed by the orchestrator with comment-only edits, and the
+gate was re-run after them. Recorded facts: (1) the three local measure instances are
+NAMED (`ds_ms`/`ds_haar`/`ds_prob`, `db_*`), the tree's habit, where the probe's were
+anonymous (the Tier 5 collision trap; statement-neutral; recorded in each header); (2)
+the probe's section bounds are its own markers (A = lines 49 to 362, B = 364 to 701),
+not the line numbers of the builder's brief; (3) 22 docstrings were added above frozen
+declarations that carried none in the probe (docstrings are invisible to the
+byte-identity tool); (4) three older ledger names end in a prime, so a quote-delimited
+regex undercounts the gate (336): count `depends on axioms: [...]` after joining wrapped
+lines and normalising whitespace. Tag `t9-datum-bridge-green` laid here (ladder §5).

@@ -58,6 +58,8 @@ import TheoremB.TimeSmooth
 import TheoremB.WithinSeries
 import TheoremB.JointSmooth
 import TheoremB.CommunityClass
+import TheoremB.Descent
+import TheoremB.DatumBridge
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -353,3 +355,48 @@ import TheoremB.CommunityClass
 #print axioms TheoremB.W4Probe.differentiableWithinAt_time_slice_of_velocity_smooth
 #print axioms TheoremB.W4Probe.differentiableAt_space_slice_of_velocity_smooth
 #print axioms TheoremB.TimeConstantWitness.const_witness_fails
+#print axioms TheoremB.Community.IsOnePeriodic.add_freq
+#print axioms TheoremB.Community.IsOnePeriodic.fderiv_apply
+#print axioms TheoremB.rep1_coe
+#print axioms TheoremB.coe_rep1
+#print axioms TheoremB.rep_fiber
+#print axioms TheoremB.fiber_rep
+#print axioms TheoremB.descend_fiber
+#print axioms TheoremB.isOpenQuotientMap_fiber
+#print axioms TheoremB.continuous_descend
+#print axioms TheoremB.fiber_sliceLine
+#print axioms TheoremB.hasDerivAt_sliceLine
+#print axioms TheoremB.hasDerivAt_descend_insertNth
+#print axioms TheoremB.integrable_of_continuous
+#print axioms TheoremB.norm_mFourierCoeff_le
+#print axioms TheoremB.mFourierCoeff_neg_of_real
+#print axioms TheoremB.mFourierCoeff_finset_sum
+#print axioms TheoremB.summable_sq_of_summable_norm
+#print axioms TheoremB.u₀Real_eq_of_lift
+#print axioms TheoremB.mFourierCoeff_descend_fderiv
+#print axioms TheoremB.contDiff_dirDeriv
+#print axioms TheoremB.dirDeriv_isOnePeriodic
+#print axioms TheoremB.hasDerivAt_descend_dirDeriv
+#print axioms TheoremB.dirIter_succ
+#print axioms TheoremB.contDiff_dirIter
+#print axioms TheoremB.dirIter_isOnePeriodic
+#print axioms TheoremB.mFourierCoeff_descend_dirIter
+#print axioms TheoremB.descend_uLift
+#print axioms TheoremB.descend_uLift_eq_uCont
+#print axioms TheoremB.mFourierCoeff_descend_uLift
+#print axioms TheoremB.coeff_apply
+#print axioms TheoremB.contDiff_ofReal_component
+#print axioms TheoremB.isOnePeriodic_ofReal_component
+#print axioms TheoremB.exists_bound_mFourierCoeff_descend
+#print axioms TheoremB.exists_bound_coeff_mul_norm_freq_pow
+#print axioms TheoremB.summable_norm_freq_pow_mul_coeff
+#print axioms TheoremB.summable_norm_freq_pow_mul_coeff_sq
+#print axioms TheoremB.exists_bound_coeff_vel_mul_norm_freq_pow
+#print axioms TheoremB.summable_weight_coeff
+#print axioms TheoremB.summable_sob_coeff
+#print axioms TheoremB.realField_coeff
+#print axioms TheoremB.divFree_coeff
+#print axioms TheoremB.coeff_u₀Real
+#print axioms TheoremB.isOnePeriodic_u₀Real
+#print axioms TheoremB.u₀Real_coeff
+#print axioms TheoremB.datum_bridge
