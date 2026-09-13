@@ -738,6 +738,11 @@ not in the tree. Nothing about the positive statement for general data;
 nothing about the breakdown statement; nothing about forced data;
 no analyticity; no numeric constant.
 
+[Supersession note, 13 Sep 2026, the adopted text above kept as adopted: the
+uniqueness half was built the same day as Tier 9c (the section below,
+PROPOSED wording); its two statements are now frozen in the tree, byte-identical
+to the candidates.]
+
 Textbook sources, named as references and not verified against, chapter
 numbers unverified: for the Fourier inversion of smooth periodic functions
 and the rapid decay of their coefficients, any text on Fourier series on
@@ -767,6 +772,140 @@ listed under "Related machine-checked work" (leray-hopf, HeliCorgi,
 Miller, OpenAI, Alpöge-Buckmaster); none of it is composed with,
 reproduced by, or superseded by anything here.
 
+## Tier 9c: uniqueness inside our copy of the community class at f = 0
+
+UPDATE (Tier 9c, 13 Sep 2026; PROPOSED WORDING, the user's call, per rules 12
+to 14 of the Tier 9c blueprint's audit register,
+`context/rung12-tier9c-blueprint.md` section 7; the short form is NOT
+rewritten until this section is adopted): Tier 9 delivered existence in OUR
+COPY of the community's periodic solution class over the community's own
+data. Tier 9c closes the other direction inside that class: every member at
+`f = 0` has a coefficient flow in `theorem_B_unique`'s class, so two members
+with the same datum have the same velocity, and pressures that differ by a
+function of time. 474 audited declarations at the tag `t9-unique-green` (421
+at W3a, 444 at W3b), every one on exactly `{propext, Classical.choice,
+Quot.sound}`, none on `sorryAx`. Files `TheoremB/SliceExtract.lean`,
+`ConvectionCoeff.lean`, `ClassParseval.lean`, `ClassFlowODE.lean`,
+`CommunityUnique.lean`.
+
+The proposed sentence: inside OUR COPY of the community's periodic solution
+class `NavierStokesExistenceAndSmoothnessPeriodic ν' u₀ 0 v p` with `0 < ν'`
+and `f = 0`, two members with the same datum `u₀` have the same velocity at
+every point and every `t ≥ 0` and pressures that differ by a function of
+time alone (compiled, `community_unique_velocity`,
+`community_unique_pressure`, `community_unique_pressure_explicit`); this is a
+corollary of `theorem_B_unique` (Tier 4) through the datum bridge (Tier 9
+W1), the textbook energy method in the enstrophy class; nothing about
+`ν' ≤ 0`, forced data, general data, competitors outside the class or the
+breakdown statement `navier_stokes_breakdown_periodic`; the positive
+statement `navier_stokes_existence_and_smoothness_periodic` and the
+breakdown statement are both untouched; the neighbours are HeliCorgi's
+local mild uniqueness on `ℝ³` and uda-lab/leray-hopf; nothing here is new
+mathematics. With this section adopted, the short form would read 474
+audited declarations, "Tiers 8b, 9 and 9c", and gain, after "inhabiting our
+copy of the community's periodic solution class", the clause "in which, for
+the same datum, the velocity is unique on `t ≥ 0` and the pressure unique up
+to a function of time".
+
+What is proved, one line per wave:
+
+- **The descent side** (wave W3a, `SliceExtract.lean`, `ConvectionCoeff.lean`,
+  `ClassParseval.lean`): from the joint `C^∞` of a class member on the closed
+  half-slab, the four slices of the class equation at fixed time (the
+  within-derivative in time, the convection, the Laplacian, the pressure
+  gradient) are continuous and one-periodic, the time-derivative slice is
+  `C^∞`, and every slice is bounded on every compact window, by compactness
+  and periodicity; the Laplacian coefficient is `−(2π)²‖freq n‖²` times the
+  coefficient (the derivative bridge twice); the coefficient of a product of
+  two smooth periodic functions is the convolution of the coefficients, with
+  a nonzero mean mode allowed (the Cauchy product of the tree's
+  `tsum_char_mul`, the coefficient read off an absolutely convergent character
+  series, discrete Young on `ℤ³`), so the coefficient of the class's
+  convection term is `−2π · convFull` (the reverse of `convection_classical`);
+  Parseval for the energy and the enstrophy of the coefficient field as
+  equalities, hence window budgets for `theorem_B_unique`'s fourth hypothesis
+  group. Textbook.
+- **The time side** (wave W3b, `ClassFlowODE.lean`): the coefficient flow of a
+  member, `classFlow v t := coeff (v · (t/(2π)))` in the campaign clock, is
+  continuous on every window and differentiable for `t > 0` (dominated
+  continuity and differentiation of the torus parametric integral, Mathlib's
+  `continuousOn_of_dominated` and
+  `hasDerivAt_integral_of_dominated_loc_of_deriv_le`); the class equation read
+  through the coefficients IS the campaign mode ODE at `ν = 2πν'`, every
+  constant computed (the `−(2π)²` of the Laplacian bridge against the `1/(2π)`
+  of the clock gives `−2πν'‖k‖²`; the `−2π` of the convection bridge gives
+  `+ convFull`; the pressure gradient's coefficient is a gradient mode, killed
+  by the Leray projection at every mode; the derivative is divergence-free
+  because every slice is), for every real `ν'`; the forward FTC turns it into
+  the integral equation on every window.
+- **The capstones** (wave W3c, `CommunityUnique.lean`): `theorem_B_unique` at
+  viscosity `2πν'` on the window `[0, 2πt]`, applied to the two coefficient
+  flows (the seven hypothesis groups supplied by the lemmas above, the budgets
+  shared through their maxima), then the inversion `u₀Real_coeff` of the datum
+  bridge on the two slices at `t`; the pressure from the class equation and
+  the constancy of a function with zero gradient on `ℝ³`. Beside them: the
+  `theorem_B_unique` window wrapper, the coefficient injectivity lemmas, and
+  the consistency corollary that every member on a constant datum is the
+  constant pair in velocity (so Tier 9's witness on a constant datum is that
+  pair).
+- **The register** (`T9cProbe`, fifteen gated probes): the pressure form is
+  sharp (every member's pressure shifted by a smooth function of time is a
+  member; `p₁ = p₂` and "up to a constant" both fail on the rest pair); the
+  half-line is sharp (two members with the same datum `0` differ at
+  `t = −1`, so `v₁ = v₂` as functions is false); two DISTINCT members with the
+  same nonzero datum exist for every `ν' > 0`; different data are not forced
+  equal; the class is inhabited for every real `ν'` (so `0 < ν'` is consumed
+  by `theorem_B_unique`, not implied by membership; nothing is claimed at
+  `ν' ≤ 0`); the coefficient flow of a non-member is a well-typed junk object;
+  the consistency with Tier 9's flow sibling holds for a mean-free datum (the
+  general-mean identity is not compiled and not claimed).
+
+What changes against Tier 9: nothing on the existence side; the Tier 9
+capstones keep their "existence only" wording (their files are frozen) and
+their "sized candidate" sentences are superseded, not struck. No new
+constant: the bounds are untracked existentials produced by compactness;
+the `−(2π)²`, `−2π` and `1/(2π)` are literal expressions.
+
+Not claimed: uniqueness of Navier-Stokes solutions in any sense beyond OUR
+COPY of the class at `f = 0` for the same datum and `0 < ν'`; nothing at
+`ν' ≤ 0`; nothing about forced data, general data, or competitors outside
+the class (non-smooth solutions, weak solutions); nothing about the
+breakdown statement; no analyticity; no numeric constant.
+
+Textbook sources, named as references and not verified against, chapter
+numbers unverified: the energy-method uniqueness in the enstrophy class in
+the Navier-Stokes texts named under Tier 8b (Temam; Robinson, Rodrigo and
+Sadowski; Constantin and Foias); for the product formula for Fourier
+coefficients and differentiation under the integral, any text on Fourier
+series on the torus and any analysis text.
+
+Verification of the tier: a reconnaissance fleet of eight probes compiled
+at the pin before any design (the whole interface was already proved there,
+every constant of the calibration computed), one design whose final probe
+proves every frozen statement end to end (both capstones on the standard
+three axioms before any build), two adversarial critiques of the blueprint
+(statement shape: zero blockers and zero majors; feasibility: clean, the
+five proposed modules compiled as a module chain, the capstones re-proved
+from the sorry'd interface), and per wave one builder and two independent
+adversarial readers before the commit (statement shape and vacuity with
+compiled probes; proof and pin with an independent gate run, minimal-import
+and double-import instance tests, and re-proofs by other routes: the
+Laplacian coefficient, the forward FTC, the divergence-free derivative, the
+pressure capstone, the coefficient injectivity; the constant ledgers of the
+Laplacian coefficient, the convection coefficient and the mode ODE
+re-derived by hand against the built files). Every frozen statement was
+checked byte-identical to the blueprint by the builder, both readers and the
+orchestrator, and both capstones against the Tier 9 candidate text. Gate
+GREEN 421/421 at W3a, 444/444 at W3b and 474/474 at W3c. The five new
+modules were replayed through the toolchain's `leanchecker` (exit 0, empty
+output; record in `context/leanchecker-replay-2026-09-13-tier9c.md`).
+
+Priority is not claimed for anything in this tier; nothing here is new
+mathematics. HeliCorgi's local mild uniqueness on `ℝ³` and uda-lab/leray-hopf
+(weak existence, uniqueness disclaimed) are the neighbours listed under
+"Related machine-checked work"; none of it is composed with, reproduced by,
+or superseded by anything here.
+
 ## Scope, verification, and tags
 
 What is STILL not claimed, precisely:
@@ -790,7 +929,7 @@ What is STILL not claimed, precisely:
 
 Verification discipline: a deterministic gate accepts the build only if
 `#print axioms` for all 294 audited declarations (391 at `t9-complete`,
-13 Sep 2026) reports at most
+13 Sep 2026; 474 at `t9-unique-green`, Tier 9c, the same day) reports at most
 `propext, Classical.choice, Quot.sound` and no `sorryAx`; statements
 frozen at declaration, every strengthening landing as a new sibling with
 the frozen statement re-verified byte-identical. Independent adversarial
@@ -803,7 +942,9 @@ probes persisted outside the tree and the essential ones compiled in
 `ForcedProbe.lean`; Tier 8b kept that rule for every wave W1 to W4, with a
 reconnaissance probe compiled before each build; Tier 9 (13 Sep 2026) kept
 it for both of its waves, with a compiled reconnaissance fleet and two
-adversarial critiques of the blueprint before any build. The audits drew blood at
+adversarial critiques of the blueprint before any build; Tier 9c (13 Sep
+2026) kept it for its three waves, its fleet of eight probes having proved
+the whole interface before the design. The audits drew blood at
 every stage, by design: M4 (a
 pressureless-class scoping, answered in-wave with the Leray layer);
 Tier 3 (the capstone discarding its own summability certificates — the
@@ -831,7 +972,9 @@ Tier 8b, time-smoothness, joint smoothness on the closed slab, and the
 community class inhabited at `f = 0`) → `t9-datum-bridge-green` →
 `t9-complete` (13 Sep 2026: Tier 9, the community's statement shape over
 real-space data, under a smallness hypothesis on the mean-free part of
-the datum). Priority, in its
+the datum) → `t9-unique-green` (13 Sep 2026: Tier 9c, uniqueness inside
+our copy of the community class at `f = 0` for the same datum and `0 < ν'`,
+the pressure up to a function of time). Priority, in its
 only defensible form: to our knowledge (reconnaissance 26 Aug to 2 Sep
 2026) the first kernel-checked small-data GLOBAL well-posedness — strong
 class, unique in the bounded-enstrophy class on every finite horizon —

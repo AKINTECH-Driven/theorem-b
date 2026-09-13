@@ -43,11 +43,11 @@ and prints `#print axioms` for every audited declaration. It passes if and only 
 line reports at most `propext`, `Classical.choice`, `Quot.sound` and no `sorryAx`. The
 script reports; it never repairs.
 
-Expected result: the final line `GATE: GREEN`, preceded by the output of the 391
+Expected result: the final line `GATE: GREEN`, preceded by the output of the 474
 `#print axioms` commands in `AxiomCheck.lean` (theorems, one definition, and the
 compiled non-vacuity probes), each on exactly the three kernel axioms. Any other outcome
 is `GATE: RED` with exit status 1. In the campaign notes this state is written
-"GREEN 391/391"; it was recorded on 13 Sep 2026 at the Tier 9 wave W2 state, the gate
+"GREEN 474/474"; it was recorded on 13 Sep 2026 at the Tier 9c wave W3c state, the gate
 having read 186/186 at `82a9ab6` (tag `t7-audited-green`, 2 Sep 2026), grown by one
 Tier 8a wave at a time (190, 199, 208, 215, 217, 226 at `2a4036b`, tag `t8a-complete`),
 by the Tier 8b wave W1 (22 frozen theorems and 3 chain-pinning probes, 251 at `0efba80`,
@@ -57,7 +57,9 @@ and 5 datum-side probes, 283 at `ade27c8`), by the Tier 8b wave W4 (4 frozen
 theorems and 7 capstone-level probes, 294 at `d59ddcd`, tag `t8b-community-green`), by the
 Tier 9 wave W1 (45 frozen theorems, 339 at `ffb8406`, tag `t9-datum-bridge-green`), and by
 the Tier 9 wave W2 (36 frozen theorems and 16 register probes, 391 at `332790f`, tag
-`t9-complete`).
+`t9-complete`), by the Tier 9c wave W3a (30 frozen theorems, 421 at `2ea0d9c`), by the
+Tier 9c wave W3b (23 frozen theorems, 444 at `43a0b29`), and by the Tier 9c wave W3c (15
+frozen theorems and 15 register probes, 474 at `68e12d2`, tag `t9-unique-green`).
 
 ## Capstone theorems
 
@@ -85,6 +87,8 @@ coefficient field is `(Fin 3 → ℤ) → Vel`, `freq k` is the raw lattice vect
 | `datum_bridge` | `TheoremB/DatumBridge.lean` | The datum bridge (Tier 9, wave W1): every `u₀ : ℝ³ → ℝ³` in the community's `InitialVelocityConditionPeriodic` (`C^∞`, one-periodic, divergence-free) has a coefficient field `coeff u₀` (the Fourier coefficients of the descent of each component to the unit 3-torus, `TheoremB/Descent.lean`) that is summable at every Sobolev level, real, divergence-free, and satisfies `u₀Real (coeff u₀) = u₀`: the pointwise Fourier inversion, from Mathlib's inversion for continuous torus functions with summable coefficients and the rapid decay of the coefficients of a smooth periodic function through `mFourierCoeff_deriv` at every order. Textbook; nothing here is new. |
 | `theorem_B_community_periodic_data` | `TheoremB/CommunityData.lean` | The community's own statement shape over REAL-SPACE data (Tier 9, wave W2): for every `ν' > 0` and every `u₀` in `InitialVelocityConditionPeriodic` with `κ · en (meanFree (coeff u₀)) · ens (meanFree (coeff u₀)) < (2πν')⁴` (the smallness is on the MEAN-FREE part of the datum's coefficient field; the mean vector enters no hypothesis), there exist `v`, `p` with `NavierStokesExistenceAndSmoothnessPeriodic ν' u₀ 0 v p` (OUR COPY of the class). The mean is removed by the Galilean change `v(x, τ) = m + w(x − τm, τ)` (`galilean_class`, `TheoremB/Galilean.lean`, a class-level fact proved from Mathlib and the community definitions only) and the mean-free part is fed to `theorem_B_community_periodic`. This is the conclusion of the upstream positive statement `navier_stokes_existence_and_smoothness_periodic` under that smallness hypothesis at `f = 0`; it says nothing about general data and nothing about `navier_stokes_breakdown_periodic`; both upstream `sorry`s are untouched. Existence only: the coefficient flow behind the witness is unique by `theorem_B_unique`, reached through the sibling below. The constant datum is handled by the boost, not excluded (register probe); the shear datum is nonzero, non-constant, small, and the capstone fires on it with both trivial candidates failing (register probes in `T9Probe`). |
 | `theorem_B_community_periodic_data_flow` | `TheoremB/CommunityData.lean` | The witness-exposing sibling: the same hypotheses and conclusion with the witness pair exhibited as `(galV m (vReal c), galP m (pReal c))`, `m` the mean vector of `coeff u₀` and `c` the coefficient flow at `ν = 2πν'` from the mean-free datum, carrying clauses 1 to 7 of `theorem_B_community_periodic_flow` (they supply the hypotheses of `theorem_B_unique` on every window `[0, T]`). Existence with an exhibited witness, not uniqueness in the class. |
+| `community_unique_velocity` | `TheoremB/CommunityUnique.lean` | Uniqueness of the velocity inside OUR COPY of the community class at `f = 0` (Tier 9c, wave W3c): two members `(v₁, p₁)`, `(v₂, p₂)` of `NavierStokesExistenceAndSmoothnessPeriodic ν' u₀ 0 v p` with the same datum `u₀` and `0 < ν'` (consumed by `theorem_B_unique`, not implied by membership: the constant pair is a member for every real `ν'`) have `v₁ x t = v₂ x t` at every `x` and every `t ≥ 0`. A corollary of `theorem_B_unique` (Tier 4) at campaign viscosity `2πν'` through the datum bridge (Tier 9 W1) and the calibration in reverse (W3b: a member's coefficient flow `classFlow v t := coeff (v · (t/(2π)))` satisfies the campaign mode ODE and its integral form on every window, every constant computed), followed by the inversion `u₀Real_coeff` on the two slices. Textbook energy method in the enstrophy class; nothing new. Nothing about general data, `ν' ≤ 0`, forced data, competitors outside the class or `navier_stokes_breakdown_periodic`; the positive statement `navier_stokes_existence_and_smoothness_periodic` and the breakdown statement are both untouched. The register (`T9cProbe`) compiles that the half-line `t ≥ 0` is sharp (two same-datum members differ at `t = -1`), that two distinct members on a nonzero datum exist, that different data are not forced equal, and that the class is inhabited for every real `ν'`. |
+| `community_unique_pressure` | `TheoremB/CommunityUnique.lean` | Under the same hypotheses the pressures differ by a function of time alone: `∃ g : ℝ → ℝ, ∀ x, ∀ t ≥ 0, p₁ x t = p₂ x t + g t` (the `k = 0` pressure mode is free; the explicit form `p₁ x t = p₂ x t + (p₁ 0 t − p₂ 0 t)` and the gradient form are frozen beside it). The pressure is unique up to a function of time, and only that: the register compiles that `p₁ = p₂` and "up to a constant" both fail (every member's pressure shifted by a smooth function of time is a member). From the velocity capstone, the class equation and `is_const_of_fderiv_eq_zero` on `ℝ³`. |
 | `ns_full_global_flow_decay` | `TheoremB/DecayFlow.lean` | The eternal flow additionally satisfies `en (c t) ≤ en c₀ · exp(−2νt)` for every `t ≥ 0`. The upper bound is compiled; sharpness is not. |
 | `theorem_B_bandwidth` | `TheoremB/Bandwidth.lean` | The eternal flow, all seven clauses quoted, additionally has energy outside the cube `‖k‖_∞ ≤ N` at most `ens c₀ / N²`, for every `N > 0` and every `t ≥ 0`. |
 | `theorem_B_modes` | `TheoremB/DeterminingModes.lean` | Determining modes: for class budgets `(ν, E, Z)` there is one `K > 0`, fixed before any horizon, tolerance, or pair of flows, such that for every `N` with `2ν + K < νN²`, two enstrophy-bounded flows (different data allowed) whose low-mode defect stays at most `δ` on `[0, T]` satisfy `en(u−v)(t) ≤ en(u−v)(0)·exp(−(νN² − K)t) + νN²/(νN² − K)·δ`. |
@@ -125,8 +129,15 @@ comes from `pressureCoeff`.
   real-space data (`Descent` and `DatumBridge`, wave W1: the descent of a one-periodic
   field to the torus and the datum bridge; `Galilean` and `CommunityData`, wave W2: the
   Galilean change on the closed slab, the mean-free algebra, the capstone with its
-  witness-exposing sibling and consistency corollary, and the `T9Probe` register).
-- `AxiomCheck.lean`: the audited-declaration ledger (391 `#print axioms` lines).
+  witness-exposing sibling and consistency corollary, and the `T9Probe` register); Tier 9c,
+  uniqueness inside our copy of the community class at `f = 0` (`SliceExtract`,
+  `ConvectionCoeff` and `ClassParseval`, wave W3a: the slice extraction from the joint
+  smoothness on the closed slab, the convection coefficient, Parseval and the window
+  budgets; `ClassFlowODE`, wave W3b: the coefficient flow of a class member, the parametric
+  integral, the calibration in reverse; `CommunityUnique`, wave W3c: the two capstones, the
+  pressure siblings, the injectivity lemmas, the consistency corollaries and the `T9cProbe`
+  register).
+- `AxiomCheck.lean`: the audited-declaration ledger (474 `#print axioms` lines).
 - `scripts/check_axioms.sh`: the gate.
 - `context/`: campaign blueprints (`rung*-blueprint.md`), the announcement draft, the
   upstreaming dossier, and the discrete-twin skeleton (`NSSkeleton.lean`).
@@ -335,11 +346,52 @@ on `ℝ³`. No mathematical priority is claimed for any layer, and none for the 
   re-proved `galilean_class` by two other tactic routes and the capstone from the frozen W1
   interface); gate GREEN 391/391. Tag `t9-complete` (`332790f`). Tier 9 complete; W3
   (uniqueness inside the class in real-space vocabulary) sized and deferred, its two
-  statements never in the tree.
+  statements never in the tree (built as Tier 9c the same day; below).
 - **Kernel replay of the Tier 9 modules, 13 Sep 2026.** The four new modules replayed
   through the toolchain's `leanchecker` at `332790f` (exit 0, empty output each; record in
   `context/leanchecker-replay-2026-09-13-tier9.md`; the imports are the modules replayed on
   12 Sep, unchanged since).
+- **Tier 9c blueprint, 13 Sep 2026** (`context/rung12-tier9c-blueprint.md`, commit `55a7a0b`,
+  prose only): eight reconnaissance probes compiled at the pin, which closed the whole
+  interface of the deferred W3 before any design (every statement proved by its owner probe;
+  the calibration in reverse with every constant computed, no discrepancy), one design whose
+  final probe proves every frozen statement end to end with both capstones on the standard
+  three axioms, two adversarial critiques (statement shape: zero blockers and zero majors,
+  six minors applied; feasibility: clean, the five proposed modules compiled as a module
+  chain), and the blueprint with its fenced statements byte-identical to the final probe.
+- **Tier 9c wave W3a, 13 Sep 2026.** `TheoremB/SliceExtract.lean`, `ConvectionCoeff.lean`,
+  `ClassParseval.lean`: the four slices of the class equation at fixed time are continuous
+  and one-periodic and the time-derivative slice is `C^∞`, the compactness bounds on every
+  window, the Laplacian coefficient `−(2π)²‖freq n‖²`, the product coefficient with a nonzero
+  mean mode and the convection coefficient matched to `−2π · convFull`, Parseval for the
+  energy and the enstrophy as equalities and the window budgets. 30 frozen statements
+  byte-identical; two independent readers before the commit (0 blockers, 0 majors; the
+  Laplacian coefficient re-proved by a second route and checked exactly on the shear datum);
+  gate GREEN 421/421 (`2ea0d9c`).
+- **Tier 9c wave W3b, 13 Sep 2026.** `TheoremB/ClassFlowODE.lean`: the coefficient flow of a
+  class member in the campaign clock, defined once; dominated continuity and differentiation
+  of the torus parametric integral; the forward FTC; the pressure-gradient coefficient and its
+  Leray kill at every mode; and the calibration in reverse: the class equation read through
+  the coefficients is the campaign mode ODE at `ν = 2πν'` (for every real `ν'`), with its
+  integral form on every window. 24 fenced declarations byte-identical; two independent
+  readers before the commit (both CLEAN; the constant ledger of the mode ODE re-derived by
+  hand against the built file; the FTC and the divergence-free derivative re-proved by second
+  routes); gate GREEN 444/444 (`43a0b29`).
+- **Tier 9c wave W3c, 13 Sep 2026.** `TheoremB/CommunityUnique.lean`:
+  `community_unique_velocity` and `community_unique_pressure` (byte-identical to the Tier 9
+  blueprint's candidate statements), the pressure's gradient, velocity-hypothesis and explicit
+  forms, the `theorem_B_unique` window wrapper, the injectivity lemmas, the consistency
+  corollaries (every member on a constant datum is the constant pair in velocity), and the
+  `T9cProbe` register (the pressure form and the half-line are sharp; two distinct members on
+  a nonzero datum; different data not forced equal; the class inhabited for every real `ν'`;
+  the coefficient flow of a non-member is junk; consistency with Tier 9's flow sibling on a
+  mean-free datum). 15 frozen and 15 registered statements byte-identical; two independent
+  readers before the commit (0 blockers, 0 majors; the capstone route re-derived by hand; the
+  pressure capstone and the coefficient injectivity re-proved by second routes); gate GREEN
+  474/474 (`68e12d2`). Tag `t9-unique-green`. Tier 9c complete.
+- **Kernel replay of the Tier 9c modules, 13 Sep 2026.** The five new modules replayed
+  through the toolchain's `leanchecker` (exit 0, empty output each; record in
+  `context/leanchecker-replay-2026-09-13-tier9c.md`).
 - **Cross-check, 9 Sep 2026.** OpenAI's Comparator (D) statement, in the community
   Formal Conjectures wording, was reproduced verbatim and compiled against this pin
   (Mathlib `15a89b24`, Lean `v4.31.0-rc2`): it elaborates (exit 0, the (D) statement
@@ -362,7 +414,7 @@ Repository tags, in order: `m1-green`, `m2-wave1-green`, `m2-complete`, `m3-cond
 `t6-smooth-green`, `t6-classical-green`, `t7-bandwidth-green`, `t7-modes-green`,
 `t7-complete`, `t7-audited-green`, `t8a-forced-trap-green`, `t8a-forced-B-green`,
 `t8a-complete`, `t8b-time-smooth-green`, `t8b-joint-smooth-green`, `t8b-community-green`,
-`t9-datum-bridge-green`, `t9-complete`.
+`t9-datum-bridge-green`, `t9-complete`, `t9-unique-green`.
 
 ## Credits
 
