@@ -60,6 +60,8 @@ import TheoremB.JointSmooth
 import TheoremB.CommunityClass
 import TheoremB.Descent
 import TheoremB.DatumBridge
+import TheoremB.Galilean
+import TheoremB.CommunityData
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -400,3 +402,55 @@ import TheoremB.DatumBridge
 #print axioms TheoremB.isOnePeriodic_u₀Real
 #print axioms TheoremB.u₀Real_coeff
 #print axioms TheoremB.datum_bridge
+#print axioms TheoremB.contDiffOn_galV
+#print axioms TheoremB.contDiffOn_galP
+#print axioms TheoremB.contDiff_space_slice
+#print axioms TheoremB.laplacian_translate
+#print axioms TheoremB.gradient_translate
+#print axioms TheoremB.divergence_translate
+#print axioms TheoremB.divergence_const_add
+#print axioms TheoremB.derivWithin_galV_time
+#print axioms TheoremB.fderiv_galV_space
+#print axioms TheoremB.convection_galV
+#print axioms TheoremB.laplacian_galV_space
+#print axioms TheoremB.gradient_galP_space
+#print axioms TheoremB.galV_zero
+#print axioms TheoremB.isOnePeriodic_galV
+#print axioms TheoremB.isOnePeriodic_galP
+#print axioms TheoremB.divergence_galV
+#print axioms TheoremB.galilean_class
+#print axioms TheoremB.meanFree_zero
+#print axioms TheoremB.meanFree_of_mean_zero
+#print axioms TheoremB.realField_meanFree
+#print axioms TheoremB.divFree_meanFree
+#print axioms TheoremB.summable_sob_meanFree
+#print axioms TheoremB.ens_meanFree
+#print axioms TheoremB.en_meanFree
+#print axioms TheoremB.uLift_meanFree_add
+#print axioms TheoremB.u₀Real_eq_meanVec_add
+#print axioms TheoremB.u₀Real_eq_meanVec_add'
+#print axioms TheoremB.u₀Real_zeroMode
+#print axioms TheoremB.realField_zeroMode
+#print axioms TheoremB.summable_norm_zeroMode
+#print axioms TheoremB.meanFree_zeroMode
+#print axioms TheoremB.meanVec_zeroMode
+#print axioms TheoremB.zeroMode_meets_all_but_mean_zero
+#print axioms TheoremB.theorem_B_community_periodic_data
+#print axioms TheoremB.theorem_B_community_periodic_data_flow
+#print axioms TheoremB.theorem_B_community_periodic_of_data
+#print axioms TheoremB.T9Probe.const_datum_in_class
+#print axioms TheoremB.T9Probe.const_pair_in_class
+#print axioms TheoremB.T9Probe.rest_pair_in_class'
+#print axioms TheoremB.T9Probe.coeff_const
+#print axioms TheoremB.T9Probe.capstone_hyp_const_datum
+#print axioms TheoremB.T9Probe.capstone_fires_on_const_datum
+#print axioms TheoremB.T9Probe.testDatum_in_class
+#print axioms TheoremB.T9Probe.coeff_testDatum
+#print axioms TheoremB.T9Probe.capstone_hyp_testDatum
+#print axioms TheoremB.T9Probe.capstone_fires_on_testDatum
+#print axioms TheoremB.T9Probe.inversion_fails_off_class
+#print axioms TheoremB.T9Probe.shear_not_const
+#print axioms TheoremB.T9Probe.capstone_hyp_not_universal
+#print axioms TheoremB.T9Probe.capstone_hyp_shifted_iff
+#print axioms TheoremB.T9Probe.ivc_const_add
+#print axioms TheoremB.T9Probe.capstone_fires_on_shifted_shear

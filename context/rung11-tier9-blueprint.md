@@ -1,9 +1,11 @@
 # Rung 11 (Tier 9 blueprint): the community's statement shape over real-space data
 
-Status: **Tier 9 wave W1 BUILT** (13 Sep 2026: `TheoremB/Descent.lean` and
-`TheoremB/DatumBridge.lean`, gate GREEN 339/339, tag `t9-datum-bridge-green`; the BUILD LOG at
-the end of this file records it; the paragraph that follows is the planning status of the
-commit `1e971bd`, kept as written).
+Status: **TIER 9 COMPLETE at the W2 commit** (13 Sep 2026). Wave W1 BUILT (`TheoremB/Descent.lean`
+and `TheoremB/DatumBridge.lean`, gate GREEN 339/339, tag `t9-datum-bridge-green`) and wave W2
+BUILT (`TheoremB/Galilean.lean` and `TheoremB/CommunityData.lean`, gate GREEN 391/391, tag
+`t9-complete`); the BUILD LOG at the end of this file records both; W3 (uniqueness inside the
+class, real-space vocabulary) stays DEFERRED as a sized candidate (§4c, §8 item 4). The paragraph
+that follows is the planning status of the commit `1e971bd`, kept as written.
 
 Original status: PLANNING (13 Sep 2026): **nothing built; gate untouched at HEAD
 `03b1656`** (the leanchecker-replay commit, on top of the dossier Unit 7 commit
@@ -1533,6 +1535,14 @@ E, instances named `cd_*`, the capstone, the flow sibling, the consistency corol
 sixteen `T9Probe` register theorems), 2 + 2 import lines and 52 ledger lines (expected gate
 391/391), two readers before the tag `t9-complete`.
 
+UPDATE (W2, 13 Sep 2026): W2 is built and tagged `t9-complete` (gate GREEN 391/391). Tier 9 is
+COMPLETE at W1 + W2. What remains is prose and the user's decisions: the announcement's Tier 9
+section (rule 6 of §7, PROPOSED wording only), the README capstone rows, W3 build-or-defer (§8
+item 4), the smallness sibling (§8 item 2), the trailer uniformity (§8 item 6), the textbook
+theorem numbers (§8 item 7), and the leanchecker replay of the four new modules (the tree was
+touched; `scripts/replay_leanchecker.sh` replays every module, single modules by
+`lake env leanchecker TheoremB.<Module>`).
+
 BUILD LOG (the planning commit `1e971bd` carried none).
 
 13 Sep 2026, Tier 9 wave W1 BUILT: `TheoremB/Descent.lean` (475 lines) and
@@ -1571,3 +1581,52 @@ declarations that carried none in the probe (docstrings are invisible to the
 byte-identity tool); (4) three older ledger names end in a prime, so a quote-delimited
 regex undercounts the gate (336): count `depends on axioms: [...]` after joining wrapped
 lines and normalising whitespace. Tag `t9-datum-bridge-green` laid here (ladder §5).
+
+13 Sep 2026, Tier 9 wave W2 BUILT, TIER 9 COMPLETE: `TheoremB/Galilean.lean` (367 lines;
+section C of the probe, R4's declarations and proofs verbatim, NO measure instance, compiles
+standalone) and `TheoremB/CommunityData.lean` (919 lines; sections D and E): the 43 frozen W2
+declarations of §4b (the Galilean block: 21 = 17 theorems + 3 defs + 1 abbrev; the CommunityData
+block: 22 = 19 theorems + 3 defs) and the 16 register theorems of §6 (`namespace T9Probe`)
+byte-identical, checked by the builder, both readers and the orchestrator (`tools/byte_identity.py`
+21/21, 22/22, 16/16; `check_capstone.py` on `theorem_B_community_periodic_data_flow` against
+`design/final/expected_theorem_B_community_periodic_data_flow.txt`, byte-identical, 20 lines);
+every proof closed with the probe's own proof (code lines diffed against the probe sections:
+0 differing); no sibling, no spec drift, no earlier Lean file edited, no private lemma
+un-privated; registered in `TheoremB.lean` and `AxiomCheck.lean` (2 import lines each, 52
+ledger lines: 17 + 19 frozen theorems as `TheoremB.<name>`, 16 register theorems as
+`TheoremB.T9Probe.<name>`). Gate GREEN 391/391 (builder, both readers independently,
+orchestrator; entries counted with wrapped lines joined; every entry exactly `[propext,
+Classical.choice, Quot.sound]`; no `sorryAx`). Two independent readers BEFORE the commit, both
+CLEAN (0 blockers, 0 majors): reader A (statement shape and vacuity) 4 minors, with the compiled
+probes `build-w2/reader-shape/ShapeW2.lean` (the constant-datum smallness hypothesis reads
+`0 < 0` at `ν' = 0` and holds for every `ν' ≠ 0`; the frozen hypothesis set inhabited by a
+nonzero non-constant datum in ONE theorem of the frozen shape on which the capstone fires and
+both trivial candidates fail; the D3 mean-free spelling shown STRICTLY WIDER than the naive
+`en (coeff u₀)` spelling on a shear with a large mean, so the choice of §1b D3 has content);
+reader B (proof and pin) 5 minors, with `GalileanAlone.lean` (exit 0: no measure instance
+needed), `DoubleImport.lean` (CommunityData with ContinuousRep, FourierDeriv, CoeffExtract and
+DatumBridge, exit 0: the `cd_*` instances do not collide) and `ReproveW2.lean` (exit 0, standard
+three axioms: `galilean_class` re-proved twice by other tactic routes, and the capstone re-proved
+from the FROZEN W1 `datum_bridge` projections, `theorem_B_community_periodic` and the re-proved
+transfer). The minors were comment-only (the shifted-shear register docstring described the
+proof's choice of `ε` rather than the statement; a pull-request sentence in the Galilean header
+said something unmeasured about the upstream file; the flow sibling's and the corollary's
+docstrings did not themselves name the two upstream statements; the general mean-shift fact
+`T9Probe.coeff_const_add` is cited beside the shear instance); fixed by the orchestrator before
+the commit, and the gate re-run after them. Recorded facts (readers' MINOR 3 and 4, not
+defects): (1) the consistency corollary `theorem_B_community_periodic_of_data`'s STATEMENT is a
+projection of `theorem_B_community_periodic` and holds from Tier 8b alone (reader A compiled
+`of_data_statement_from_8b_alone`); its value as the §6 MUST-HOLD is the ROUTE, which opens with
+the Tier 9 capstone, so the check is on the route, not the statement; (2) §5's W2 row counts
+section E as 41 declarations, the built `T9Probe` holds 45 (16 registered + 14 `cc` clones + 15
+further helpers), an undercount of 4 in this file's estimate, the headers being right; (3) the
+capstone docstring says "both upstream placeholder proofs are untouched" where the Tier 8b
+docstrings say "both upstream `sorry`s are untouched" (the builder's choice so that the source
+hygiene grep reads 0; the content rule is met either way); (4) the builder's first pass left
+correct files and a GREEN gate on disk but returned no report; the second pass trusted none of
+it and re-measured everything (`build-w2/builder/pass1-superseded/`); (5) the pin's
+unused-binder warning on `σ` in the R4-verbatim helper `mapsTo_galCurve` is the only warning of
+the two modules (kept verbatim); (6) the three local measure instances are NAMED `cd_ms` /
+`cd_haar` / `cd_prob` (statement-neutral, recorded in the header). Tag `t9-complete` laid here
+(ladder §5). Tier 9 is COMPLETE at W1 + W2; W3 stays DEFERRED (§8 item 4, the user's call), its
+two statements frozen as CANDIDATE only and never in the tree.

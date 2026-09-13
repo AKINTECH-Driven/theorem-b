@@ -60,3 +60,5 @@ import TheoremB.JointSmooth
 import TheoremB.CommunityClass
 import TheoremB.Descent
 import TheoremB.DatumBridge
+import TheoremB.Galilean
+import TheoremB.CommunityData
