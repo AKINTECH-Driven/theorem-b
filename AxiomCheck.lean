@@ -65,6 +65,7 @@ import TheoremB.CommunityData
 import TheoremB.SliceExtract
 import TheoremB.ConvectionCoeff
 import TheoremB.ClassParseval
+import TheoremB.ClassFlowODE
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -487,3 +488,26 @@ import TheoremB.ClassParseval
 #print axioms TheoremB.ens_coeff_le_of_bound
 #print axioms TheoremB.classFlow_budget
 #print axioms TheoremB.summable_flow
+#print axioms TheoremB.classFlow_apply
+#print axioms TheoremB.classFlow_clock
+#print axioms TheoremB.classFlow_zero_eq
+#print axioms TheoremB.continuousOn_coeff_of_dominated
+#print axioms TheoremB.hasDerivAt_coeff_of_dominated
+#print axioms TheoremB.continuousOn_coeff_vel
+#print axioms TheoremB.hasDerivAt_coeff_vel
+#print axioms TheoremB.classFlow_continuousOn
+#print axioms TheoremB.hasDerivAt_classFlow
+#print axioms TheoremB.integral_eq_of_hasDerivAt
+#print axioms TheoremB.lerayProj_pressure_gradient
+#print axioms TheoremB.coeff_add
+#print axioms TheoremB.coeff_sub
+#print axioms TheoremB.coeff_smul
+#print axioms TheoremB.coeff_neg
+#print axioms TheoremB.pressure_gradient_coeff
+#print axioms TheoremB.lerayProj_pressure_gradient_coeff
+#print axioms TheoremB.divFree_slice
+#print axioms TheoremB.divFree_deriv
+#print axioms TheoremB.laplacian_coeff_vel
+#print axioms TheoremB.convection_coeff_vel
+#print axioms TheoremB.class_member_mode_ode
+#print axioms TheoremB.class_member_integral_eq

@@ -1753,3 +1753,47 @@ nothing leaks; (2) the probe's `-- SECTION` markers are dropped and its `/-! # A
 brief stated the interface on one line and the fences were extracted from the probe verbatim (frozen text, not
 re-wrapped); (4) disk 5.6 GiB before and after. No tag (ladder §5). Workflow `wf_fba1e9f2-1e9`; records under
 `audit-tier9c/build-w3a/`.
+
+13 Sep 2026, Tier 9c wave W3b BUILT: `TheoremB/ClassFlowODE.lean` (897 lines, instances `co_*`, imports
+`TheoremB.CommunityData` (for the one public clone `dotR_zero_left`, measured by a stub that fails without it),
+`TheoremB.ClassParseval` and `TheoremB.ConvectionCoeff`): the 24 fenced W3b declarations of §4b (`def classFlow`,
+defined ONCE in the tree, plus 23 frozen theorems) byte-identical, checked by the builder, both readers and the
+orchestrator with `tools/byte_identity.py` (24/24; bounds 702-866, unchanged by this entry); every proof closed
+with the final probe's own proof (`design/final/Tier9cFinal.lean` section D, cut at the probe's own markers,
+lines 985-1680); no sibling added, no spec drift, no earlier Lean file edited, no private lemma cloned, no
+file-level `maxHeartbeats`; registered in `TheoremB.lean` and `AxiomCheck.lean` (1 import line each after
+`import TheoremB.ClassParseval`; 23 ledger lines, audit lines 31 to 53 of the probe verbatim). Gate GREEN
+444/444 (builder, both readers independently, orchestrator twice: before and after the comment-only edits
+below; counted on the bracket pattern after joining wrapped lines; the quote-delimited regex reads 438; every
+entry exactly `[propext, Classical.choice, Quot.sound]`; no `sorryAx`). Two independent readers BEFORE the
+commit, both CLEAN (0 blockers, 0 majors): reader A (statement shape and vacuity) 4 minors, with the compiled
+probe `build-w3b/reader-shape/ShapeW3b.lean` (exit 0, 0 sorry, 25 axiom entries on the standard triple): the
+mode ODE I12 instantiated on the constant member `T9Probe.const_pair_in_class` at `ν' = 1` AND `ν' = -1` (the
+statement holds for every real `ν'`, D14) with the frozen right-hand side evaluated to `0` at every mode by the
+reader's own route (the constant flow is `zeroMode m`, whose `convFull` vanishes at every mode), consistent with
+the zero derivative of a constant flow; I13 at `t = 0` reads the initial datum; the hypotheses of I8/I9 are
+load-bearing (the jointly smooth non-periodic field `(x, t) ↦ t • x`); the coefficient flow of a non-member is
+junk (`inversion_fails_off_class`); the Leray kill of the gradient mode is sharp; two register-only
+observations recorded without drift (I14's `hg` is consumed only as interval integrability; `divFree_deriv`'s
+`0 < t` could be `0 ≤ t`; the frozen statements stand); the honest limit that no non-constant class member
+exists in the tree yet, so the sign of the convection term in I12 is checked through the sign-sensitive ledger
+identity and I10's sign, the end-to-end check on a non-constant member being W3c's flow-sibling consistency
+item. Reader B (proof and pin) 5 minors, an independent gate run (444; the quote-delimited counts 438 and 434
+documented), the minimal-import probe, the double-import test (`build-w3b/reader-proof/DoubleImport.lean`:
+ClassFlowODE with the four W3a/Tier 9 torus modules, ContinuousRep, FourierDeriv, CoeffExtract and DatumBridge,
+a downstream named instance triple and one elaborated torus integral, exit 0), the constant ledger of I12
+RE-DERIVED BY HAND in its report line by line against the built file (the `−(2π)²` of `laplacian_coeff`, the
+`−2π` of `coeff_convection`, the `(2πi k_j p̂)_j` of `pressure_gradient_coeff`, the `1/(2π)` of
+`hasDerivAt_classFlow`, the Leray projection of both sides), and `integral_eq_of_hasDerivAt` and
+`divFree_deriv` RE-PROVED by routes of its own (`build-w3b/reader-proof/Reprove.lean`, statements
+byte-identical, standard three axioms). The minors (a ledger range in the header written inclusively; a
+present-tense pointer to W3c's file in `classFlow_zero_eq`'s docstring; the label "VERBATIM (R6 3.vi)" on I12 and
+I13 whose unused `hν'` D14 dropped) were fixed by the orchestrator with comment-only edits before the commit
+(`build-w3b/orchestrator-final/`, the gate re-run after them: GREEN 444/444); the three linter notes of the
+module (the pin's `τ` note and the two agreed `hT` binders of D6) stay. Trap-ledger additions from reader B: the
+pin prints some errors as `error(lean.unknownIdentifier):`, so `grep -c "error:"` reads 0 on such a log (count on
+`error` or on the exit code); the quote-delimited gate regex reads 438 line-anchored and 434 greedy against the
+true 444. Kernel replay of the three W3a modules recorded meanwhile (`audit-tier9c/replay/SUMMARY.txt`:
+`lake env leanchecker` exit 0 with empty output for SliceExtract 36 s, ConvectionCoeff 6 s, ClassParseval 18 s);
+ClassFlowODE's replay follows at the tag. Disk 5.6 GiB. No tag (ladder §5). Workflow `wf_07986f09-74c`; records
+under `audit-tier9c/build-w3b/`.
