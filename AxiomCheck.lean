@@ -62,6 +62,9 @@ import TheoremB.Descent
 import TheoremB.DatumBridge
 import TheoremB.Galilean
 import TheoremB.CommunityData
+import TheoremB.SliceExtract
+import TheoremB.ConvectionCoeff
+import TheoremB.ClassParseval
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -454,3 +457,33 @@ import TheoremB.CommunityData
 #print axioms TheoremB.T9Probe.capstone_hyp_shifted_iff
 #print axioms TheoremB.T9Probe.ivc_const_add
 #print axioms TheoremB.T9Probe.capstone_fires_on_shifted_shear
+#print axioms TheoremB.hasDerivAt_time_slice
+#print axioms TheoremB.continuous_time_deriv_slice
+#print axioms TheoremB.contDiff_time_deriv_slice
+#print axioms TheoremB.isOnePeriodic_time_deriv_slice
+#print axioms TheoremB.exists_bound_time_deriv_slice
+#print axioms TheoremB.exists_bound_velocity
+#print axioms TheoremB.exists_bound_space_deriv
+#print axioms TheoremB.laplacian_coeff
+#print axioms TheoremB.isOnePeriodic_laplacian_slice
+#print axioms TheoremB.isOnePeriodic_gradient_slice
+#print axioms TheoremB.continuous_laplacian_slice
+#print axioms TheoremB.continuous_gradient_slice
+#print axioms TheoremB.continuous_convection_slice
+#print axioms TheoremB.isOnePeriodic_convection_slice
+#print axioms TheoremB.contDiff_laplacian
+#print axioms TheoremB.contDiff_space_slice'
+#print axioms TheoremB.mFourierCoeff_charSeries
+#print axioms TheoremB.summable_norm_conv
+#print axioms TheoremB.coeffC_mul
+#print axioms TheoremB.mFourierCoeff_factor
+#print axioms TheoremB.convection_coeff_eq_convFull
+#print axioms TheoremB.coeff_convection
+#print axioms TheoremB.hasSum_sq_mFourierCoeff_descend
+#print axioms TheoremB.en_coeff_eq
+#print axioms TheoremB.ens_coeff_eq
+#print axioms TheoremB.integral_le_of_bound
+#print axioms TheoremB.en_coeff_le_of_bound
+#print axioms TheoremB.ens_coeff_le_of_bound
+#print axioms TheoremB.classFlow_budget
+#print axioms TheoremB.summable_flow

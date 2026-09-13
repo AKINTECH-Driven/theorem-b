@@ -1704,3 +1704,52 @@ re-checks byte-identity of every W3a statement against §4a of this file with `t
 proof and pin with a double-import instance test and an independent gate run) before the commit; no tag.
 
 BUILD LOG (the planning commit carries none).
+
+13 Sep 2026, Tier 9c wave W3a BUILT: `TheoremB/SliceExtract.lean` (517 lines, instances `se_*`, imports
+`TheoremB.DatumBridge` and `TheoremB.Galilean`), `TheoremB/ConvectionCoeff.lean` (382 lines, `cc_*`, imports
+`TheoremB.DatumBridge`) and `TheoremB/ClassParseval.lean` (422 lines, `cp_*`, imports `TheoremB.SliceExtract`
+only: ConvectionCoeff was not needed, the build confirmed it): the 30 frozen W3a declarations of §4a (16 + 6 + 8
+theorems) byte-identical, checked by the builder, both readers and the orchestrator with
+`tools/byte_identity.py` (16/16, 6/6, 8/8; bounds 519-598, 599-644, 645-701 at the planning commit, unchanged by
+this entry, which sits below every block); every proof closed with the final probe's own proof
+(`design/final/Tier9cFinal.lean` sections A, B, C, cut at the probe's own markers, lines 64-434, 437-692,
+695-982); no sibling added, no spec drift, no earlier Lean file edited, no private lemma cloned, no file-level
+`maxHeartbeats`; registered in `TheoremB.lean` and `AxiomCheck.lean` (3 import lines each after `import
+TheoremB.CommunityData`; 30 ledger lines, the first 30 audit lines of the probe verbatim, so the SliceExtract
+block's ledger order is the probe's audit order rather than the file's declaration order, same set). Gate GREEN
+421/421 (builder, both readers independently, orchestrator twice: before and after the comment-only edits below;
+counted on the bracket pattern after joining wrapped lines; the quote-delimited regex reads 415 because six
+ledger names now end in a prime, the five older ones plus `contDiff_space_slice'`; every entry exactly
+`[propext, Classical.choice, Quot.sound]`; no `sorryAx`). Two independent readers BEFORE the commit: reader A
+(statement shape and vacuity) 0 blockers, 0 majors, 6 minors, with seventeen compiled probe theorems in
+`build-w3a/reader-shape/ShapeW3a.lean` (exit 0, 0 sorry, all on the standard triple): the Laplacian coefficient
+I7 computed on the shear datum by an independent route agrees with the frozen theorem at every mode (the value
+`−(2π)² · ccVec ε` at the mode `ccpe1`, `0` at the mode `0`); the frozen budget shape (`∃ E Z` before
+`∀ t ∈ Icc 0 T`) is the strong one, the pointwise shape being provable for every `v`; the periodicity
+hypothesis of the time-derivative slice fact is load-bearing (the jointly smooth non-periodic field
+`(x, t) ↦ t • x` has the non-periodic derivative slice `x ↦ x`); `en` and `ens` of the shear read `2ε²` through
+the frozen Parseval equalities; the shear's convection coefficient VANISHES on both sides of I10 (recorded
+honestly) while a two-mode field has a nonzero one, so I10 is not `0 = 0` in general; `C := 0` cannot discharge
+the velocity bound on the shear member; `norm_rep_le`'s `2` is slack (`√3` sharp, statement-neutral). Reader B
+(proof and pin) CLEAN with 3 minors, an independent gate run (421, both counts documented), the three
+minimal-import probes (each module imports exactly what §1a says), the double-import test
+(`build-w3a/reader-proof/DoubleImport.lean`: ClassParseval with ConvectionCoeff, CommunityData, ContinuousRep,
+FourierDeriv, CoeffExtract and DatumBridge plus a downstream named instance triple and one elaborated torus
+integral, exit 0; and `DoubleImportNoInst.lean`: the local instances do not leak into an importer), every
+Mathlib and tree name of the read proofs found at the pin, I7 RE-PROVED by a second route
+(`build-w3a/reader-proof/ReproveI7.lean`: `laplacian_eq_sum_second`, `fderiv_right` and `clm_apply`, the
+first-order bridge applied twice per direction; standard three axioms), and both constant ledgers (I7:
+`∑ i (2πi nᵢ)² = −(2π)²‖freq n‖²`; I10: the `−2π` against `convection_classical`'s `−(2π)` at
+Nonlinearity.lean:296) re-derived by hand in its report. The minors (the headers' capstone pointer named neither
+the same datum nor `0 < ν'`; a recon-era "modulo the P1 interface" on `classFlow_budget` and its section heading
+although SliceExtract discharges the interface; "the torus L² norm" where the statements carry the integral of
+the squared norm; two probe labels P3/P4 in docstrings) were fixed by the orchestrator with comment-only edits
+before the commit (`build-w3a/orchestrator-final/`, the gate re-run after them: GREEN 421/421); the unused `hT`
+binders of `classFlow_budget` and `summable_flow_clock` stay as D6 says (two linter warnings, the only ones of
+the three modules). Recorded facts: (1) the three local measure instance triples are NAMED and sit inside
+`noncomputable section`; the tree's global `AddCircle.measureSpace 1` answers `#synth` in an importer, so
+nothing leaks; (2) the probe's `-- SECTION` markers are dropped and its `/-! # A. W3a : … (P1) -/` headings kept
+(provenance); (3) several frozen statements stand on single lines longer than 100 characters because the recon
+brief stated the interface on one line and the fences were extracted from the probe verbatim (frozen text, not
+re-wrapped); (4) disk 5.6 GiB before and after. No tag (ladder §5). Workflow `wf_fba1e9f2-1e9`; records under
+`audit-tier9c/build-w3a/`.

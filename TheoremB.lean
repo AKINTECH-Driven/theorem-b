@@ -62,3 +62,6 @@ import TheoremB.Descent
 import TheoremB.DatumBridge
 import TheoremB.Galilean
 import TheoremB.CommunityData
+import TheoremB.SliceExtract
+import TheoremB.ConvectionCoeff
+import TheoremB.ClassParseval
