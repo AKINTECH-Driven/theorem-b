@@ -648,6 +648,124 @@ listed under "Related machine-checked work" (leray-hopf, HeliCorgi,
 Miller, OpenAI, Alpöge-Buckmaster); none of it is composed with,
 reproduced by, or superseded by anything here.
 
+## Tier 9: the community's statement shape over real-space data
+
+UPDATE (Tier 9, 13 Sep 2026; PROPOSED WORDING, the user's call, per rule 6
+of the Tier 9 blueprint's audit register, `context/rung11-tier9-blueprint.md`
+section 7): Tier 8b inhabited OUR COPY of the community's periodic solution
+class for data of the form `u₀Real c₀`, a coefficient field in the
+campaign's small class. Tier 9 quantifies over the community's own data:
+every `u₀ : ℝ³ → ℝ³` in `InitialVelocityConditionPeriodic` (`C^∞`,
+one-periodic, divergence-free), under a smallness hypothesis on the
+MEAN-FREE part of its coefficient field. 391 audited declarations at the
+tag `t9-complete` (339 at `t9-datum-bridge-green`), every one on exactly
+`{propext, Classical.choice, Quot.sound}`, none on `sorryAx`. Files
+`TheoremB/Descent.lean`, `DatumBridge.lean`, `Galilean.lean`,
+`CommunityData.lean`. If this section is adopted, the short form's "294
+audited declarations" becomes 391 and its "Tier 8b" becomes "Tiers 8b
+and 9".
+
+The proposed sentence: for every datum in the community's own periodic
+initial-velocity condition whose mean-free coefficient part is small in
+the sense `κ · en (meanFree (coeff u₀)) · ens (meanFree (coeff u₀)) <
+(2πν')⁴`, OUR copy of the community's periodic solution class
+`NavierStokesExistenceAndSmoothnessPeriodic ν' u₀ 0 v p` is inhabited
+(compiled, `theorem_B_community_periodic_data`); this is the conclusion of
+the upstream positive statement
+`navier_stokes_existence_and_smoothness_periodic` under that smallness
+hypothesis with `f = 0`; nothing about general data, nothing about the
+breakdown statement `navier_stokes_breakdown_periodic`; both upstream
+statements are untouched; existence only; the Fourier inversion and the
+Galilean invariance are textbook.
+
+What is proved, one line per wave:
+
+- **The datum bridge** (`datum_bridge`, wave W1, `Descent.lean` and
+  `DatumBridge.lean`): the descent of a one-periodic field to the unit
+  3-torus (through the `[0,1)³` representative; `fiber` is an open
+  quotient map, so continuity transfers), the coefficient field `coeff u₀`
+  (the Fourier coefficients of the descent of each component), the
+  derivative-to-frequency identity at every order (the tree's
+  `mFourierCoeff_deriv` fed by a fiber-slice brick), hence rapid decay and
+  summability at every Sobolev level, reality, divergence-freeness, the
+  round trip `coeff (u₀Real c) = c`, and the inversion
+  `u₀Real (coeff u₀) = u₀` (Mathlib's pointwise inversion for continuous
+  torus functions with summable coefficients at the pin). Textbook.
+- **The mean** (wave W2, `Galilean.lean` and `CommunityData.lean`): the
+  community's condition does not impose a zero mean while the campaign's
+  small class needs one; the mean is removed by the Galilean change
+  `v(x, τ) = m + w(x − τm, τ)`, `p(x, τ) = q(x − τm, τ)`, proved as a
+  class-level fact (`galilean_class`: membership of OUR COPY of the class
+  transfers, for every `m` and every real `ν'`; Mathlib and the community
+  definitions only; the joint within-derivative on the closed slab is
+  decomposed through one `HasFDerivWithinAt` of the uncurried field). The
+  capstone feeds the mean-free part to `theorem_B_community_periodic` and
+  boosts the result; the witness-exposing sibling
+  `theorem_B_community_periodic_data_flow` exhibits the pair
+  `(galV m (vReal c), galP m (pReal c))` with the coefficient flow `c`
+  carrying the seven clauses that supply `theorem_B_unique`'s hypotheses;
+  the corollary `theorem_B_community_periodic_of_data` re-derives the
+  Tier 8b conclusion (its statement already follows from Tier 8b; its
+  value is the route, which opens with the Tier 9 capstone).
+- **The register** (`T9Probe`, sixteen gated probes): the constant datum
+  `u₀ = m` is in the class and satisfies the smallness hypothesis for every
+  `ν' > 0` (its mean-free part is `0`; at `ν' = 0` the hypothesis reads
+  `0 < 0`), so it is handled by the boost, not excluded; the rest state is
+  the case `m = 0`; the shear datum is nonzero, non-constant, in the class
+  and small, the capstone fires on it and both trivial candidates (the rest
+  velocity, the time-constant velocity) fail for every pressure; the
+  smallness hypothesis is restrictive on the class (a large shear fails
+  it), so the capstone says nothing about general data; the mean enters no
+  hypothesis (compiled as an equivalence on the shear datum,
+  `capstone_hyp_shifted_iff`, and as the general fact `coeff_const_add`, not
+  prose); `coeff` of a
+  non-periodic field is a well-typed junk object and the inversion fails
+  for the identity map, so the class hypothesis is load-bearing.
+
+What changes against Tier 8b: the datum, and nothing else. The
+constant `κ` is that of Tier 8b, of explicit form and exported as a
+compiled existential; the decay constants of the datum bridge are
+untracked existentials produced by `choose`.
+
+Not claimed: uniqueness inside the community class in real-space
+vocabulary (two members of the class with the same datum agree). It is
+sized in the blueprint (about 1300 lines, six to eight sessions, medium
+risk, the hardest step being differentiation under the integral with the
+time-derivative slice extracted from `ContDiffOn` on the closed half-slab)
+and deferred; its two statements are frozen as candidates only and are
+not in the tree. Nothing about the positive statement for general data;
+nothing about the breakdown statement; nothing about forced data;
+no analyticity; no numeric constant.
+
+Textbook sources, named as references and not verified against, chapter
+numbers unverified: for the Fourier inversion of smooth periodic functions
+and the rapid decay of their coefficients, any text on Fourier series on
+the torus (Grafakos, Classical Fourier Analysis, the chapter on the
+torus); for the Galilean invariance, the opening chapter of any of the
+Navier-Stokes texts named under Tier 8b.
+
+Verification of the tier: a reconnaissance fleet of six probes compiled at
+the pin before any design (the descent, the Galilean class transfer and
+the whole vacuity register were already proved there), one design and two
+adversarial critiques of the blueprint (statement shape and feasibility,
+zero blockers and zero majors each), a final planning probe proving the
+whole tier before any build, and per wave one builder and two independent
+adversarial readers before the commit (statement shape and vacuity with
+compiled probes; proof and pin with an independent gate run, a
+double-import instance test, and re-proofs of the inversion and of the
+Galilean transfer by other routes). Every frozen statement was checked
+byte-identical to the blueprint by the builder, both readers and the
+orchestrator. Gate GREEN 339/339 at W1 and 391/391 at W2. The four new
+modules were replayed through the toolchain's `leanchecker` at
+`t9-complete` (exit 0, empty output; record in
+`context/leanchecker-replay-2026-09-13-tier9.md`).
+
+Priority is not claimed for anything in this tier; nothing here is new
+mathematics. The machine-checked Navier-Stokes work it sits beside is
+listed under "Related machine-checked work" (leray-hopf, HeliCorgi,
+Miller, OpenAI, Alpöge-Buckmaster); none of it is composed with,
+reproduced by, or superseded by anything here.
+
 ## Scope, verification, and tags
 
 What is STILL not claimed, precisely:
@@ -670,7 +788,8 @@ What is STILL not claimed, precisely:
   for); nothing two-sided is claimed at the endpoint.
 
 Verification discipline: a deterministic gate accepts the build only if
-`#print axioms` for all 294 audited declarations reports at most
+`#print axioms` for all 294 audited declarations (391 at `t9-complete`,
+13 Sep 2026) reports at most
 `propext, Classical.choice, Quot.sound` and no `sorryAx`; statements
 frozen at declaration, every strengthening landing as a new sibling with
 the frozen statement re-verified byte-identical. Independent adversarial
@@ -681,7 +800,9 @@ their builders at tag time and independently audited post-tag on
 passed two independent adversarial readers before its commit, with the
 probes persisted outside the tree and the essential ones compiled in
 `ForcedProbe.lean`; Tier 8b kept that rule for every wave W1 to W4, with a
-reconnaissance probe compiled before each build. The audits drew blood at
+reconnaissance probe compiled before each build; Tier 9 (13 Sep 2026) kept
+it for both of its waves, with a compiled reconnaissance fleet and two
+adversarial critiques of the blueprint before any build. The audits drew blood at
 every stage, by design: M4 (a
 pressureless-class scoping, answered in-wave with the Leray layer);
 Tier 3 (the capstone discarding its own summability certificates — the
@@ -706,7 +827,10 @@ fixes; `t7-bandwidth-green` re-laid on the corrected statement) →
 adds `ForcedProbe.lean`) → `t8b-time-smooth-green` →
 `t8b-joint-smooth-green` → `t8b-community-green` (9 to 10 Sep 2026:
 Tier 8b, time-smoothness, joint smoothness on the closed slab, and the
-community class inhabited at `f = 0`). Priority, in its
+community class inhabited at `f = 0`) → `t9-datum-bridge-green` →
+`t9-complete` (13 Sep 2026: Tier 9, the community's statement shape over
+real-space data, under a smallness hypothesis on the mean-free part of
+the datum). Priority, in its
 only defensible form: to our knowledge (reconnaissance 26 Aug to 2 Sep
 2026) the first kernel-checked small-data GLOBAL well-posedness — strong
 class, unique in the bounded-enstrophy class on every finite horizon —
