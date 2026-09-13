@@ -1620,6 +1620,12 @@ the changes of the two critics and their disposition are listed in item 12 (none
    neighbours are HeliCorgi's local mild uniqueness on `ℝ³` and uda-lab/leray-hopf; nothing here is new
    mathematics." Whether to name the neighbours in the sentence itself or in the surrounding paragraph is the
    user's call.
+   ADOPTED (13 Sep 2026, after the addendum W3d): the user adopted the announcement's Tier 9c section as
+   written; the short form now reads 484 audited declarations, "Tiers 8b, 9 and 9c" and the uniqueness clause
+   (for the same datum and `0 < ν'`, the velocity unique on `t ≥ 0`, the pressure unique up to a function of
+   time); the neighbours stay in the section's paragraph. The `CommunityUnique.lean` header still quotes the
+   sentence as proposed wording; that note is superseded by the adoption and is NOT struck (built files are not
+   edited for prose, the house rule since Tier 8b W1).
 4. **Shipping the injectivity lemmas** (D3). DECIDED: `eq_of_mFourierCoeff_eq`, `eq_of_coeff_eq`,
    `eq_of_coeff_eq'` frozen and registered in `CommunityUnique.lean` (three ledger lines; the handoff asked for
    the former). User's call: drop `eq_of_coeff_eq'` (the second proof) to save a line; not recommended (it is
@@ -1640,6 +1646,12 @@ the changes of the two critics and their disposition are listed in item 12 (none
    theorem numbers** (rung11 §8 item 7), **the upstream hash and the upstream statement name in the
    announcement** (rung11 §8 item 5, carried from rung10 §8 item 1 and the Tier 8b handoff): carried,
    unchanged, still the user's call; W3 adds the uniqueness chapter references (§7) with the same hedge.
+   UPDATE (13 Sep 2026, the user's decision "go with 2"): the smallness sibling is BUILT (§9, D24,
+   `theorem_B_community_periodic_data_ens`); trailer uniformity is CLOSED, not done (§9, D25); the textbook
+   theorem numbers are checked online and the verified ones entered in the announcement (§9, D26); the upstream
+   hash and the two statement names are verified and quoted in the announcement and the README (§9, D27). The
+   MUST-HOLD for a datum with a nonzero mean (item 7) is BUILT (§9, D22, `classFlow_galV_vReal` and its Tier 9
+   instance).
 9. **`vel_tsum_apply`** (P3) is shipped unconsumed (kept verbatim as the measured component-extraction form).
    User's call: drop it; cost nil either way.
 10. **Docstrings.** Every frozen declaration of `Tier9cFinal.lean` carries one (D18 closed the design's §8

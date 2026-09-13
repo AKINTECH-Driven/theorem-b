@@ -1,4 +1,4 @@
-# Kernel replay through the toolchain's `leanchecker`: the five Tier 9c modules (13 Sep 2026)
+# Kernel replay through the toolchain's `leanchecker`: the five Tier 9c modules and the addendum module (13 Sep 2026)
 
 Run at the wave commits of Tier 9c, toolchain `leanprover/lean4:v4.31.0-rc2`, checker
 `~/.elan/toolchains/leanprover--lean4---v4.31.0-rc2/bin/leanchecker` (the binary that ships
@@ -15,14 +15,15 @@ module; each run was made after the module's commit, while the following wave wa
 | `TheoremB.ClassParseval` | W3a, `2ea0d9c` | 0 | 18 | 0 |
 | `TheoremB.ClassFlowODE` | W3b, `43a0b29` | 0 | 22 | 0 |
 | `TheoremB.CommunityUnique` | W3c, `68e12d2` (tag `t9-unique-green`) | 0 | 125 | 0 |
+| `TheoremB.GeneralMean` | addendum W3d, `b402d9a` | 0 | 68 | 0 |
 
 What this establishes: every declaration of the five modules added by Tier 9c (waves W3a,
-W3b and W3c) is re-checked by the Lean kernel, through the toolchain's own checker, from the
+W3b and W3c) and of the addendum module `GeneralMean` (W3d, replayed after its commit `b402d9a`) is re-checked by the Lean kernel, through the toolchain's own checker, from the
 environment provided by the modules they import. Those imports are the 60 modules replayed
 on 12 Sep 2026 at `5dfce7a` and the four Tier 9 modules replayed on 13 Sep 2026 at
 `332790f`; no Lean file of the tree other than the five new ones and the two registration
 files (`TheoremB.lean`, `AxiomCheck.lean`, import and `#print axioms` lines only) changed
-between `332790f` and `68e12d2`, so the earlier replays of the imports stand. The wall times
+between `332790f` and `b402d9a`, so the earlier replays of the imports stand. The wall times
 differ from the Tier 9 record (5 s per module there) because a wave build was running
 alongside each replay and `CommunityUnique` is the largest of the five; a bogus module name
 makes the checker exit 1 (checked again in this run; `bogus-module-check.log` in the session

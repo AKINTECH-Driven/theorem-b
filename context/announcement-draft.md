@@ -14,7 +14,9 @@ existence-and-trapping theorem through uniqueness to a **classical,
 pointwise** solution, jointly smooth on the closed slab `ℝ³ × [0, ∞)` and,
 at `f = 0`, for every datum in the community's own periodic initial-velocity
 condition whose mean-free part is small, inhabiting our copy of the
-community's periodic solution class (Tiers 8b and 9): 391 audited
+community's periodic solution class, in which, for the same datum and
+`0 < ν'`, the velocity is unique on `t ≥ 0` and the pressure unique up to a
+function of time (Tiers 8b, 9 and 9c): 484 audited
 declarations (the axiom ledger:
 theorems, one definition, and the compiled non-vacuity probes), every one
 on exactly `{propext, Classical.choice, Quot.sound}`, none on `sorryAx`.
@@ -601,6 +603,8 @@ What is proved, one line per wave:
   first seven clauses of the pinned form. The real-part bridge and the
   clock change are textbook.
 
+The community class copied into `TheoremB.Community` is taken from the Navier-Stokes file of google-deepmind/formal-conjectures, whose last content change on the default branch is commit b9fc95eb75b048b195f3d01af4315ad3437ab157 of 11 September 2026 (the file was moved without any content change by commit bc1d2bc0df6edcbc6bfa43d0b4b1018ccdbdb627 on 12 September 2026, and the default-branch head read on 13 September 2026 was 5ba2dbfc100a82e12207a9d8e75a3b8782a0ed5c); that file carries the positive statement `navier_stokes_existence_and_smoothness_periodic` and the breakdown statement `navier_stokes_breakdown_periodic`, both names verified verbatim against the fetched file on 13 September 2026. Declaration by declaration, with comments and docstrings stripped, our copy of the two definitions and six structures is byte-identical to the fetched file except in the namespace (`NavierStokes` upstream, `TheoremB.Community` here) and the divergence notation (a global `@[inherit_doc] notation "∇⬝"` upstream, a `local notation` here); the upstream file is not imported into the gated tree, and both upstream placeholder proofs, the `sorry` bodies of `navier_stokes_existence_and_smoothness_periodic` and `navier_stokes_breakdown_periodic`, are untouched by us.
+
 What this does and does not say about the upstream file. The upstream
 file carries two statements, both `sorry`: the positive statement
 `navier_stokes_existence_and_smoothness_periodic` (for every `ν > 0` and
@@ -630,11 +634,7 @@ time-derivative chain and the majorants of the slab lemma are untracked
 existentials produced by the Leibniz induction. No numeric value of any
 constant is claimed.
 
-Textbook sources for the bootstrap and the M-test, named as references and
-not verified against, chapter numbers unverified: Temam, Navier-Stokes
-Equations, Ch. III; Robinson-Rodrigo-Sadowski, The Three-Dimensional
-Navier-Stokes Equations, Ch. 6-7; Constantin-Foias, Navier-Stokes
-Equations, Ch. 10.
+Textbook sources for the bootstrap and the M-test, named as references and not verified against the books themselves; the chapter, section and theorem numbers below were checked on 13 Sep 2026 against publisher tables of contents and Google Books previews (record: audit-tier9c/w3d/textbook/report.md in the session directory), and anything not seen there stays hedged as before: Temam, Navier-Stokes Equations: Theory and Numerical Analysis (AMS Chelsea 2001), Ch. III (The Evolution Navier-Stokes Equations), section 3 (Existence and uniqueness theorems, n at most 4), Theorem 3.4, p. 201 (for n = 3 at most one solution of the weak problem in a smaller class than the existence class; the subsection titles unverified); Robinson, Rodrigo and Sadowski, The Three-Dimensional Navier-Stokes Equations (CUP 2016), Ch. 6 (Existence of strong solutions: Theorem 6.8, local existence, pp. 133-134; section 6.3 and Theorem 6.10, weak-strong uniqueness, p. 137) and Ch. 7 (Regularity of strong solutions: Theorems 7.1 and 7.3, pp. 149 and 151, the bootstrap to smoothness in the space variables); Constantin and Foias, Navier-Stokes Equations (Chicago 1988), Ch. 9 (Strong Solutions; chapter title only) and Ch. 10 (Further Results Concerning Weak and Strong Solutions: Theorem 10.2, p. 84, uniqueness of a strong solution inside the larger class of weak solutions; the dimension in the statement not legible in the preview). No number for the M-test was sought.
 
 Verification of the tier: every wave W1 to W4 passed two independent
 adversarial readers BEFORE its commit (statement shape and vacuity; proof
@@ -743,12 +743,7 @@ uniqueness half was built the same day as Tier 9c (the section below,
 PROPOSED wording); its two statements are now frozen in the tree, byte-identical
 to the candidates.]
 
-Textbook sources, named as references and not verified against, chapter
-numbers unverified: for the Fourier inversion of smooth periodic functions
-and the rapid decay of their coefficients, any text on Fourier series on
-the torus (Grafakos, Classical Fourier Analysis, the chapter on the
-torus); for the Galilean invariance, the opening chapter of any of the
-Navier-Stokes texts named under Tier 8b.
+Textbook sources, named as references and not verified against the books themselves; the numbers below were checked on 13 Sep 2026 against a library table-of-contents scan and Google Books previews (record as under Tier 8b), and anything not seen there stays hedged as before: for the Fourier inversion of periodic functions with absolutely summable coefficients and the rapid decay of the coefficients of smooth functions, Grafakos, Classical Fourier Analysis (3rd ed., Springer GTM 249, 2014), Ch. 3 (Fourier Series), section 3.2.1 (Partial sums and Fourier inversion), Proposition 3.2.5 (Fourier inversion, p. 185), and section 3.3.2 (Decay of Fourier Coefficients of Smooth Functions, p. 195), Theorem 3.3.9 with Corollary 3.3.10 (pp. 196-197, decay for a function whose derivatives up to order s are integrable); for the Galilean invariance, Majda and Bertozzi, Vorticity and Incompressible Flow (CUP 2001), Ch. 1, section 1.2 (symmetry groups of the Euler and the Navier-Stokes equations), Proposition 1.1, p. 3 (the transformation v(x - ct, t) + c; cited on p. 8 as Galilean invariance); the opening chapter of any of the Navier-Stokes texts named under Tier 8b also states it, chapter numbers unverified.
 
 Verification of the tier: a reconnaissance fleet of six probes compiled at
 the pin before any design (the descent, the Galilean class transfer and
@@ -774,19 +769,22 @@ reproduced by, or superseded by anything here.
 
 ## Tier 9c: uniqueness inside our copy of the community class at f = 0
 
-UPDATE (Tier 9c, 13 Sep 2026; PROPOSED WORDING, the user's call, per rules 12
-to 14 of the Tier 9c blueprint's audit register,
-`context/rung12-tier9c-blueprint.md` section 7; the short form is NOT
-rewritten until this section is adopted): Tier 9 delivered existence in OUR
+UPDATE (Tier 9c, 13 Sep 2026; ADOPTED by the user on 13 Sep 2026 as written,
+per rules 12 to 14 of the Tier 9c blueprint's audit register,
+`context/rung12-tier9c-blueprint.md` section 7; the short form now reads 484
+audited declarations, "Tiers 8b, 9 and 9c" and the uniqueness clause): Tier 9 delivered existence in OUR
 COPY of the community's periodic solution class over the community's own
 data. Tier 9c closes the other direction inside that class: every member at
 `f = 0` has a coefficient flow in `theorem_B_unique`'s class, so two members
 with the same datum have the same velocity, and pressures that differ by a
 function of time. 474 audited declarations at the tag `t9-unique-green` (421
-at W3a, 444 at W3b), every one on exactly `{propext, Classical.choice,
-Quot.sound}`, none on `sorryAx`. Files `TheoremB/SliceExtract.lean`,
-`ConvectionCoeff.lean`, `ClassParseval.lean`, `ClassFlowODE.lean`,
-`CommunityUnique.lean`.
+at W3a, 444 at W3b) and 484 at the post-tag addendum W3d (commit `b402d9a`:
+the general-mean consistency identity for the boosted witness, its Tier 9 and
+constant-datum instances, and the smallness sibling spelled `ens (coeff u₀)`),
+every one on exactly `{propext, Classical.choice, Quot.sound}`, none on
+`sorryAx`. Files `TheoremB/SliceExtract.lean`, `ConvectionCoeff.lean`,
+`ClassParseval.lean`, `ClassFlowODE.lean`, `CommunityUnique.lean`,
+`GeneralMean.lean`.
 
 The proposed sentence: inside OUR COPY of the community's periodic solution
 class `NavierStokesExistenceAndSmoothnessPeriodic ν' u₀ 0 v p` with `0 < ν'`
@@ -801,11 +799,11 @@ breakdown statement `navier_stokes_breakdown_periodic`; the positive
 statement `navier_stokes_existence_and_smoothness_periodic` and the
 breakdown statement are both untouched; the neighbours are HeliCorgi's
 local mild uniqueness on `ℝ³` and uda-lab/leray-hopf; nothing here is new
-mathematics. With this section adopted, the short form would read 474
-audited declarations, "Tiers 8b, 9 and 9c", and gain, after "inhabiting our
-copy of the community's periodic solution class", the clause "in which, for
-the same datum, the velocity is unique on `t ≥ 0` and the pressure unique up
-to a function of time".
+mathematics. With this section adopted, the short form reads 484 audited
+declarations, "Tiers 8b, 9 and 9c", and carries, after "inhabiting our copy
+of the community's periodic solution class", the clause "in which, for the
+same datum and `0 < ν'`, the velocity is unique on `t ≥ 0` and the pressure
+unique up to a function of time".
 
 What is proved, one line per wave:
 
@@ -857,8 +855,16 @@ What is proved, one line per wave:
   equal; the class is inhabited for every real `ν'` (so `0 < ν'` is consumed
   by `theorem_B_unique`, not implied by membership; nothing is claimed at
   `ν' ≤ 0`); the coefficient flow of a non-member is a well-typed junk object;
-  the consistency with Tier 9's flow sibling holds for a mean-free datum (the
-  general-mean identity is not compiled and not claimed).
+  the consistency with Tier 9's flow sibling holds for a mean-free datum, and
+  (the post-tag addendum W3d, `GeneralMean.lean`) for a datum of arbitrary
+  mean the boosted witness's coefficient flow is the phase-twisted mean-free
+  flow plus the zero mode, `classFlow (galV m (vReal c)) t k = zeroMode m k +
+  mFourier (-k) (fiber ((t/(2π)) • m)) • c t k`, the coefficient of a
+  translated periodic field carrying the phase `e^{-2πi k·a}`; on the constant
+  datum the flow from the zero datum is the zero flow; the smallness sibling
+  `theorem_B_community_periodic_data_ens` spells the hypothesis with
+  `ens (coeff u₀)` (the two spellings are equivalent, `ens` being insensitive
+  to the mean; the mean-free spelling stays the primary one).
 
 What changes against Tier 9: nothing on the existence side; the Tier 9
 capstones keep their "existence only" wording (their files are frozen) and
@@ -872,12 +878,7 @@ COPY of the class at `f = 0` for the same datum and `0 < ν'`; nothing at
 the class (non-smooth solutions, weak solutions); nothing about the
 breakdown statement; no analyticity; no numeric constant.
 
-Textbook sources, named as references and not verified against, chapter
-numbers unverified: the energy-method uniqueness in the enstrophy class in
-the Navier-Stokes texts named under Tier 8b (Temam; Robinson, Rodrigo and
-Sadowski; Constantin and Foias); for the product formula for Fourier
-coefficients and differentiation under the integral, any text on Fourier
-series on the torus and any analysis text.
+Textbook sources, named as references and not verified against the books themselves; the numbers below were checked on 13 Sep 2026 against publisher tables of contents, Google Books previews and lecture notes quoting the book (record as under Tier 8b), and anything not seen there stays hedged as before: the energy-method uniqueness in the enstrophy class, the textbook counterpart of our statement (uniqueness inside OUR COPY of the community class at f = 0, for the same datum and 0 < ν'; the pressure unique up to a function of time), in Temam, Ch. III, Theorem 3.4, p. 201 (n = 3, at most one solution of the weak problem in the smaller class (3.75)-(3.76)); Robinson, Rodrigo and Sadowski, Ch. 6, section 6.3, Theorem 6.10 (Weak-strong uniqueness, p. 137); Constantin and Foias, Ch. 10, Theorem 10.2, p. 84 (dimension in the statement not legible in the preview); Foias, Manley, Rosa and Temam, Navier-Stokes Equations and Turbulence (CUP 2001), Ch. II, section 7 (from p. 55; section title unverified), Theorem 7.2 (Local Existence and Uniqueness of Strong Solutions in Three Dimensions, p. 57); for differentiation under the integral, Folland, Real Analysis: Modern Techniques and Their Applications (2nd ed., Wiley 1999), Theorem 2.27 (interchange of an integral with a derivative under an integrable dominating function; number and content seen in lecture notes and a citing paper, not on the book's page); for the product formula for Fourier coefficients, any text on Fourier series on the torus (Grafakos, 3rd ed., Ch. 3, section 3.1.2, Proposition 3.1.2, p. 176, collects the elementary properties of the coefficients of L1 functions; which item carries the product identity was not seen, so this reference stays hedged).
 
 Verification of the tier: a reconnaissance fleet of eight probes compiled
 at the pin before any design (the whole interface was already proved there,

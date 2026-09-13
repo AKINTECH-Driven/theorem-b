@@ -43,11 +43,11 @@ and prints `#print axioms` for every audited declaration. It passes if and only 
 line reports at most `propext`, `Classical.choice`, `Quot.sound` and no `sorryAx`. The
 script reports; it never repairs.
 
-Expected result: the final line `GATE: GREEN`, preceded by the output of the 474
+Expected result: the final line `GATE: GREEN`, preceded by the output of the 484
 `#print axioms` commands in `AxiomCheck.lean` (theorems, one definition, and the
 compiled non-vacuity probes), each on exactly the three kernel axioms. Any other outcome
 is `GATE: RED` with exit status 1. In the campaign notes this state is written
-"GREEN 474/474"; it was recorded on 13 Sep 2026 at the Tier 9c wave W3c state, the gate
+"GREEN 484/484"; it was recorded on 13 Sep 2026 at the Tier 9c addendum W3d state, the gate
 having read 186/186 at `82a9ab6` (tag `t7-audited-green`, 2 Sep 2026), grown by one
 Tier 8a wave at a time (190, 199, 208, 215, 217, 226 at `2a4036b`, tag `t8a-complete`),
 by the Tier 8b wave W1 (22 frozen theorems and 3 chain-pinning probes, 251 at `0efba80`,
@@ -58,8 +58,10 @@ theorems and 7 capstone-level probes, 294 at `d59ddcd`, tag `t8b-community-green
 Tier 9 wave W1 (45 frozen theorems, 339 at `ffb8406`, tag `t9-datum-bridge-green`), and by
 the Tier 9 wave W2 (36 frozen theorems and 16 register probes, 391 at `332790f`, tag
 `t9-complete`), by the Tier 9c wave W3a (30 frozen theorems, 421 at `2ea0d9c`), by the
-Tier 9c wave W3b (23 frozen theorems, 444 at `43a0b29`), and by the Tier 9c wave W3c (15
-frozen theorems and 15 register probes, 474 at `68e12d2`, tag `t9-unique-green`).
+Tier 9c wave W3b (23 frozen theorems, 444 at `43a0b29`), by the Tier 9c wave W3c (15
+frozen theorems and 15 register probes, 474 at `68e12d2`, tag `t9-unique-green`), and by
+the Tier 9c post-tag addendum W3d (7 frozen theorems and 3 register probes, 484 at
+`b402d9a`).
 
 ## Capstone theorems
 
@@ -82,7 +84,7 @@ coefficient field is `(Fin 3 → ℤ) → Vel`, `freq k` is the raw lattice vect
 | `theorem_B_smooth_classical_eq` | `TheoremB/ClassicalEquation.lean` | The same flow, all nineteen clauses re-exported, satisfies at every component `j`, torus point `x`, and `t > 0`, as one `HasDerivAt` in time: `∂ₜu_j = (ν/(2π)²)(Σᵢ ∂ᵢ²u)_j − (1/2π)(Σᵢ uᵢ ∂ᵢu_j) − ∂_j p`, each piece spelled out in full. |
 | `theorem_B_time_smooth` | `TheoremB/TimeSmooth.lean` | The same flow, all twenty clauses of `theorem_B_smooth_classical_eq` re-exported verbatim, plus (clause 21) a derivative chain `D` with `D 0 = c`, the Leibniz recurrence `D (n+1) = −ν‖k‖²·D n + P_k (S n)` with `S n = Σ_{i+j=n} C(n,i)·convBil (D i) (D j)` exported alongside, each `D n` differentiating to `D (n+1)` on `t > 0`, with the right derivative `D (n+1) 0` within `Ici 0`, continuous on `Ici 0`, and in every weighted-ℓ¹ window class at every order (the same for `S n`); and (clause 22) every mode `t ↦ c t k` is `C^∞` in time on the CLOSED half-line `Ici 0`. Time only: joint smoothness in `(x, t)` is not claimed here. `∞` is `(⊤ : ℕ∞)`, not `ω`: no analyticity. |
 | `theorem_B_joint_smooth` | `TheoremB/JointSmooth.lean` | The same flow, all twenty-two clauses of `theorem_B_time_smooth` re-exported verbatim, plus (clause 23) the pressure coefficients have every weighted-ℓ¹ order at every `t ≥ 0`, (clause 24) for every component `j` the velocity lift `(x, t) ↦ uLift j (c t) x` is `C^∞` jointly in `(x, t)` on the CLOSED slab `ℝ³ × [0, ∞)` (`ContDiffOn ℝ ∞ … (univ ×ˢ Ici 0)`), and (clause 25) the pressure lift `(x, t) ↦ pLift (c t) x` is `C^∞` jointly on the same closed slab. The engine is the Mathlib-only within-convex tsum theory of `TheoremB/WithinSeries.lean` (absent from Mathlib at the pin, grep-verified, not new mathematics). `∞` is `(⊤ : ℕ∞)`, not `ω`: no analyticity. |
-| `theorem_B_community_periodic_flow` | `TheoremB/CommunityClass.lean` | The same flow, all twenty clauses of `theorem_B_smooth_classical_eq` re-exported verbatim, plus (clause 21): OUR COPY of the community's periodic solution class `NavierStokesExistenceAndSmoothnessPeriodic (ν/(2π)) (u₀Real c₀) 0 (vReal c) (pReal c)` is inhabited by this flow read back as a real velocity and pressure in the clock `τ = t/(2π)`, with the zero force. The six class definitions are copied into `TheoremB.Community` from the community wording (google-deepmind/formal-conjectures as adapted in OpenAI's Comparator file); the copy differs from the upstream file only in the namespace and the `local notation` for the divergence; the upstream file is not imported. |
+| `theorem_B_community_periodic_flow` | `TheoremB/CommunityClass.lean` | The same flow, all twenty clauses of `theorem_B_smooth_classical_eq` re-exported verbatim, plus (clause 21): OUR COPY of the community's periodic solution class `NavierStokesExistenceAndSmoothnessPeriodic (ν/(2π)) (u₀Real c₀) 0 (vReal c) (pReal c)` is inhabited by this flow read back as a real velocity and pressure in the clock `τ = t/(2π)`, with the zero force. The six class definitions are copied into `TheoremB.Community` from the community wording (google-deepmind/formal-conjectures as adapted in OpenAI's Comparator file); the copy differs from the upstream file only in the namespace and the `local notation` for the divergence; the upstream file is not imported. Verified again on 13 Sep 2026 against the file fetched from the default branch of google-deepmind/formal-conjectures (last content change commit `b9fc95eb75b048b195f3d01af4315ad3437ab157` of 11 Sep 2026; both statement names present; both upstream placeholder proofs still `sorry`): the two definitions and six structures are byte-identical with comments stripped, up to those two differences. |
 | `theorem_B_community_periodic` | `TheoremB/CommunityClass.lean` | The community's own shape: for every `ν' > 0` and every datum `u₀Real c₀` with `c₀` summable at every Sobolev level, mean-zero, real, divergence-free and `κ · en c₀ · ens c₀ < (2πν')⁴`, the datum meets `InitialVelocityConditionPeriodic`, the zero force meets `ForceConditionPeriodic`, and there exist `v`, `p` with `NavierStokesExistenceAndSmoothnessPeriodic ν' (u₀Real c₀) 0 v p`. This is exactly the conclusion of the upstream positive statement `navier_stokes_existence_and_smoothness_periodic` restricted to that data class at `f = 0`; it says nothing about the positive statement for general data and nothing about `navier_stokes_breakdown_periodic`; both upstream `sorry`s are untouched. Existence only: the class has no uniqueness clause (uniqueness of the coefficient flow behind `vReal c` is `theorem_B_unique`). The rest state is not a witness for nonzero data (probe), and the time-constant velocity is excluded on the shear datum (probe). |
 | `datum_bridge` | `TheoremB/DatumBridge.lean` | The datum bridge (Tier 9, wave W1): every `u₀ : ℝ³ → ℝ³` in the community's `InitialVelocityConditionPeriodic` (`C^∞`, one-periodic, divergence-free) has a coefficient field `coeff u₀` (the Fourier coefficients of the descent of each component to the unit 3-torus, `TheoremB/Descent.lean`) that is summable at every Sobolev level, real, divergence-free, and satisfies `u₀Real (coeff u₀) = u₀`: the pointwise Fourier inversion, from Mathlib's inversion for continuous torus functions with summable coefficients and the rapid decay of the coefficients of a smooth periodic function through `mFourierCoeff_deriv` at every order. Textbook; nothing here is new. |
 | `theorem_B_community_periodic_data` | `TheoremB/CommunityData.lean` | The community's own statement shape over REAL-SPACE data (Tier 9, wave W2): for every `ν' > 0` and every `u₀` in `InitialVelocityConditionPeriodic` with `κ · en (meanFree (coeff u₀)) · ens (meanFree (coeff u₀)) < (2πν')⁴` (the smallness is on the MEAN-FREE part of the datum's coefficient field; the mean vector enters no hypothesis), there exist `v`, `p` with `NavierStokesExistenceAndSmoothnessPeriodic ν' u₀ 0 v p` (OUR COPY of the class). The mean is removed by the Galilean change `v(x, τ) = m + w(x − τm, τ)` (`galilean_class`, `TheoremB/Galilean.lean`, a class-level fact proved from Mathlib and the community definitions only) and the mean-free part is fed to `theorem_B_community_periodic`. This is the conclusion of the upstream positive statement `navier_stokes_existence_and_smoothness_periodic` under that smallness hypothesis at `f = 0`; it says nothing about general data and nothing about `navier_stokes_breakdown_periodic`; both upstream `sorry`s are untouched. Existence only: the coefficient flow behind the witness is unique by `theorem_B_unique`, reached through the sibling below. The constant datum is handled by the boost, not excluded (register probe); the shear datum is nonzero, non-constant, small, and the capstone fires on it with both trivial candidates failing (register probes in `T9Probe`). |
@@ -136,8 +138,10 @@ comes from `pressureCoeff`.
   budgets; `ClassFlowODE`, wave W3b: the coefficient flow of a class member, the parametric
   integral, the calibration in reverse; `CommunityUnique`, wave W3c: the two capstones, the
   pressure siblings, the injectivity lemmas, the consistency corollaries and the `T9cProbe`
-  register).
-- `AxiomCheck.lean`: the audited-declaration ledger (474 `#print axioms` lines).
+  register; `GeneralMean`, the post-tag addendum W3d: the phase of a translated field's
+  coefficients, the general-mean consistency identity for the boosted witness, its Tier 9 and
+  constant-datum instances, and the smallness sibling spelled `ens (coeff u₀)`).
+- `AxiomCheck.lean`: the audited-declaration ledger (484 `#print axioms` lines).
 - `scripts/check_axioms.sh`: the gate.
 - `context/`: campaign blueprints (`rung*-blueprint.md`), the announcement draft, the
   upstreaming dossier, and the discrete-twin skeleton (`NSSkeleton.lean`).
@@ -392,6 +396,19 @@ on `ℝ³`. No mathematical priority is claimed for any layer, and none for the 
 - **Kernel replay of the Tier 9c modules, 13 Sep 2026.** The five new modules replayed
   through the toolchain's `leanchecker` (exit 0, empty output each; record in
   `context/leanchecker-replay-2026-09-13-tier9c.md`).
+- **Tier 9c post-tag addendum W3d, 13 Sep 2026.** `TheoremB/GeneralMean.lean`: the
+  coefficient of a translated one-periodic field carries the phase `mFourier (-k) (fiber a)`
+  (no continuity needed); the general-mean consistency identity, the boosted witness's
+  coefficient flow is `zeroMode m` plus the phase-twisted mean-free flow, under reality and
+  ℓ¹ at the time alone; its instance on the Tier 9 witness for a datum of arbitrary mean and
+  its constant-datum instance (the flow from the zero datum is the zero flow, through the
+  velocity capstone); the smallness sibling spelled `ens (coeff u₀)` with the equivalence of
+  the two spellings. 19 statements byte-identical to the blueprint's section 9; two
+  independent readers before the commit (both CLEAN; the phase lemma re-proved by the
+  opposite substitution, the sign checked by hand and on a half-period translate of a
+  character); gate GREEN 484/484 (`b402d9a`). No tag. Also on 13 Sep 2026: the textbook
+  theorem numbers checked against online tables of contents and previews (the verified ones
+  entered in the announcement, the rest kept hedged), and the upstream file re-verified.
 - **Cross-check, 9 Sep 2026.** OpenAI's Comparator (D) statement, in the community
   Formal Conjectures wording, was reproduced verbatim and compiled against this pin
   (Mathlib `15a89b24`, Lean `v4.31.0-rc2`): it elaborates (exit 0, the (D) statement
