@@ -66,3 +66,4 @@ import TheoremB.SliceExtract
 import TheoremB.ConvectionCoeff
 import TheoremB.ClassParseval
 import TheoremB.ClassFlowODE
+import TheoremB.CommunityUnique

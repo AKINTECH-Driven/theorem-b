@@ -1797,3 +1797,62 @@ true 444. Kernel replay of the three W3a modules recorded meanwhile (`audit-tier
 `lake env leanchecker` exit 0 with empty output for SliceExtract 36 s, ConvectionCoeff 6 s, ClassParseval 18 s);
 ClassFlowODE's replay follows at the tag. Disk 5.6 GiB. No tag (ladder §5). Workflow `wf_07986f09-74c`; records
 under `audit-tier9c/build-w3b/`.
+
+13 Sep 2026, Tier 9c wave W3c BUILT, TIER 9c COMPLETE: `TheoremB/CommunityUnique.lean` (about 900 lines,
+instances `cu_*`, imports `TheoremB.ClassFlowODE` alone: `CommunityData` is reached transitively, the build
+and the minimal-import probe confirmed it): the 15 frozen W3c theorems of §4c and the 16 fenced register
+declarations of §6 (15 theorems and `def preHistory`, in `namespace T9cProbe`) byte-identical, checked by the
+builder, both readers and the orchestrator with `tools/byte_identity.py` (15/15, 16/16; bounds 867-1044 and
+1045-1214, unchanged by this entry); THE TWO CAPSTONES `community_unique_velocity` and
+`community_unique_pressure` byte-identical to rung11 §4c (lines 953 to 975) by `tools/check_capstone.py`
+against `design/final/expected_community_unique_velocity.txt` and `expected_community_unique_pressure.txt`
+and by a Python substring test (builder, both readers, orchestrator); every proof closed with the final probe's
+own proof (`design/final/Tier9cFinal.lean` section E, cut at the probe's own markers, lines 1684-2335; the
+built body diffed against the probe section: identical); no sibling added, no spec drift, no earlier Lean file
+edited, no private lemma cloned, no file-level `maxHeartbeats`; registered in `TheoremB.lean` and
+`AxiomCheck.lean` (1 import line each after `import TheoremB.ClassFlowODE`; 30 ledger lines, audit lines 54 to
+83 of the probe verbatim: 15 as `TheoremB.<name>`, 15 as `TheoremB.T9cProbe.<name>`). Gate GREEN 474/474
+(builder, both readers independently, orchestrator twice: before and after the comment-only edits below;
+counted on the bracket pattern after joining wrapped lines; the quote-delimited regex reads 466 because eight
+ledger names end in a prime; every entry exactly `[propext, Classical.choice, Quot.sound]`; no `sorryAx`).
+Two independent readers BEFORE the commit, both with 0 blockers and 0 majors: reader A (statement shape and
+vacuity) CLEAN with 3 minors and the compiled probe `build-w3c/reader-shape/ShapeW3c.lean` (exit 0, 0 sorry,
+21 probe theorems on the standard triple): the capstone FIRES on Tier 9's shear witness (every other member on
+that nonzero datum has the witness's velocity on `t ≥ 0` and a pressure differing by a function of time; the
+witness is not the rest state); the hypothesis set is inhabited by DISTINCT pairs (`two_members_same_datum`
+consumed, the velocities agreeing by the capstone and by `rfl`); the pressure form is SHARP in one theorem (the
+frozen `∃ g` form holds while the pointwise form and the `∃ C` form are refuted); the half-line is sharp
+(`velocity_not_unique_off_halfline` consumed; the function-equality strengthening refuted); the same-datum
+hypotheses are load-bearing; membership holds at `ν' = 0` and `ν' = -1`, and at `ν' = -1` two same-datum
+members with different velocities exist, so `0 < ν'` is a genuine hypothesis (nothing is claimed at `ν' ≤ 0`,
+every mention in the file a disclaimer); the consistency corollary on the Tier 9 constant-datum witness is a
+genuine consequence; the MUST-HOLD with the Tier 9 flow sibling consumed on the (mean-free) shear datum, the
+general-mean identity stated nowhere; the register's pressure-shifted pair forces `g = 1`; `id` shows the
+periodicity hypotheses of `eq_of_coeff_eq` are load-bearing. Reader B (proof and pin) 3 minors, an independent
+gate run (474; the trap count 466 and the eight primed names listed), the module recompiled from source with an
+empty diagnostic log, the minimal-import and double-import tests (`build-w3c/reader-proof/DoubleImport.lean`:
+CommunityUnique with the four W3 modules, CommunityData, ContinuousRep, FourierDeriv, CoeffExtract and
+DatumBridge, a downstream named instance triple and one elaborated torus integral, exit 0), the velocity
+capstone's route RE-DERIVED BY HAND line by line against the built file (window `T := 2πt`, viscosity
+`ν := 2πν'` the ONLY consumer of `0 < ν'`; H1 `classFlow_zero`, H2 `classFlow_continuousOn`, H3
+`summable_classFlow`, H4 `classFlow_budget` through the maxima, H5 `divFree_classFlow`, H6
+`class_member_integral_eq`; `theorem_B_unique` at the right end of the window; `classFlow_clock`; the inversion
+`u₀Real_coeff` on the two slices; nothing assumed beyond the two memberships and `0 < ν'`), and two RE-PROOFS by
+routes of its own (`build-w3c/reader-proof/Reprove.lean`, statements byte-identical, standard three axioms):
+`community_unique_pressure` through the frozen gradient form and Mathlib's `IsOpen.is_const_of_fderiv_eq_zero`
+on `univ`, and `eq_of_coeff_eq` by the torus-side route citing neither built injectivity lemma. The minors
+(three register docstrings still calling the capstones "candidates", one saying an identification "is not
+proved here" while the same file proves it; the header's citation of the PROPOSED sentence; the literal rule-12
+phrase "through the datum bridge" absent from the velocity capstone's docstring; the E6 docstrings not naming
+`f = 0`, OUR COPY and `0 < ν'` in words) were fixed by the orchestrator with comment-only edits before the commit
+(each recon sentence EXTENDED with a clause naming the frozen capstone and the E6 identification, not
+rewritten; `build-w3c/orchestrator-final/`, the gate re-run after them: GREEN 474/474, the two byte-identity
+runs and the capstone checker re-run). Recorded facts: (1) the header quotes the announcement sentence of §8
+item 3 as PROPOSED wording, the user's call, verbatim (checked programmatically after whitespace
+normalisation); (2) the header records that the Tier 9 headers' "sized candidate" sentences and rung11 rule 9
+are superseded by this wave, not struck (§8 item 11); (3) `unique_of_windows` is frozen and registered but not
+consumed by a capstone (the capstone calls `theorem_B_unique` directly, D4); (4) reader B's pin note:
+`fderiv_sub` is stated for `f - g`, not the lambda form. Kernel replay: the four earlier W3 modules recorded
+before this commit (`audit-tier9c/replay/SUMMARY.txt`, all exit 0 with empty output); `CommunityUnique`
+replayed after this commit, before the tag. Tag `t9-unique-green` laid on this commit after the replay (ladder
+§5). Workflow `wf_5f373c52-92e`; records under `audit-tier9c/build-w3c/`.

@@ -66,6 +66,7 @@ import TheoremB.SliceExtract
 import TheoremB.ConvectionCoeff
 import TheoremB.ClassParseval
 import TheoremB.ClassFlowODE
+import TheoremB.CommunityUnique
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -511,3 +512,33 @@ import TheoremB.ClassFlowODE
 #print axioms TheoremB.convection_coeff_vel
 #print axioms TheoremB.class_member_mode_ode
 #print axioms TheoremB.class_member_integral_eq
+#print axioms TheoremB.classFlow_zero
+#print axioms TheoremB.summable_classFlow
+#print axioms TheoremB.divFree_classFlow
+#print axioms TheoremB.eq_add_const_of_gradient_eq
+#print axioms TheoremB.unique_of_windows
+#print axioms TheoremB.community_unique_velocity
+#print axioms TheoremB.community_unique_pressure
+#print axioms TheoremB.community_unique_pressure_gradient
+#print axioms TheoremB.community_unique_pressure_of_velocity
+#print axioms TheoremB.community_unique_pressure_explicit
+#print axioms TheoremB.eq_of_mFourierCoeff_eq
+#print axioms TheoremB.eq_of_coeff_eq
+#print axioms TheoremB.eq_of_coeff_eq'
+#print axioms TheoremB.const_datum_member_is_const
+#print axioms TheoremB.capstone_fires_on_const_datum_witness
+#print axioms TheoremB.T9cProbe.pressure_add_time_function_in_class
+#print axioms TheoremB.T9cProbe.pressure_add_const_in_class
+#print axioms TheoremB.T9cProbe.pressure_add_id_in_class
+#print axioms TheoremB.T9cProbe.pressure_not_unique
+#print axioms TheoremB.T9cProbe.pressure_not_unique_up_to_const
+#print axioms TheoremB.T9cProbe.two_members_same_datum
+#print axioms TheoremB.T9cProbe.different_data_not_forced_equal
+#print axioms TheoremB.T9cProbe.class_inhabited_all_visc
+#print axioms TheoremB.T9cProbe.const_datum_two_members
+#print axioms TheoremB.T9cProbe.classFlow_junk
+#print axioms TheoremB.T9cProbe.classFlow_junk'
+#print axioms TheoremB.T9cProbe.classFlow_eq_of_flow
+#print axioms TheoremB.T9cProbe.flow_witness_classFlow_eq
+#print axioms TheoremB.T9cProbe.preHistory_in_class
+#print axioms TheoremB.T9cProbe.velocity_not_unique_off_halfline
