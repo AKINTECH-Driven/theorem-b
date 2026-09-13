@@ -67,6 +67,7 @@ import TheoremB.ConvectionCoeff
 import TheoremB.ClassParseval
 import TheoremB.ClassFlowODE
 import TheoremB.CommunityUnique
+import TheoremB.GeneralMean
 
 #print axioms TheoremB.trap_forward_invariance
 #print axioms TheoremB.riccati_window
@@ -542,3 +543,13 @@ import TheoremB.CommunityUnique
 #print axioms TheoremB.T9cProbe.flow_witness_classFlow_eq
 #print axioms TheoremB.T9cProbe.preHistory_in_class
 #print axioms TheoremB.T9cProbe.velocity_not_unique_off_halfline
+#print axioms TheoremB.mFourierCoeff_descend_translate
+#print axioms TheoremB.mFourier_neg_fiber
+#print axioms TheoremB.mFourierCoeff_descend_translate_exp
+#print axioms TheoremB.classFlow_galV_vReal
+#print axioms TheoremB.classFlow_galV_vReal_exp
+#print axioms TheoremB.smallness_ens_iff
+#print axioms TheoremB.theorem_B_community_periodic_data_ens
+#print axioms TheoremB.T9cProbe.flow_witness_classFlow_eq_general_mean
+#print axioms TheoremB.T9cProbe.general_mean_identity_mean_free
+#print axioms TheoremB.T9cProbe.general_mean_const_datum

@@ -67,3 +67,4 @@ import TheoremB.ConvectionCoeff
 import TheoremB.ClassParseval
 import TheoremB.ClassFlowODE
 import TheoremB.CommunityUnique
+import TheoremB.GeneralMean

@@ -1715,7 +1715,7 @@ this entry, which sits below every block); every proof closed with the final pro
 (`design/final/Tier9cFinal.lean` sections A, B, C, cut at the probe's own markers, lines 64-434, 437-692,
 695-982); no sibling added, no spec drift, no earlier Lean file edited, no private lemma cloned, no file-level
 `maxHeartbeats`; registered in `TheoremB.lean` and `AxiomCheck.lean` (3 import lines each after `import
-TheoremB.CommunityData`; 30 ledger lines, the first 30 audit lines of the probe verbatim, so the SliceExtract
+TheoremB.CommunityData`; 30 ledger lines, audit lines 1 to 30 of the probe verbatim, so the SliceExtract
 block's ledger order is the probe's audit order rather than the file's declaration order, same set). Gate GREEN
 421/421 (builder, both readers independently, orchestrator twice: before and after the comment-only edits below;
 counted on the bracket pattern after joining wrapped lines; the quote-delimited regex reads 415 because six
@@ -1856,3 +1856,231 @@ consumed by a capstone (the capstone calls `theorem_B_unique` directly, D4); (4)
 before this commit (`audit-tier9c/replay/SUMMARY.txt`, all exit 0 with empty output); `CommunityUnique`
 replayed after this commit, before the tag. Tag `t9-unique-green` laid on this commit after the replay (ladder
 §5). Workflow `wf_5f373c52-92e`; records under `audit-tier9c/build-w3c/`.
+
+## 9. Post-tag addendum W3d (13 Sep 2026): the general-mean consistency identity and the smallness sibling
+
+Status: written after the tag `t9-unique-green` (on `68e12d2`) and the prose commit `ac4cb91`, on the user's
+decision of 13 Sep 2026 on §8 items 7 and 8 ("go with 2"): build the general-mean identity, build the smallness
+sibling, verify the textbook theorem numbers and the upstream file online and write only what was seen, and settle
+the trailer question. This section is appended at the END of the file so that no line cited by §8 item 15 or
+by the build log moves; the blocks of §4 and §6 keep their bounds. Every fenced statement below is extracted from
+the probe `audit-tier9c/w3d/probe/ReconW3d.lean` (session directory; 367 lines, 19 declarations, compiled at the
+pin by the probe agent and recompiled by the orchestrator: exit 0, 0 errors, 0 sorry declarations, 19 of 19
+`#print axioms` lines on exactly `[propext, Classical.choice, Quot.sound]`, log
+`w3d/probe/orchestrator-recompile/ReconW3d.log`) by the ruler `tools/byte_identity.decls_in_file`, so the block
+is byte-identical to the probe by construction; the built file is checked against it before the commit.
+
+Decisions (this addendum):
+
+- **D20 (file).** ONE new file `TheoremB/GeneralMean.lean`, importing `TheoremB.CommunityUnique` alone (the
+  probe's import; measured by its compile), local measure instances named `gm_ms`/`gm_haar`/`gm_prob` inside
+  `noncomputable section`; the register items in `namespace T9cProbe` (the register reopened in the new file),
+  everything else in `TheoremB`. No earlier file is edited (the tag's files are frozen).
+- **D21 (frozen, registered, helpers).** All 19 statements are fenced and byte-identity-checked. Ten carry a
+  ledger line: `mFourierCoeff_descend_translate`, `mFourier_neg_fiber`, `mFourierCoeff_descend_translate_exp`,
+  `classFlow_galV_vReal`, `classFlow_galV_vReal_exp`, `smallness_ens_iff`,
+  `theorem_B_community_periodic_data_ens` (as `TheoremB.<name>`) and `flow_witness_classFlow_eq_general_mean`,
+  `general_mean_identity_mean_free`, `general_mean_const_datum` (as `TheoremB.T9cProbe.<name>`); the nine helpers
+  (`fiber_add`, `fiber_sub`, `eq_of_fiber_eq`, `descend_translate_add`, `mFourier_apply_add`,
+  `continuous_u₀Real`, `isOnePeriodic_translate`, `fiber_zero`, `zeroMode_zero`) carry none. Ledger 474 → 484;
+  1 import line in each registration file after `import TheoremB.CommunityUnique`. The quote-delimited gate
+  regex still undercounts by eight (no new primed name).
+- **D22 (the phase).** The canonical phase is `mFourier (-k) (fiber a)` with `a := (t / (2 * Real.pi)) • m`
+  (the coefficient of a translate `x ↦ f (x - a)` is `mFourier (-k) (fiber a)` times the coefficient, for a
+  one-periodic `f`, with NO continuity hypothesis: the translation invariance of the torus Haar measure carries
+  none); the evaluated form `Complex.exp (-(2 * Real.pi * Complex.I * ((∑ i, (k i : ℝ) * a i : ℝ) : ℂ)))`
+  (Mathlib's `fourier_coe_apply`) and the campaign-clock form
+  `Complex.exp (-(Complex.I * ((t * ∑ i, (k i : ℝ) * m i : ℝ) : ℂ)))` are frozen corollaries. The identity
+  `classFlow (galV m (vReal c)) t k = zeroMode m k + mFourier (-k) (fiber ((t / (2 * Real.pi)) • m)) • c t k`
+  needs only `RealField (c t)` and `Summable ‖c t k‖` at the time `t`; D12's sentence "NOT compiled and NOT
+  claimed" is superseded by this addendum (its text is kept).
+- **D23 (no tag).** The tag `t9-unique-green` stays on `68e12d2`; the addendum commit is cited by hash in the
+  README and the announcement (484 audited declarations at that commit). Two readers before the commit, as for
+  every wave; the new module replayed through `leanchecker` before the commit's prose.
+- **D24 (the sibling).** `theorem_B_community_periodic_data_ens` (the smallness spelled `ens (coeff u₀)`) exists
+  for citation convenience and is derived from the frozen capstone by `ens_meanFree` through
+  `smallness_ens_iff`; the D3 spelling on the mean-free part stays the primary one (rung11 D3's reason stands:
+  `en` differs on the mean-free part, `ens` does not); its docstring says so.
+- **D25 (trailer uniformity, rung11 §8 item 6).** DECIDED, NOT DONE, CLOSED: making the trailers of the earlier
+  commits uniform would rewrite 76 commits under 31 tags and move every hash cited in every blueprint, README
+  row, tag message and memory note; the trailers stay as they are (Tier 8b's W1 commit says `Claude Fable 5`,
+  the user's requested text at the time; every later commit carries the harness trailer in force in its
+  session).
+- **D26 (textbook theorem numbers, rung11 §8 item 7).** Checked on 13 Sep 2026 against publisher tables of
+  contents, Google Books previews and lecture notes quoting the books (record
+  `audit-tier9c/w3d/textbook/report.md`); the announcement's three "Textbook sources" paragraphs are rewritten
+  with the numbers SEEN and everything else left hedged: Temam, Ch. III, section 3, Theorem 3.4 (p. 201); Robinson,
+  Rodrigo and Sadowski, Ch. 6, Theorem 6.8 (local existence) and section 6.3, Theorem 6.10 (weak-strong
+  uniqueness), Ch. 7, Theorems 7.1 and 7.3; Constantin and Foias, Ch. 9 (Strong Solutions, title only) and
+  Ch. 10, Theorem 10.2 (p. 84; the dimension in the statement not legible in the preview); Foias, Manley, Rosa
+  and Temam, Ch. II, section 7, Theorem 7.2 (p. 57); Grafakos, Ch. 3, Proposition 3.2.5 (Fourier inversion,
+  p. 185), Theorem 3.3.9 with Corollary 3.3.10 (decay, pp. 196-197), Proposition 3.1.2 (p. 176, the elementary
+  properties of the coefficients; which item carries the product identity was not seen, so that reference stays
+  hedged); Majda and Bertozzi, Vorticity and Incompressible Flow, Ch. 1, Proposition 1.1 (p. 3, the Galilean
+  invariance); Folland, Real Analysis, Theorem 2.27 (differentiation under the integral; seen in notes quoting
+  the book, not on the book's page). Page numbers are as displayed by the previews, not checked against a
+  physical copy; the campaign's earlier "Constantin-Foias Ch. 10" pointed at the further-results chapter, Ch. 9
+  being the one titled Strong Solutions.
+- **D27 (the upstream file, rung11 §8 item 5).** Fetched on 13 Sep 2026 from the default branch of
+  google-deepmind/formal-conjectures (head `5ba2dbfc100a82e12207a9d8e75a3b8782a0ed5c`; the Navier-Stokes
+  file's last content change is commit `b9fc95eb75b048b195f3d01af4315ad3437ab157` of 11 Sep 2026, a docstring
+  and attribute change; the file was moved without content change by `bc1d2bc0df6edcbc6bfa43d0b4b1018ccdbdb627`
+  on 12 Sep 2026; record and the fetched file under `audit-tier9c/w3d/upstream/`). Both statement names
+  `navier_stokes_existence_and_smoothness_periodic` and `navier_stokes_breakdown_periodic` verified verbatim;
+  both bodies are `sorry` upstream; our copy of the two definitions and six structures
+  (`CommunityClass.lean:153-198`) is byte-identical to the fetched file with comments stripped, except in the
+  namespace and the divergence notation (a global `@[inherit_doc] notation` upstream, a `local notation` here),
+  exactly the two differences rung10 §2a records; the definitions did not change between the Tier 8b copy and
+  today. The upstream file's directory name contains a prize name and is therefore not written into the tree
+  (rule 2); the announcement quotes the repository, the hashes and the statement names only. The upstream
+  attribute of the breakdown statement now carries a link to an external formal proof; we neither fetched nor
+  assessed it and claim nothing about it.
+
+#### W3d: `TheoremB/GeneralMean.lean` (probe `audit-tier9c/w3d/probe/ReconW3d.lean`, exit 0, 0 sorry decls)
+
+```
+theorem fiber_add (x y : ℝ³) : fiber (x + y) = fiber x + fiber y
+
+theorem fiber_sub (x y : ℝ³) : fiber (x - y) = fiber x - fiber y
+
+theorem eq_of_fiber_eq {α : Sort*} {f : ℝ³ → α} (hf : IsOnePeriodic f) {x y : ℝ³}
+    (h : fiber x = fiber y) : f x = f y
+
+theorem descend_translate_add {α : Sort*} {f : ℝ³ → α} (hf : IsOnePeriodic f) (a : ℝ³)
+    (z : UnitAddTorus (Fin 3)) :
+    descend (fun x => f (x - a)) (z + fiber a) = descend f z
+
+theorem mFourier_apply_add (n : Fin 3 → ℤ) (x y : UnitAddTorus (Fin 3)) :
+    mFourier n (x + y) = mFourier n x * mFourier n y
+
+theorem mFourierCoeff_descend_translate {f : ℝ³ → ℂ} (hper : IsOnePeriodic f) (a : ℝ³)
+    (k : Fin 3 → ℤ) :
+    mFourierCoeff (descend fun x => f (x - a)) k
+      = mFourier (-k) (fiber a) * mFourierCoeff (descend f) k
+
+theorem mFourier_neg_fiber (k : Fin 3 → ℤ) (a : ℝ³) :
+    mFourier (-k) (fiber a)
+      = Complex.exp (-(2 * Real.pi * Complex.I * ((∑ i, (k i : ℝ) * a i : ℝ) : ℂ)))
+
+theorem mFourierCoeff_descend_translate_exp {f : ℝ³ → ℂ} (hper : IsOnePeriodic f) (a : ℝ³)
+    (k : Fin 3 → ℤ) :
+    mFourierCoeff (descend fun x => f (x - a)) k
+      = Complex.exp (-(2 * Real.pi * Complex.I * ((∑ i, (k i : ℝ) * a i : ℝ) : ℂ)))
+        * mFourierCoeff (descend f) k
+
+theorem continuous_u₀Real {c : (Fin 3 → ℤ) → Vel} (hc : Summable fun k => ‖c k‖) :
+    Continuous (u₀Real c)
+
+theorem isOnePeriodic_translate {α : Sort*} {f : ℝ³ → α} (hf : IsOnePeriodic f) (a : ℝ³) :
+    IsOnePeriodic (fun x => f (x - a))
+
+theorem classFlow_galV_vReal {m : ℝ³} {c : ℝ → (Fin 3 → ℤ) → Vel}
+    (hreal : ∀ t ≥ 0, RealField (c t)) (hl1 : ∀ t ≥ 0, Summable fun k => ‖c t k‖)
+    {t : ℝ} (ht : 0 ≤ t) (k : Fin 3 → ℤ) :
+    classFlow (galV m (vReal c)) t k
+      = zeroMode m k + mFourier (-k) (fiber ((t / (2 * Real.pi)) • m)) • c t k
+
+theorem classFlow_galV_vReal_exp {m : ℝ³} {c : ℝ → (Fin 3 → ℤ) → Vel}
+    (hreal : ∀ t ≥ 0, RealField (c t)) (hl1 : ∀ t ≥ 0, Summable fun k => ‖c t k‖)
+    {t : ℝ} (ht : 0 ≤ t) (k : Fin 3 → ℤ) :
+    classFlow (galV m (vReal c)) t k
+      = zeroMode m k
+        + Complex.exp (-(Complex.I * ((t * ∑ i, (k i : ℝ) * m i : ℝ) : ℂ))) • c t k
+
+theorem flow_witness_classFlow_eq_general_mean :
+    ∃ κ, 0 < κ ∧ ∀ {ν' : ℝ}, 0 < ν' → ∀ {u₀ : ℝ³ → ℝ³},
+      InitialVelocityConditionPeriodic (n := 3) u₀ →
+      κ * en (meanFree (coeff u₀)) * ens (meanFree (coeff u₀)) < (2 * Real.pi * ν') ^ 4 →
+      ∃ c : ℝ → (Fin 3 → ℤ) → Vel,
+        c 0 = meanFree (coeff u₀) ∧
+        (∀ t ∈ Ici (0:ℝ), RealField (c t) ∧ DivFree (c t)) ∧
+        (∀ t ∈ Ici (0:ℝ), Summable fun k => ‖c t k‖) ∧
+        NavierStokesExistenceAndSmoothnessPeriodic (n := 3) ν' u₀ (f := 0)
+          (galV (meanVec (coeff u₀)) (vReal c)) (galP (meanVec (coeff u₀)) (pReal c)) ∧
+        (∀ t ∈ Ici (0:ℝ), ∀ k, classFlow (galV (meanVec (coeff u₀)) (vReal c)) t k
+          = zeroMode (meanVec (coeff u₀)) k
+            + mFourier (-k) (fiber ((t / (2 * Real.pi)) • meanVec (coeff u₀))) • c t k)
+
+theorem fiber_zero : fiber (0 : ℝ³) = 0
+
+theorem zeroMode_zero : zeroMode (0 : ℝ³) = 0
+
+theorem general_mean_identity_mean_free {u₀ : ℝ³ → ℝ³} (h0 : coeff u₀ 0 = 0)
+    {c : ℝ → (Fin 3 → ℤ) → Vel}
+    (hreal : ∀ t ≥ 0, RealField (c t)) (hl1 : ∀ t ≥ 0, Summable fun k => ‖c t k‖)
+    {t : ℝ} (ht : 0 ≤ t) (k : Fin 3 → ℤ) :
+    classFlow (galV (meanVec (coeff u₀)) (vReal c)) t k = c t k
+
+theorem smallness_ens_iff (κ ν' : ℝ) (u₀ : ℝ³ → ℝ³) :
+    κ * en (meanFree (coeff u₀)) * ens (meanFree (coeff u₀)) < (2 * Real.pi * ν') ^ 4 ↔
+    κ * en (meanFree (coeff u₀)) * ens (coeff u₀) < (2 * Real.pi * ν') ^ 4
+
+theorem theorem_B_community_periodic_data_ens :
+    ∃ κ, 0 < κ ∧ ∀ {ν' : ℝ}, 0 < ν' → ∀ {u₀ : ℝ³ → ℝ³},
+      InitialVelocityConditionPeriodic (n := 3) u₀ →
+      κ * en (meanFree (coeff u₀)) * ens (coeff u₀) < (2 * Real.pi * ν') ^ 4 →
+      ∃ (v : ℝ³ → ℝ → ℝ³) (p : ℝ³ → ℝ → ℝ),
+        NavierStokesExistenceAndSmoothnessPeriodic (n := 3) ν' u₀ (f := 0) v p
+
+theorem general_mean_const_datum :
+    ∃ κ : ℝ, 0 < κ ∧ ∀ {ν' : ℝ}, 0 < ν' → ∀ (m : ℝ³),
+      ∃ c : ℝ → (Fin 3 → ℤ) → Vel,
+        c 0 = 0 ∧
+        NavierStokesExistenceAndSmoothnessPeriodic (n := 3) ν' (fun _ => m) (f := 0)
+          (galV m (vReal c)) (galP m (pReal c)) ∧
+        (∀ t ∈ Ici (0:ℝ), classFlow (galV m (vReal c)) t = zeroMode m) ∧
+        (∀ t ∈ Ici (0:ℝ), c t = 0)
+```
+PROVED (every statement, in the probe; orchestrator recompile exit 0, 19/19 standard). Route notes: the phase
+lemma by the translation invariance of the torus volume (`integral_add_right_eq_self`, whose instances
+`Pi.isAddLeftInvariant_volume` and `IsAddLeftInvariant.isAddRightInvariant` are found by instance search under
+the three named local instances), `fiber_sub`, `fiber_rep` and `descend_fiber` (no floor arithmetic); the
+identity by `classFlow_apply`, the unfolding of `galV`/`vReal`/`u₀Real`, `coeff_add` (ClassFlowODE),
+`T9Probe.coeff_const`, the phase lemma componentwise and the round trip `coeff_u₀Real`; the Tier 9 instance by the
+`obtain` pattern of `theorem_B_community_periodic_data_flow` keeping clause 10 of
+`theorem_B_community_periodic_flow` at `p = 0` (the ℓ¹) and clause 2 (reality); the constant-datum register item
+through `const_datum_member_is_const` (the velocity capstone) and the identity's right side, identifying the flow
+from the zero datum as the zero flow; the sibling by `ens_meanFree`. Traps measured: `∃ κ, 0 < κ ∧ …` with `κ`
+free elsewhere elaborates `κ : ℕ` (annotate `∃ κ : ℝ`); `mul_div_cancel₀ t h2π` is the clock identity
+`2π * (t / 2π) = t` at the pin; `WithLp.toLp 2 (fun j => 0) = 0` needs `PiLp.ext`; `field_simp` closes the
+exponent identity and a trailing `ring` errors with "no goals"; Mathlib's global `MeasureSpace (AddCircle T)`
+loses to the named local instance, which every torus file must mirror. Builder note: one docstring line of the
+probe begins with the word `lemma` and the ruler reads it as a declaration; re-wrap that docstring in the built
+file so that no docstring line starts with a declaration keyword.
+
+W3d BUILD LOG. 13 Sep 2026, addendum W3d BUILT: `TheoremB/GeneralMean.lean` (505 lines, instances `gm_*`,
+imports `TheoremB.CommunityUnique` alone): the 19 fenced statements of the block above byte-identical, checked
+by the builder, both readers and the orchestrator with `tools/byte_identity.py` (19/19; bounds by
+`grep -n "^#### W3d"` to the end of the file); every proof closed with the probe's own proof; the three register
+items in a reopened `namespace T9cProbe`; no sibling, no spec drift, no earlier Lean file edited; registered in
+`TheoremB.lean` and `AxiomCheck.lean` (1 import line each; 10 ledger lines in the D21 order). Gate GREEN 484/484
+(builder, both readers independently, orchestrator twice: before and after the comment-only edits below; the
+quote-delimited regex reads 476; every entry exactly `[propext, Classical.choice, Quot.sound]`; no `sorryAx`).
+Two independent readers BEFORE the commit, both CLEAN (0 blockers, 0 majors): reader A (statement shape and
+vacuity) 5 minors, with the compiled probe `build-w3d/reader-shape/ShapeW3d.lean` (exit 0, 14 theorems on the
+standard triple): the phase lemma on a character translated by half a period gives exactly `−1` (the sign
+convention checked on a concrete field); the phase is a unit, so the mean-free flow is recovered from the boosted
+witness's flow (the identity loses nothing); the mean-free reduction on the shear datum has the shape of the W3c
+register item, and the W3c item is re-derived from the general-mean item alone; the constant-datum item's
+zero-flow conclusion fails on the shear datum, so the item has content; the sibling's hypothesis on `m + shear`
+is the shear's own and the sibling fires there for every `m`; the identity needs no smoothness (a constant-in-time
+flow read at the mode `ccpe1`); the translate in the other direction carries the inverse phase. Reader B (proof
+and pin) 3 minors, an independent gate run (484; the trap count 476 and the eight primed names), the
+minimal-import and double-import tests (`build-w3d/reader-proof/DoubleImport.lean`, exit 0), the sign of the
+phase RE-DERIVED BY HAND from `fourier_coe_apply` against the built statements, and two RE-PROOFS by routes of
+its own (`build-w3d/reader-proof/Reprove.lean`, statements byte-identical, standard three axioms):
+`mFourierCoeff_descend_translate` by the opposite substitution `z ↦ z − fiber a`, and
+`general_mean_identity_mean_free` directly through `T9Probe.meanVec_of_mean_zero` and the round trip. The minors
+(two docstrings calling the `∃ κ` "the sibling's own" where this file also has the smallness sibling; one
+docstring sentence about the hypotheses consumed "at the one time `t`" that a reader could take as describing
+the statement's binders; the inert `∃ κ` of `general_mean_const_datum`, a shape note; six pre-existing prose
+lines at HEAD carrying a third-party repository name and a negated sentence, outside this wave; the disk
+figure) were fixed by the orchestrator with comment-only edits before the commit where they concern this file
+(`build-w3d/orchestrator-final/`, the gate re-run after them: GREEN 484/484). Recorded facts: (1) the file's
+declaration order equals the ledger order except for the nine unregistered helpers (the three register items
+grouped at the end); (2) the probe's docstring line beginning with the word `lemma` was re-wrapped so that the
+ruler's declaration scan reads exactly 19 lines; (3) `lake build` replays 41 pre-existing linter warnings of
+frozen upstream modules and none on the new file; (4) the disk fell from 8.0 to 5.0 GiB over the day with the
+tree at 444 MB and the session directory at 43 MB, so the consumer is elsewhere on the machine. No tag (D23):
+`t9-unique-green` stays on `68e12d2`. Workflow `wf_f4fe796d-2a4`; records under `audit-tier9c/build-w3d/`;
+the kernel replay of `GeneralMean` follows this commit and is recorded in the prose commit.
