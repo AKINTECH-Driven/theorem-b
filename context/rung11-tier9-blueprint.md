@@ -1313,7 +1313,8 @@ diffed against this file):**
   decay constants `C_q` of the datum bridge and the sup bounds `M` are UNTRACKED existentials
   produced by `choose`; the `√3` and `(√3/2π)^q` factors are literal expressions". No numeric
   value of any constant anywhere.
-- Rule 6, Tier 9 instance (PROPOSED only; the user's call; NOT before the capstone ships with
+- Rule 6, Tier 9 instance (ADOPTED by the user on 13 Sep 2026 as written, after the capstone
+  shipped with W2; the record of the proposal: PROPOSED only; the user's call; NOT before the capstone ships with
   W2, `t9-complete`): "for every datum in the community's own periodic initial-velocity
   condition whose mean-free coefficient part is small in the sense `κ · en (meanFree (coeff
   u₀)) · ens (meanFree (coeff u₀)) < (2πν')⁴`, OUR copy of the community's periodic solution
@@ -1488,6 +1489,11 @@ user's call:
    (`t9-complete`); the proposed sentence is in the §7 amendments; whether to quote the upstream
    commit hash and the upstream statement name alongside the prose diff is the user's call
    (carried from rung10 §8 item 1 and the Tier 8b handoff).
+   ADOPTED (13 Sep 2026): the user adopted the announcement's Tier 9 section as written; the
+   short form now reads 391 audited declarations and "Tiers 8b and 9" (commit after `ff89dd0`).
+   The `CommunityData.lean` header still quotes the rule-6 sentence as proposed wording; that
+   note is superseded by the adoption and is NOT struck (built files are not edited for prose;
+   the house rule since Tier 8b W1).
 6. **Trailer uniformity.** DECIDED for this tier: every Tier 9 commit ends with the harness
    trailer in force in the building session (the doctrine, §1). User's call: whether the
    trailers of the 66 earlier commits are to be made uniform (carried from the Tier 8b handoff;

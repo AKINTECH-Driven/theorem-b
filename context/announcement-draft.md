@@ -12,8 +12,10 @@ We have kernel-checked, in Lean 4 over Mathlib (pin `15a89b24`, toolchain
 Navier-Stokes equations on the 3-torus that runs from an *unconditional*
 existence-and-trapping theorem through uniqueness to a **classical,
 pointwise** solution, jointly smooth on the closed slab `ℝ³ × [0, ∞)` and,
-for small data at `f = 0`, inhabiting our copy of the community's periodic
-solution class (Tier 8b): 294 audited declarations (the axiom ledger:
+at `f = 0`, for every datum in the community's own periodic initial-velocity
+condition whose mean-free part is small, inhabiting our copy of the
+community's periodic solution class (Tiers 8b and 9): 391 audited
+declarations (the axiom ledger:
 theorems, one definition, and the compiled non-vacuity probes), every one
 on exactly `{propext, Classical.choice, Quot.sound}`, none on `sorryAx`.
 
@@ -650,9 +652,9 @@ reproduced by, or superseded by anything here.
 
 ## Tier 9: the community's statement shape over real-space data
 
-UPDATE (Tier 9, 13 Sep 2026; PROPOSED WORDING, the user's call, per rule 6
-of the Tier 9 blueprint's audit register, `context/rung11-tier9-blueprint.md`
-section 7): Tier 8b inhabited OUR COPY of the community's periodic solution
+UPDATE (Tier 9, 13 Sep 2026; ADOPTED by the user on 13 Sep 2026 as written,
+per rule 6 of the Tier 9 blueprint's audit register,
+`context/rung11-tier9-blueprint.md` section 7): Tier 8b inhabited OUR COPY of the community's periodic solution
 class for data of the form `u₀Real c₀`, a coefficient field in the
 campaign's small class. Tier 9 quantifies over the community's own data:
 every `u₀ : ℝ³ → ℝ³` in `InitialVelocityConditionPeriodic` (`C^∞`,
@@ -661,11 +663,10 @@ MEAN-FREE part of its coefficient field. 391 audited declarations at the
 tag `t9-complete` (339 at `t9-datum-bridge-green`), every one on exactly
 `{propext, Classical.choice, Quot.sound}`, none on `sorryAx`. Files
 `TheoremB/Descent.lean`, `DatumBridge.lean`, `Galilean.lean`,
-`CommunityData.lean`. If this section is adopted, the short form's "294
-audited declarations" becomes 391 and its "Tier 8b" becomes "Tiers 8b
-and 9".
+`CommunityData.lean`. With this section adopted, the short form reads 391
+audited declarations and "Tiers 8b and 9".
 
-The proposed sentence: for every datum in the community's own periodic
+The adopted sentence: for every datum in the community's own periodic
 initial-velocity condition whose mean-free coefficient part is small in
 the sense `κ · en (meanFree (coeff u₀)) · ens (meanFree (coeff u₀)) <
 (2πν')⁴`, OUR copy of the community's periodic solution class
