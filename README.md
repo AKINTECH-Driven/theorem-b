@@ -12,7 +12,7 @@ audited declaration is accepted by a deterministic axiom gate: the kernel report
 All of it is claimed at one pin only: Lean `leanprover/lean4:v4.31.0-rc2` and Mathlib
 `15a89b24`. The Lean sources are 70 files and 32,454 lines under `TheoremB/`, all imported by
 the umbrella `TheoremB.lean`, and the gate prints `GATE: GREEN (484/484)`. The history through
-13 Sep 2026 is 79 commits and 31 tags; the publication commit and the `v0.1.0` tag come on
+13 Sep 2026 is 79 commits and 31 tags; the publication commits and the `v0.1.0` tag come on
 top of that.
 
 It was written by Claude (Anthropic), as the commit trailers record (Fable 5, Fable 5.1, and
@@ -22,12 +22,19 @@ frozen-statement discipline, wording rules, gates and the decision to publish ar
 author's: Konstantinos Tsantakos, founder of AKINTECH Driven Ltd, not a professional
 mathematician. No human domain expert has reviewed the statements; the community-class copy
 is byte-identical to upstream (the two definitions and six structures copied from the
-upstream Navier-Stokes file are byte-identical to it with comments stripped, except the
+upstream Navier-Stokes file are byte-identical to it with comments and blank lines stripped, except the
 namespace and the divergence notation, made `local`, its `@[inherit_doc]` attribute dropped);
 review of the statements is what we are asking for. The
 byte-identity is pinned to the copied commit: the copy matches the upstream file content as of
-commit `b9fc95eb75b048b195f3d01af4315ad3437ab157` (11 Sep 2026); upstream has touched that
-file since (see "Related work"), and it was not re-diffed against the current upstream file.
+commit `b9fc95eb75b048b195f3d01af4315ad3437ab157` (11 Sep 2026). Upstream has touched that
+file since (see "Related work"). It was re-diffed on 11 Nov 2026 against the file as it stood at
+upstream commit `e4e4a9b0b6031c663a293de43a0f29a379ae03e0` (the branch head that day; the file's
+last change is `d9f6ffa8` of 29 Oct 2026). Upstream's own text of the copied declarations,
+docstrings included, is the same there as at the copied commit; and declaration by declaration,
+with comments, docstrings and blank lines removed from both sides, the copy differs from
+upstream's text of those declarations in the same two places only (the file's other declarations
+are not copied). Text was compared; nothing upstream was compiled (record:
+`context/upstream-rediff-2026-11-11.md`).
 
 Nothing here is new mathematics. See "Scope and non-claims" and "Related work" before
 quoting any of it.
@@ -199,7 +206,7 @@ coefficient field is `(Fin 3 → ℤ) → Vel`, `freq k` is the raw lattice vect
 | `theorem_B_smooth_classical_eq` | `TheoremB/ClassicalEquation.lean` | The same flow, all nineteen clauses re-exported, satisfies at every component `j`, torus point `x`, and `t > 0`, as one `HasDerivAt` in time: `∂ₜu_j = (ν/(2π)²)(Σᵢ ∂ᵢ²u)_j − (1/2π)(Σᵢ uᵢ ∂ᵢu_j) − ∂_j p`, each piece spelled out in full. |
 | `theorem_B_time_smooth` | `TheoremB/TimeSmooth.lean` | The same flow, all twenty clauses of `theorem_B_smooth_classical_eq` re-exported verbatim, plus (clause 21) a derivative chain `D` with `D 0 = c`, the Leibniz recurrence `D (n+1) = −ν‖k‖²·D n + P_k (S n)` with `S n = Σ_{i+j=n} C(n,i)·convBil (D i) (D j)` exported alongside, each `D n` differentiating to `D (n+1)` on `t > 0`, with the right derivative `D (n+1) 0` within `Ici 0`, continuous on `Ici 0`, and in every weighted-ℓ¹ window class at every order (the same for `S n`); and (clause 22) every mode `t ↦ c t k` is `C^∞` in time on the CLOSED half-line `Ici 0`. Time only: joint smoothness in `(x, t)` is not claimed here. `∞` is `(⊤ : ℕ∞)`, not `ω`: no analyticity. |
 | `theorem_B_joint_smooth` | `TheoremB/JointSmooth.lean` | The same flow, all twenty-two clauses of `theorem_B_time_smooth` re-exported verbatim, plus (clause 23) the pressure coefficients have every weighted-ℓ¹ order at every `t ≥ 0`, (clause 24) for every component `j` the velocity lift `(x, t) ↦ uLift j (c t) x` is `C^∞` jointly in `(x, t)` on the CLOSED slab `ℝ³ × [0, ∞)` (`ContDiffOn ℝ ∞ … (univ ×ˢ Ici 0)`), and (clause 25) the pressure lift `(x, t) ↦ pLift (c t) x` is `C^∞` jointly on the same closed slab. The engine is the Mathlib-only within-convex tsum theory of `TheoremB/WithinSeries.lean` (absent from Mathlib at the pin, grep-verified, not new mathematics). `∞` is `(⊤ : ℕ∞)`, not `ω`: no analyticity. |
-| `theorem_B_community_periodic_flow` | `TheoremB/CommunityClass.lean` | The same flow, all twenty clauses of `theorem_B_smooth_classical_eq` re-exported verbatim, plus (clause 21): OUR COPY of the community's periodic solution class `NavierStokesExistenceAndSmoothnessPeriodic (ν/(2π)) (u₀Real c₀) 0 (vReal c) (pReal c)` is inhabited by this flow read back as a real velocity and pressure in the clock `τ = t/(2π)`, with the zero force. The six class definitions are copied into `TheoremB.Community` from the community wording (google-deepmind/formal-conjectures as adapted in OpenAI's Comparator file); the copy differs from the upstream file only in the namespace and the `local notation` for the divergence (whose `@[inherit_doc]` attribute is dropped); the upstream file is not imported. Verified again on 13 Sep 2026 against the file fetched from the default branch of google-deepmind/formal-conjectures (last content change of the declarations commit `b9fc95eb75b048b195f3d01af4315ad3437ab157` of 11 Sep 2026; both statement names present; both upstream placeholder proofs still `sorry`): the two definitions and six structures are byte-identical with comments stripped, up to those two differences. Upstream has touched the file since: commit `bc1d2bc0` of 12 Sep 2026 (moved without content change, as read on 13 Sep 2026); commit `6fbb54f2` of 18 Sep 2026 changed the file header only (module system: `module`, `public import`, `@[expose] public section`), with every definition, structure and both `sorry` bodies byte-identical when diffed on 20 Sep 2026; commit `d9f6ffa8` of 29 Oct 2026 (a linter option, as checked on 11 Nov 2026) was not re-diffed. |
+| `theorem_B_community_periodic_flow` | `TheoremB/CommunityClass.lean` | The same flow, all twenty clauses of `theorem_B_smooth_classical_eq` re-exported verbatim, plus (clause 21): OUR COPY of the community's periodic solution class `NavierStokesExistenceAndSmoothnessPeriodic (ν/(2π)) (u₀Real c₀) 0 (vReal c) (pReal c)` is inhabited by this flow read back as a real velocity and pressure in the clock `τ = t/(2π)`, with the zero force. The class's two definitions and six structures are copied into `TheoremB.Community` from the community wording (google-deepmind/formal-conjectures as adapted in OpenAI's Comparator file); declaration by declaration, with comments and blank lines stripped, the copy differs from upstream's text of those declarations only in the namespace and the `local notation` for the divergence (whose `@[inherit_doc]` attribute is dropped); the upstream file is not imported. Verified again on 13 Sep 2026 against the file fetched from the default branch of google-deepmind/formal-conjectures (last content change of the declarations commit `b9fc95eb75b048b195f3d01af4315ad3437ab157` of 11 Sep 2026; both statement names present; both upstream placeholder proofs still `sorry`): the two definitions and six structures are byte-identical with comments and blank lines stripped, up to those two differences. Upstream has touched the file since: commit `bc1d2bc0` of 12 Sep 2026 (moved, same bytes); commit `6fbb54f2` of 18 Sep 2026 (the Lean module conversion: `module`, `public import`, `@[expose] public section` and one blank line); commit `d9f6ffa8` of 29 Oct 2026 (a linter option line before each breakdown statement). Re-diffed on 11 Nov 2026 against the file as it stood at upstream commit `e4e4a9b0`: no other line changed, and upstream's own text of the copied declarations, docstrings included, is the same there as at the copied commit (record: `context/upstream-rediff-2026-11-11.md`). |
 | `theorem_B_community_periodic` | `TheoremB/CommunityClass.lean` | The community's own shape: for every `ν' > 0` and every datum `u₀Real c₀` with `c₀` summable at every Sobolev level, mean-zero, real, divergence-free and `κ · en c₀ · ens c₀ < (2πν')⁴`, the datum meets `InitialVelocityConditionPeriodic`, the zero force meets `ForceConditionPeriodic`, and there exist `v`, `p` with `NavierStokesExistenceAndSmoothnessPeriodic ν' (u₀Real c₀) 0 v p`. This is exactly the conclusion of the upstream positive statement `navier_stokes_existence_and_smoothness_periodic` restricted to that data class at `f = 0`; it says nothing about the positive statement for general data and nothing about `navier_stokes_breakdown_periodic`; both upstream `sorry`s are untouched. Existence only: the class has no uniqueness clause (uniqueness of the coefficient flow behind `vReal c` is `theorem_B_unique`). The rest state is not a witness for nonzero data (probe), and the time-constant velocity is excluded on the shear datum (probe). |
 | `datum_bridge` | `TheoremB/DatumBridge.lean` | The datum bridge (Tier 9, wave W1): every `u₀ : ℝ³ → ℝ³` in the community's `InitialVelocityConditionPeriodic` (`C^∞`, one-periodic, divergence-free) has a coefficient field `coeff u₀` (the Fourier coefficients of the descent of each component to the unit 3-torus, `TheoremB/Descent.lean`) that is summable at every Sobolev level, real, divergence-free, and satisfies `u₀Real (coeff u₀) = u₀`: the pointwise Fourier inversion, from Mathlib's inversion for continuous torus functions with summable coefficients and the rapid decay of the coefficients of a smooth periodic function through `mFourierCoeff_deriv` at every order. Textbook; nothing here is new. |
 | `theorem_B_community_periodic_data` | `TheoremB/CommunityData.lean` | The community's own statement shape over REAL-SPACE data (Tier 9, wave W2): for every `ν' > 0` and every `u₀` in `InitialVelocityConditionPeriodic` with `κ · en (meanFree (coeff u₀)) · ens (meanFree (coeff u₀)) < (2πν')⁴` (the smallness is on the MEAN-FREE part of the datum's coefficient field; the mean vector enters no hypothesis), there exist `v`, `p` with `NavierStokesExistenceAndSmoothnessPeriodic ν' u₀ 0 v p` (OUR COPY of the class). The mean is removed by the Galilean change `v(x, τ) = m + w(x − τm, τ)` (`galilean_class`, `TheoremB/Galilean.lean`, a class-level fact proved from Mathlib and the community definitions only) and the mean-free part is fed to `theorem_B_community_periodic`. This is the conclusion of the upstream positive statement `navier_stokes_existence_and_smoothness_periodic` under that smallness hypothesis at `f = 0`; it says nothing about general data and nothing about `navier_stokes_breakdown_periodic`; both upstream `sorry`s are untouched. Existence only: the coefficient flow behind the witness is unique by `theorem_B_unique`, reached through the sibling below. The constant datum is handled by the boost, not excluded (register probe); the shear datum is nonzero, non-constant, small, and the capstone fires on it with both trivial candidates failing (register probes in `T9Probe`). |
@@ -241,7 +248,7 @@ comes from `pressureCoeff`.
   and the gated probes `ForcedProbe`); Tier 8b, time-smoothness of the eternal flow
   (`TimeSmooth`, wave W1), the Mathlib-only within-convex series engine (`WithinSeries`,
   wave W2, a PR candidate), joint smoothness on the closed slab (`JointSmooth`, W2), and
-  the community class (`CommunityClass`: the six community definitions copied into
+  the community class (`CommunityClass`: the community's two definitions and six structures copied into
   `TheoremB.Community`, the real-part bridge, the datum-side conditions, and the two
   capstones with their probes; W3 and W4); Tier 9, the community's statement shape over
   real-space data (`Descent` and `DatumBridge`, wave W1: the descent of a one-periodic
@@ -271,7 +278,8 @@ comes from `pressureCoeff`.
   announcement draft, the drafted Mathlib PR, the upstreaming dossier, the discrete-twin
   skeleton `NSSkeleton.lean`); it is kept as a historical record, with its planning-time
   status headers; the publication commit adds only supersession notes and wording fixes,
-  except the announcement draft, the PR text and the dossier, which were revised. It is not
+  except the announcement draft, the PR text and the dossier, which were revised; the upstream
+  re-diff record of 11 Nov 2026 (`context/upstream-rediff-2026-11-11.md`) was added after it. It is not
   part of the library.
 - `context/audit-digest.md`: the sanitised per-wave record of the reader audits (verdicts,
   gate counts) behind the process claims under "Verification"; the raw reader reports are not
@@ -421,8 +429,10 @@ kernel status is as reported by each author. Corrections welcome.
   with a link to OpenAI's commit `8937a8f4`, and keeps both existence-and-smoothness
   statements, including the periodic one that `theorem_B_community_periodic_data` inhabits at
   zero force for small mean-free data, `research open`. As checked on 11 Nov 2026 the current
-  file (touched since by `bc1d2bc0` of 12 Sep 2026 (moved without content change, as read on
-  13 Sep 2026), `6fbb54f2` of 18 Sep 2026 and `d9f6ffa8` of 29 Oct 2026) still marks
+  file (touched since by `bc1d2bc0` of 12 Sep 2026 (moved, same bytes), `6fbb54f2` of
+  18 Sep 2026 (the Lean module conversion: `module`, `public import`, `@[expose] public section`
+  and one blank line) and `d9f6ffa8` of 29 Oct 2026 (a linter option line before each breakdown
+  statement); no other line changed, as diffed on 11 Nov 2026) still marks
   the two existence-and-smoothness statements `research open` and the two breakdown
   statements `research solved` with the same link, and all four bodies are `sorry`.
 - Seen, not verifiable by us, not counted as prior art either way: the self-described

@@ -18,15 +18,22 @@ beyond it. Supersedes the M3-scoped draft of 27 Aug.
 - Expert review: No human domain expert has reviewed the statements; the
   community-class copy is byte-identical to upstream (the two definitions and
   six structures copied from the upstream Navier-Stokes file are byte-identical
-  to it with comments stripped, except the namespace and the divergence
+  to it with comments and blank lines stripped, except the namespace and the divergence
   notation, made `local`, its `@[inherit_doc]` attribute dropped); review of
   the statements is what we are asking for. The byte-identity is pinned: the copy matches the
   upstream file content as of commit
   b9fc95eb75b048b195f3d01af4315ad3437ab157 (11 Sep 2026); upstream has touched
-  that file since (commits bc1d2bc0 of 12 Sep 2026, read on 13 Sep 2026 as a move
-  without content change; 6fbb54f2 of 18 Sep 2026, header only, as read on
-  20 Sep 2026; and d9f6ffa8 of 29 Oct 2026, seen on 11 Nov 2026 and not
-  diffed), and the copy was not re-diffed.
+  that file since (commits bc1d2bc0 of 12 Sep 2026, a move with the same bytes;
+  6fbb54f2 of 18 Sep 2026, the Lean module conversion; and d9f6ffa8 of
+  29 Oct 2026, a linter option line before each breakdown statement). Re-diffed
+  on 11 Nov 2026 against the file as it stood at upstream commit e4e4a9b0 (the
+  branch head that day): apart from the module lines, the two option lines and
+  one blank line nothing changed; upstream's own text of the copied
+  declarations, docstrings included, is the same there as at the copied commit; and declaration by
+  declaration, with comments, docstrings and blank lines removed from both
+  sides, the copy differs from upstream's text of those declarations in the
+  same two places only (the file's other declarations are not copied). Text
+  was compared; nothing upstream was compiled.
 - Entry point for statements: the capstones are named in the README table,
   frozen at tags and checked by `scripts/check_tags.sh`; a statement-only file
   (`Statements.lean`) is planned for a later release, v0.1.1.
@@ -658,11 +665,11 @@ What is proved, one line per wave:
   within-set variant exists there (grep-verified); the within-set form is
   absent from Mathlib, not new mathematics, and is a PR candidate.
 - **The community class** (`theorem_B_community_periodic_flow` and
-  `theorem_B_community_periodic`, waves W3 and W4): the six definitions of
-  the class are copied into `TheoremB.Community` in the wording of
+  `theorem_B_community_periodic`, waves W3 and W4): the two definitions and six
+  structures of the class are copied into `TheoremB.Community` in the wording of
   google-deepmind/formal-conjectures as adapted in OpenAI's Comparator
-  file; declaration by declaration with comments stripped the copy is
-  identical to the upstream file except in exactly two places, the
+  file; declaration by declaration with comments and blank lines stripped the
+  copy is identical to the upstream file except in exactly two places, the
   namespace and the `local notation` for the divergence (a claim that the
   namespace is the sole difference would be false and is not made); the
   upstream file is not imported. The pinned capstone re-exports the twenty
@@ -680,10 +687,10 @@ What is proved, one line per wave:
   first seven clauses of the pinned form. The real-part bridge and the
   clock change are textbook.
 
-The community class copied into `TheoremB.Community` is taken from the Navier-Stokes file of google-deepmind/formal-conjectures; the copy matches the upstream file content as of commit b9fc95eb75b048b195f3d01af4315ad3437ab157 (11 September 2026). As checked on 11 Nov 2026, upstream has touched that file since: commit bc1d2bc0df6edcbc6bfa43d0b4b1018ccdbdb627 of 12 September 2026 (read on 13 September 2026 as a move without any content change), commit 6fbb54f24ccc2e64dcfaffc28c58950e377110d2 of 18 September 2026 (which, as read on 20 September 2026, changed only the file header for the module system, with every definition, structure and both `sorry` bodies byte-identical), and commit d9f6ffa8dd7fc2b8b597dd1f7a824d27b12b88af of 29 October 2026 (a linter change that also adds a `linter.style.formal_proof_palomar false` option to the two breakdown statements); the copy was not re-diffed against the current file. That file carries the positive statement `navier_stokes_existence_and_smoothness_periodic` and the breakdown statement `navier_stokes_breakdown_periodic`, both names verified verbatim against the fetched file on 13 September 2026. Declaration by declaration, with comments and docstrings stripped, our copy of the two definitions and six structures is byte-identical to the file fetched on 13 September 2026 except in the namespace (`NavierStokes` upstream, `TheoremB.Community` here) and the divergence notation (a global `@[inherit_doc] notation "∇⬝"` upstream, a `local notation` here); the upstream file is not imported into the gated tree, and both upstream placeholder proofs, the `sorry` bodies of `navier_stokes_existence_and_smoothness_periodic` and `navier_stokes_breakdown_periodic`, are untouched by us.
+The community class copied into `TheoremB.Community` is taken from the Navier-Stokes file of google-deepmind/formal-conjectures; the copy matches the upstream file content as of commit b9fc95eb75b048b195f3d01af4315ad3437ab157 (11 September 2026). As checked on 11 Nov 2026, upstream has touched that file since: commit bc1d2bc0df6edcbc6bfa43d0b4b1018ccdbdb627 of 12 September 2026 (a move without any content change: the file has the same bytes at both commits, checked on 11 November 2026), commit 6fbb54f24ccc2e64dcfaffc28c58950e377110d2 of 18 September 2026 (the Lean module conversion: it adds `module`, turns `import` into `public import` and adds `@[expose] public section` with one blank line, and changes nothing else), and commit d9f6ffa8dd7fc2b8b597dd1f7a824d27b12b88af of 29 October 2026 (it adds one `set_option linter.style.formal_proof_palomar false in` line before each of the two breakdown statements and changes nothing else in the file). The copy was re-diffed on 11 November 2026 against the file as it stood at upstream commit e4e4a9b0b6031c663a293de43a0f29a379ae03e0 (the branch head that day), which has the same bytes as the file at d9f6ffa8dd7fc2b8b597dd1f7a824d27b12b88af: across the three commits those are the only changed lines, and upstream's own text of the two definitions, the six structures and the divergence notation, docstrings included, is the same there as at the copied commit. Text was compared; nothing upstream was compiled. That file carries four problem statements; the two periodic ones are the positive statement `navier_stokes_existence_and_smoothness_periodic` and the breakdown statement `navier_stokes_breakdown_periodic`, both names verified verbatim against the fetched file on 13 September 2026. Declaration by declaration, with comments, docstrings and blank lines stripped, our copy of the two definitions and six structures is byte-identical to the file fetched on 13 September 2026, and to the file fetched on 11 November 2026, except in the namespace (`NavierStokes` upstream, `TheoremB.Community` here) and the divergence notation (a global `@[inherit_doc] notation "∇⬝"` upstream, a `local notation` here); the upstream file is not imported into the gated tree, and both upstream placeholder proofs, the `sorry` bodies of `navier_stokes_existence_and_smoothness_periodic` and `navier_stokes_breakdown_periodic`, are untouched by us.
 
 What this does and does not say about the upstream file. The upstream
-file carries two statements, both `sorry`: the positive statement
+file carries four problem statements, all `sorry`; the two periodic ones are the positive statement
 `navier_stokes_existence_and_smoothness_periodic` (for every `ν > 0` and
 every smooth, divergence-free, one-periodic datum there exist `v`, `p` in
 the class at `f = 0`) and the breakdown statement

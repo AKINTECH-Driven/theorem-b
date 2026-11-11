@@ -18,6 +18,11 @@ The publication commit. It adds:
 - package metadata in `lakefile.toml` (version, description, keywords, licence);
 - prose corrections in the README and the context documents.
 
+The upstream re-diff of 11 Nov 2026 is recorded in `context/upstream-rediff-2026-11-11.md`: as
+text, the copied community-class declarations are unchanged since the copied commit `b9fc95eb` in
+the upstream file as it stood at commit `e4e4a9b0` that day (nothing upstream was compiled). The
+README and the announcement fact sheet say the same.
+
 ## Tags before v0.1.0
 
 - 2026-08-27 `m1-green`: M1 complete, the four open steps in `RiccatiTrap.lean` closed.
