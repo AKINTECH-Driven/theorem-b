@@ -622,8 +622,9 @@ F5 commit; laid on `2a4036b`). Gate GREEN 226/226 at that commit.
 
 ## Tier 8b: time-smoothness, and the community class inhabited
 
-UPDATE (Tier 8b, 9 to 10 Sep 2026; PROPOSED WORDING, the user's call, per
-rule 6 of the Tier 8 blueprint's audit register): the eternal small-data
+UPDATE (Tier 8b, 9 to 10 Sep 2026; ADOPTED by the user on 11 Nov 2026 as it
+stands at commit `01d6cd4`, per rule 6 of the Tier 8 blueprint's audit
+register): the eternal small-data
 flow is `C^∞` in time on the CLOSED half-line, jointly `C^∞` in `(x, t)`
 on the closed slab `ℝ³ × [0, ∞)` together with its pressure, and, read
 back as a real velocity and pressure in the clock `τ = t/(2π)`, it
@@ -633,7 +634,7 @@ inhabits OUR COPY of the community's periodic solution class at `f = 0`:
 `TheoremB/TimeSmooth.lean`, `WithinSeries.lean`, `JointSmooth.lean`,
 `CommunityClass.lean`.
 
-The proposed sentence: for data in the campaign's small class, OUR COPY of
+The adopted sentence: for data in the campaign's small class, OUR COPY of
 the community's periodic solution class
 `NavierStokesExistenceAndSmoothnessPeriodic (ν/(2π)) u₀ 0 v p` is
 inhabited by the eternal flow (compiled); this is the conclusion of the
