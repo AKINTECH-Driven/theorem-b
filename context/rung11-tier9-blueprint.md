@@ -54,8 +54,8 @@ the time this file was written.
   the orchestrator re-verified it by `git log`). Nothing under the repository was touched by the design pass, by either critic, or by this
   pass: every one of them writes only under the session directory `audit-tier9/`. Disk: 7.2 GB
   free at the start of this pass.
-- Evidence state, by whom and where (session directory `audit-tier9/`, absolute prefix
-  `/Users/konstantinosa.tsantakos/.claude/projects/-Users-konstantinosa-tsantakos-Documents/f281f76f-53ac-48b2-9228-0cfa7b9859e9/audit-tier9/`):
+- Evidence state, by whom and where (session directory `audit-tier9/`, inside
+  the session audit directory (outside the tree)):
   - RECONNAISSANCE (six agents, 12 and 13 Sep): `recon/R1/ReconR1.lean` (exit 0, 0 sorry),
     `recon/R2/ReconR2.lean` (exit 0, 0 sorry), `recon/R3/ReconR3.lean` (exit 0, 2 sorry = the
     two R2 bricks), `recon/R4/ReconR4.lean` (exit 0, 0 sorry), `recon/R5/ReconR5.lean` (exit 0,

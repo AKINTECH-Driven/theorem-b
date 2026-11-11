@@ -47,7 +47,7 @@ a surviving artifact, and every PROVED proof is LOST and must be re-proved.
 What survives, and what was then re-verified independently: the statements
 in §4 were extracted from this file verbatim into two recompile files kept
 outside the scratchpad
-(`~/.claude/projects/…/audit-2026-09-02/tier8-recheck/Recheck8a_Forced.lean`,
+(the session audit directory (outside the tree), `tier8-recheck/Recheck8a_Forced.lean`,
 `Recheck8b_TimeSmooth.lean`) and elaborated at the pin with `lake env lean`:
 8a — 29 declarations, exit 0, no errors; 8b — 59 declarations plus the §2
 community definitions and the twenty classical clauses spliced verbatim from

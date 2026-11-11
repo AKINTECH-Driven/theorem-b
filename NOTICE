@@ -1,0 +1,24 @@
+Theorem B: small-data 3D Navier-Stokes on the torus, machine-checked in Lean 4
+Copyright 2026 Konstantinos Tsantakos (AKINTECH Driven Ltd)
+Licensed under the Apache License, Version 2.0.
+
+This repository includes material from the following projects, each licensed
+under the Apache License, Version 2.0 (https://www.apache.org/licenses/LICENSE-2.0):
+
+1. google-deepmind/formal-conjectures
+   Copyright 2026 The Formal Conjectures Authors.
+   TheoremB/CommunityClass.lean, section `TheoremB.Community`, copies two definitions
+   and six structures from that repository's Navier-Stokes file (file content as of commit
+   b9fc95eb75b048b195f3d01af4315ad3437ab157, 11 September 2026). Modifications: the
+   namespace, the divergence notation made local (its `@[inherit_doc]` attribute
+   dropped), comments and docstrings removed.
+
+2. uda-lab/leray-hopf (Tomoki Uda)
+   Copyright 2026 Tomoki Uda.
+   TheoremB/LerayHopfVocab.lean restates that project's L2-sigma vocabulary layer
+   (commit e704400f2fb2, v0.2.1, 8 August 2026) against this repository's Mathlib
+   pin, with modifications. Nothing else of that project is redistributed here; its
+   verification doctrine is followed, not copied.
+
+Mathlib (leanprover-community/mathlib4, Apache License 2.0) is a build dependency
+fetched by Lake at the pinned revision and is not redistributed in this tree.

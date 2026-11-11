@@ -1,4 +1,8 @@
 name = "theoremb"
+version = "0.1.0"
+description = "Small-data 3D Navier-Stokes on the torus, machine-checked in Lean 4"
+keywords = ["navier-stokes", "pde", "formalization", "mathlib"]
+license = "Apache-2.0"
 defaultTargets = ["TheoremB"]
 
 [[require]]

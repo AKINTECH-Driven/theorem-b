@@ -47,7 +47,12 @@ identifying every level's witness with the base flow through
 
 HONEST SCOPE. Nothing is asserted about analyticity (`contDiff_tsum` caps
 at `ℕ∞`) or about `C^∞` in time (that needs a time-derivative of
-`convFull`, which the campaign does not have).  The classical coefficients
+`convFull`, which the campaign does not have).
+[Superseded 9 Sep 2026: `TheoremB/TimeSmooth.lean` supplies the
+time-derivative of the convection (`hasDerivAt_convBil_flow`) and proves
+`C^∞` in time on the closed half-line; the statements of this file are
+unchanged.]
+The classical coefficients
 carry the campaign's own normalisation — `ν/(2π)²` on `Δu` and `1/2π` on
 `(u·∇)u`, always to be quoted together; "physical viscosity" is not a
 well-defined phrase for this un-rescaled lift (see `Calibration.lean`).

@@ -6,11 +6,14 @@ Torus3, haarTorus3, L2VF/L2C, torus3_mFourierBasis, mFourierCoeff3 with
 Parseval, the component CLMs, DivFreeL2/divSymbol, the closed complete
 L2Sigma, memH1Torus/h1EnergySq, viscousFormSq, stokesTestPairing,
 DissipativeEvolution, and WeakFormNS — compiled against THIS repository's
-Mathlib pin. Statements copied byte-similar from the read-only clone at
-~/Documents/leray-hopf-ref (commit e704400f2fb2, v0.2.1, 2026-08-08), with
+Mathlib pin. Statements copied byte-similar from a read-only local clone of
+uda-lab/leray-hopf (commit e704400f2fb2, v0.2.1, 2026-08-08), with
 this header as the per-file provenance record; both projects pin the same
 toolchain (v4.31.0-rc2) and the same Mathlib revision, so the restatement
 carries no pin risk.
+
+LICENCE NOTE. uda-lab/leray-hopf is Apache License 2.0, Copyright 2026 Tomoki Uda; this
+restatement is a modified derivative of its vocabulary layer (see `NOTICE`).
 
 PURPOSE AND HONEST SCOPE. This file is the kernel-checked half of the
 alignment the Tier-5 blueprint promised: it proves the leray-hopf solution

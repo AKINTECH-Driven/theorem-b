@@ -25,6 +25,9 @@
     upstream file is kept on this machine; the local half is measured against
     the persisted `ProbeOpenAIStatement.lean`.  The external file is not
     imported into the gated tree; this block is a copy of it.
+    [Superseded 13 Sep 2026: the upstream file was fetched and compared, comments
+    stripped (D27 in `context/rung12-tier9c-blueprint.md`); the two differences
+    recorded above are the only ones in the copied definitions and structures.]
   * The bridge objects `vReal`, `pReal`, `u₀Real` (position before time, as
     the class has it; the factor `2π` on the pressure is the clock change of
     section 2b, `τ = t/(2π)`).
@@ -150,6 +153,31 @@ local notation "ℝ³" => EuclideanSpace ℝ (Fin 3)
 
 namespace TheoremB
 
+/-
+The definitions and structures of this section are copied from the Navier-Stokes file of
+google-deepmind/formal-conjectures (file content as of commit
+b9fc95eb75b048b195f3d01af4315ad3437ab157, 11 Sep 2026), whose header reads:
+
+Copyright 2026 The Formal Conjectures Authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    https://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Only the two definitions and six structures used here are copied; the rest of the upstream
+file (its other lemmas, structures and statements) is not. Modified here (2026): namespace
+`TheoremB.Community` in place of `NavierStokes`, the divergence notation made `local` (its
+`@[inherit_doc]` attribute dropped), comments and docstrings removed. Everything outside this
+section is original to this repository.
+-/
 namespace Community
 variable {n : ℕ}
 noncomputable

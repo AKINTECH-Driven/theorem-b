@@ -7,9 +7,18 @@ absent from Mathlib at pin `15a89b24`. This dossier lists them in
 PR-ready units, with the generalization each would want before submission.
 Acting on it (opening PRs, engaging reviewers) is outward-facing and
 therefore the user's call; nothing here has been submitted anywhere.
+Master findings below are dated: unit-by-unit reads of Mathlib master on
+20 Sep 2026, and pull-request status as checked on 11 Nov 2026 (Mathlib
+master is on `v4.36.0-rc2` that day, against the campaign's `v4.31.0-rc2`).
 
-## Unit 1 — the multi-dimensional derivative↔frequency bridge
+## Unit 1: the multi-dimensional derivative↔frequency bridge
 **File**: `TheoremB/FourierDeriv.lean` (M4 wave 1; audited, tag m4-wave1-green).
+**Master check (20 Sep 2026)**: `fourierCoeffOn_of_hasDerivAt` (with
+`fourierCoeffOn_of_hasDerivAt_Ioo` and `fourierCoeffOn_of_hasDeriv_right`)
+in `Analysis/Fourier/AddCircle.lean` already gives the interval identity,
+and `FourierDeriv.lean` itself consumes `fourierCoeffOn_of_hasDerivAt`. Only
+the `AddCircle`-level form with `n = 0` and the multi-dimensional capstone
+are proposed; `AddCircleMulti.lean` on master has no derivative declaration.
 **Content**: `fourierCoeff_hasDerivAt` (1-D periodic, all `n : ℤ` including 0),
 the coordinate-peeling `integral_insertNth`, the monomial factorization
 `mFourier_insertNth`, and the capstone `mFourierCoeff_deriv`
@@ -19,11 +28,11 @@ interval-based; AddCircleMulti has no derivative layer at all.
 **Generalization before PR**: arbitrary `Fintype d` (the proofs are
 d-agnostic modulo `Fin 3` literals); align with Mathlib's preference for
 `fourierCoeff` naming. The file-local MeasureSpace instances must be
-reconciled with AddCircleMulti's own local instances (a known sharp edge —
+reconciled with AddCircleMulti's own local instances (a known sharp edge;
 Mathlib may prefer to EXPORT those instances, which would simplify every
 consumer, ours included).
 
-## Unit 2 — the lattice kernel and shell machinery
+## Unit 2: the lattice kernel and shell machinery
 **Files**: `TheoremB/LatticeKernel.lean` (Tier 4) and the shell-count
 lemmas inside `TheoremB/SpectralNorms.lean` (M2).
 **Content**: `summable_freq_rpow_neg` (Σ‖k‖^s over ℤ³ converges for
@@ -31,57 +40,87 @@ s < −3, via natMax shell counts), `kernel_sum_le` (the shift-uniform
 convolution-kernel bound at exponent 7/4), `weighted_interp` (the
 (1/8, 7/8) Hölder interpolation between ℓ²-mass and weighted ℓ²-mass).
 **Why**: these are the standard bricks of discrete harmonic analysis.
-CORRECTION (2 Sep 2026): the pin is NOT bare here — `ZLattice.summable_norm_rpow`
+CORRECTION (2 Sep 2026): the pin is NOT bare here: `ZLattice.summable_norm_rpow`
 exists and is what `summable_freq_rpow_neg` consumes (SpectralNorms.lean:84),
 `Mathlib/Topology/Algebra/InfiniteSum/DiscreteConvolution.lean` exists at
 the pin, and `tsum_mul_tsum_of_summable_norm` is in
 `Analysis/Normed/Ring/InfiniteSum.lean`. What is plausibly absent is the
 shift-uniform kernel bound at exponent 7/4 with shell counts and the
 (1/8, 7/8) weighted interpolation; a PR must be scoped to those and cite
-the existing API. The same caution applies to every "absent from Mathlib"
-line in this dossier: each was read from the pinned sources, none was
-checked against Mathlib master or open PRs, and "PR-ready" is a
-self-assessment under Mathlib's 2026 policy on LLM-generated code.
+the existing API. Master check (20 Sep 2026): `ZLattice.summable_norm_sub_rpow`
+(the shifted sum) and `ZLattice.tsum_norm_rpow_le` (an explicit bound) also
+exist on master, so the summability half and the shifted summability are
+already covered; what is left is the uniform-in-shift constant at 7/4 and
+the weighted interpolation, a short consequence of Mathlib's Hölder-for-tsum
+family (`Real.inner_le_Lp_mul_Lq_tsum`). **Status: not proposed unless
+asked.** The unit-by-unit master findings are given in each unit; "PR-ready"
+remains a self-assessment under Mathlib's 2026 policy on LLM-generated code.
 **Generalization**: ℤ^d with the exponent window s < −d; the kernel lemma
 at general conjugate exponents.
 
-## Unit 3 — differentiation-adjacent series tools
-**Content**: `hasDerivAt_finset_sum_sq` (DefectCalculus), the
-finite-section energy-derivative pattern, and the interval-localized
-Grönwall wrappers (`gronwall_const_source` in FullUnique — an
-endpoint-free constant-source Grönwall needing derivative data only on
+## Unit 3: differentiation-adjacent series tools
+**Content**: the finite-section energy-derivative pattern, and the
+interval-localized Grönwall wrappers (`gronwall_const_source` in FullUnique,
+an endpoint-free constant-source Grönwall needing derivative data only on
 the open interior, which Mathlib's Gronwall.lean lacks: its lemmas demand
-the left endpoint).
+the left endpoint). (`hasDerivAt_finset_sum_sq` in DefectCalculus was
+listed here before; it is a corollary of `HasDerivAt.sum` and is not a
+contribution.)
 **Why**: the Ico-endpoint requirement in Mathlib's Grönwall family is a
 recurring pain point; the Ioo-only form is strictly more applicable.
+**Master check (20 Sep 2026)**: `Analysis/ODE/Gronwall.lean` has the same
+sixteen declarations as the pin and no Ioo-only wrapper exists, but
+`gronwall_const_source` is derivable from
+`norm_le_gronwallBound_of_norm_deriv_right_le` on `[a + ε, b]` plus
+continuity, which is what a reviewer would say: live, low value.
+**Related PRs on master (as checked on 11 Nov 2026)**: #38829 (Bellman form,
+`Analysis/ODE/Gronwall`) was closed unmerged on 19 May 2026; #39871 (uniform
+Grönwall inequality, new file `Analysis/ODE/UniformGronwall.lean`) is open,
+with the labels awaiting-author, LLM-generated, new-contributor and
+t-analysis; #45443 (variable-coefficient integral Grönwall) is open since
+28 Oct 2026. #39871 keeps the `Ico` right-derivative convention. From
+their titles and labels, none appears to cover the Ioo-only form or the
+derivative-free window form. The 11 Nov check read titles and labels only;
+the 20 Sep audit read the diffs of #38829 and #39871 (hence the `Ico` remark);
+the diff of #45443 was not read.
+A standalone PR draft of the derivative-free form sits at
+`context/upstream/PR.md` and `GronwallWindow.lean` (drafted 29 Aug 2026, not
+submitted).
 
-## Unit 4 — the ε/3 tail method as reusable lemmas
+## Unit 4: the ε/3 tail method as reusable lemmas
 **Files**: `TheoremB/LimitPassage.lean`, `ConvContinuity.lean` (Tier 3).
 **Content**: `tendsto_convFull_of_modes` and
-`tendsto_convFull_uniformlyOn` are convolution-specific, but their core —
+`tendsto_convFull_uniformlyOn` are convolution-specific, but their core:
 "mode-wise limits pass through an ℓ²×ℓ²-type bilinear tsum under a
-uniform weighted-tail bound, where no summable uniform majorant exists" —
+uniform weighted-tail bound, where no summable uniform majorant exists":
 generalizes to a statement about bilinear maps on weighted ℓ² spaces.
 Tannery's theorem (`tendsto_tsum_of_dominated_convergence`) exists at the
 pin; the tail-uniform variant does not.
+**Master check (20 Sep 2026)**: `Analysis/Normed/Group/Tannery.lean` still
+contains only `tendsto_tsum_of_dominated_convergence`; no tail-uniform or
+bilinear variant, and a PR search found nothing in this direction.
 **Generalization effort**: moderate; worth proposing as an extension next
 to Tannery in `Analysis/Normed/Group/Tannery.lean`.
 
-## Unit 5 — the product-coefficient identity
+## Unit 5: the product-coefficient identity
 **File**: `TheoremB/CoeffExtract.lean` (Tier 5).
-**Content**: `convFull_pairing_physical` — the Fourier coefficient of a
+**Content**: `convFull_pairing_physical`: the Fourier coefficient of a
 pointwise product of two L² synthesized functions equals the coefficient
 convolution, proved entirely inside L² (the twist trick: absorb the
 character into one factor, keep both slots L², use inner-product
-continuity — no L¹ excursion, no convolution theorem).
+continuity; no L¹ excursion, no convolution theorem).
 **Why**: Mathlib has NO torus convolution theorem at the pin (verified by
 Tier-5 recon); this is the natural first brick, and the L²-only proof is
 short.
+**Master check (20 Sep 2026)**: `AddCircleMulti.lean` has the Parseval pairing
+`hasSum_prod_mFourierCoeff` but no coefficient-of-a-product identity, and the
+1-D `AddCircle.lean` has no `mul`, `conv` or `prod` coefficient lemma.
 **Generalization**: state for two arbitrary `Lp ℂ 2` functions via their
 coefficient families (our version is phrased through the synthesis
 operator; the general form falls out by `repr` surjectivity).
 
-## Unit 6 — small sharp edges worth reporting upstream (not PRs)
+## Unit 6: small sharp edges worth reporting upstream (not PRs)
+**Master check (20 Sep 2026)**: all four items below were unchanged on master.
 - `Analysis/ODE/Gronwall.lean`'s right-derivative hypotheses demand the
   LEFT endpoint (Ico), which interior-only knowledge cannot satisfy.
 - Countable-product metrizability is Finite-index-only
@@ -94,9 +133,9 @@ operator; the general form falls out by `repr` surjectivity).
   import (we now name them explicitly per file).
 - No named δ-integral lemma `∫ mFourier n = if n = 0 then 1 else 0`.
 
-## Unit 7 — the within-convex Weierstrass M-test for series of functions
+## Unit 7: the within-convex Weierstrass M-test for series of functions
 **File**: `TheoremB/WithinSeries.lean` (Tier 8b wave W2, tag
-`t8b-joint-smooth-green`; `import Mathlib` only, 234 lines, six theorems,
+`t8b-joint-smooth-green`; `import Mathlib` only, 233 lines, six theorems,
 all gated).
 **Content**: on a convex set `s`, a series of functions with a summable
 uniform bound on the within-derivatives is differentiable within `s`
@@ -139,7 +178,7 @@ user's call.
 
 ## Housekeeping notes recorded by the Tier-5 audit (repo-internal)
 - `calibrated_integral_equation`/`calibrated_trap` (TorusStructure) are
-  valid, audited, and currently unconsumed — the torus capstone re-derives
+  valid, audited, and currently unconsumed; the torus capstone re-derives
   the calibration inline; both paths verified to agree.
 - `mode_equation_of_weak` carries two unused hypotheses (`hν`, `hzero`)
   in its frozen statement; harmless (they only weaken the lemma).

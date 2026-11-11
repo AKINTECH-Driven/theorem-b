@@ -2,10 +2,10 @@
 
 Run at commit `5dfce7a` (the tree of tag `t8b-community-green` plus the dossier
 commit), toolchain `leanprover/lean4:v4.31.0-rc2`, checker
-`~/.elan/toolchains/leanprover--lean4---v4.31.0-rc2/bin/leanchecker` (the
+the toolchain's own `bin/leanchecker` (the
 checker that ships inside every Lean toolchain from v4.28.0; nothing was
-cloned, built or installed), by `scripts/replay_leanchecker.sh`, on a Mac with
-16 GiB of memory and 10 cores. Started 2026-09-12T20:36:20Z; the summed
+cloned, built or installed), by `scripts/replay_leanchecker.sh`, on a 16 GiB machine with
+10 cores. Started 2026-09-12T20:36:20Z; the summed
 per-module checker time is 2,357 s (about 39 minutes of wall clock).
 
 What one line means: `lake env leanchecker <module>` re-checks every

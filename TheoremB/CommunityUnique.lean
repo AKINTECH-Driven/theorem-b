@@ -149,7 +149,8 @@
     item 11): the two capstones above are what makes uniqueness citable inside OUR COPY of the
     class.
   * PROPOSED announcement wording (blueprint section 8 item 3, the written-out form of D9; the
-    user's call; quoted here, not asserted, verbatim):
+    user's call; quoted here, not asserted, verbatim)
+    [Adopted by the user on 13 Sep 2026, commit 1146a08]:
     "Inside OUR COPY of the community's periodic solution class
     `NavierStokesExistenceAndSmoothnessPeriodic ν' u₀ 0 v p` with `0 < ν'` and `f = 0`, two members
     with the same datum `u₀` have the same velocity at every point and every `t ≥ 0` and pressures

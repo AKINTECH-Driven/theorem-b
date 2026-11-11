@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata in this file."
+title: "Theorem B: small-data 3D Navier-Stokes on the torus, machine-checked in Lean 4"
+type: software
+authors:
+  - family-names: Tsantakos
+    given-names: Konstantinos
+    affiliation: "AKINTECH Driven Ltd"
+license: Apache-2.0
+version: 0.1.0
+keywords:
+  - navier-stokes
+  - pde
+  - formalization
+  - mathlib

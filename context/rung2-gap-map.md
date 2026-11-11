@@ -107,7 +107,7 @@ Decomposition into tiers, each with a deterministic acceptance gate
 | Sobolev H¹ → L⁶ with constant, on 𝕋³ | MISSING | Tier 1 task (ℝ³ version expected in Mathlib; torus transfer is ours) |
 | Enstrophy dynamics for smooth solutions | MISSING | Tier 1-2, the campaign core |
 | Local H¹ well-posedness + continuation | MISSING | Tier 3, the hard layer |
-| Small-data global regularity (any assistant) | MISSING | the prize of this campaign |
+| Small-data global regularity (any assistant) | MISSING | the goal of this campaign |
 
 ## 4. Venue and toolchain decisions
 

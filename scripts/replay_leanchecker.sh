@@ -8,7 +8,8 @@
 # from the environment provided by its imports (the imports are not replayed;
 # pass --fresh yourself for a single module if you want that, it is single-threaded
 # and slow). Writes one TSV line per module: module, exit code, seconds, output size.
-# Exit status: 0 iff every module replayed with exit 0. This script reports; it
+# Exit status: 0 iff every module replayed with exit 0; 2 if the toolchain has no
+# leanchecker (or lake is missing), before anything is replayed. This script reports; it
 # never repairs.
 #
 # The umbrella module TheoremB (imports only, no declarations of its own) is NOT
@@ -20,6 +21,7 @@
 # Usage: [REPLAY_ROOT=1] bash scripts/replay_leanchecker.sh [outdir]   (default outdir: .lake/leanchecker)
 set -uo pipefail
 cd "$(dirname "$0")/.."
+lake env which leanchecker >/dev/null 2>&1 || { echo "leanchecker not in toolchain (or lake is missing)" >&2; exit 2; }
 OUT="${1:-.lake/leanchecker}"
 mkdir -p "$OUT"
 TSV="$OUT/replay.tsv"

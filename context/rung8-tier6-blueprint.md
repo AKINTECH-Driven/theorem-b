@@ -13,7 +13,7 @@ explicit bound `sob m (c t) ≤ sob m c₀·(1 + exp(K_m T))` on every window �
 and, from all-levels finiteness, the flow has a genuinely smooth
 representative: the ℤ³-periodic lift `u : ℝ → (Fin 3 → ℝ) → ℂ`, C^p in
 space for every p, C¹ in time on t > 0, satisfying calibrated
-Navier-Stokes POINTWISE. Small-data solutions in the Clay problem's own
+Navier-Stokes POINTWISE. Small-data solutions in the community problem's own
 regularity class.
 
 ## The decisive design facts (recon-established)

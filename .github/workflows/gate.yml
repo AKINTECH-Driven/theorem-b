@@ -1,0 +1,105 @@
+name: gate
+on:
+  push:
+    branches: [main]
+    tags: ['*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Never set MATHLIB_CACHE_USE_CLOUDFLARE in this file: as of 20 Sep 2026 the mirror does not
+# hold this Mathlib pin, while the default cache endpoint does.
+
+jobs:
+  build-and-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0          # tags and full history for the tag check
+
+      - name: Pin self-check
+        run: |
+          test "$(cat lean-toolchain)" = "leanprover/lean4:v4.31.0-rc2"
+          grep -q '"rev": "15a89b2468bc01f1a6230d6e49ef5efc5286e502"' lake-manifest.json
+
+      - name: Free runner disk (about 14 GB is tight for Mathlib oleans plus toolchain)
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL || true
+          df -h /
+
+      - name: Build (elan from lean-toolchain, Mathlib oleans from the cache, lake build)
+        uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          use-mathlib-cache: true
+          use-github-cache: false
+          build: true
+          test: false
+          lint: false
+          # axiom-audit-root defaults to the library name TheoremB, which covers 483 of the 484
+          # ledger entries; LHRestate.mem_L2Sigma_iff is outside it. The next steps are the
+          # load-bearing check.
+          axiom-audit: true
+          check-reservoir-eligibility: true
+
+      - name: Drop the .ltar download cache after unpacking (disk)
+        run: rm -rf ~/.cache/mathlib && df -h /
+
+      - name: Axiom gate
+        run: |
+          bash scripts/check_axioms.sh | tee gate.log
+          test "${PIPESTATUS[0]}" = "0"
+          grep -q '^GATE: GREEN' gate.log
+
+      - name: Entry count on the bracket pattern (join wrapped lines; never a quote-delimited regex)
+        run: |
+          EXPECTED=$(grep -c '^#print axioms' AxiomCheck.lean)
+          FOUND=$(awk '/\[/ && !/\]/ {buf=$0; next} buf!="" {buf=buf" "$0; if (index($0,"]")) {print buf; buf=""}; next} {print}' gate.log | grep -c 'depends on axioms: \[')
+          echo "entries: $FOUND expected: $EXPECTED"
+          test "$FOUND" = "$EXPECTED"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gate-log
+          path: gate.log
+
+  replay:
+    # kernel replay of every module through the toolchain's leanchecker; about an hour; on demand and on tags
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
+    needs: build-and-gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+      - name: Free runner disk
+        run: sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc || true
+      - uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          use-mathlib-cache: true
+          use-github-cache: false
+          build: true
+          test: false
+          lint: false
+      - run: rm -rf ~/.cache/mathlib
+      - name: Per-module leanchecker replay (umbrella module skipped by design; needs more than 23 GB)
+        run: bash scripts/replay_leanchecker.sh .lake/leanchecker
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: leanchecker-replay
+          path: .lake/leanchecker
+
+  tags:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Frozen capstones byte-identical at their tags
+        run: bash scripts/check_tags.sh

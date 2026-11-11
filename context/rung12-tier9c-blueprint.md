@@ -1,6 +1,6 @@
 # Rung 12: Tier 9c blueprint (W3): uniqueness inside OUR COPY of the community class at f = 0, in real-space vocabulary
 
-Status: PLANNING (13 Sep 2026, session `ca018cdf-179f-4d35-ac64-e4ff4bc5b398`): **nothing
+Status: PLANNING (13 Sep 2026, the Tier 9c session): **nothing
 built; gate untouched at HEAD `dc3bd8f`** (the announcement adoption, prose only, on top of
 `ff89dd0` (Tier 9 prose), `332790f` (W2, tag `t9-complete`), `ffb8406` (W1, tag
 `t9-datum-bridge-green`), `1e971bd` (the Tier 9 blueprint); 30 tags; 70 commits). The gate was
@@ -18,7 +18,7 @@ modules at `5dfce7a` (`context/leanchecker-replay-2026-09-12.md`) and the four T
 planning pass; it writes only this file (in `context/`, as `rung12-tier9c-blueprint.md`) and its
 probes (in the session directory `audit-tier9c/`).
 
-**Reconnaissance state (the orchestrator, 13 Sep 2026, workflow `wf_1999ecfc-e65`, eight
+**Reconnaissance state (the orchestrator, 13 Sep 2026, the Tier 9c session, eight
 probes in parallel, 23 minutes, every agent returned; structured reports in
 `audit-tier9c/recon/recon-results.json`, the inventory in `recon/recon-summary.md`, the traps in
 `recon/traps-all.md`, the measured names in `recon/verified-names-all.md`; the agents' own
@@ -110,8 +110,8 @@ time this file was written.
   every one of them writes only under the session directory `audit-tier9c/`. Disk: 5.8 GiB free
   at the start of this pass (`df -h`; the skeleton's 8.0 GiB was measured before the critics' probes
   and oleans). No `lean` process was running when this pass compiled its probe.
-- Evidence state, by whom and where (session directory `audit-tier9c/`, absolute prefix
-  `/Users/konstantinosa.tsantakos/.claude/projects/-Users-konstantinosa-tsantakos-Documents/ca018cdf-179f-4d35-ac64-e4ff4bc5b398/audit-tier9c/`):
+- Evidence state, by whom and where (session directory `audit-tier9c/`, inside
+  the session audit directory (outside the tree)):
   - RECONNAISSANCE (eight agents, 13 Sep): `recon/P1/ReconP1.lean` (exit 0, 0 sorry), `recon/P2/ReconP2.lean`
     (exit 0, 5 sorry = the P1 interface I1 to I5), `recon/P3/ReconP3.lean` (exit 0, 0 sorry),
     `recon/P4/ReconP4.lean` (exit 0, 9 sorry = interface stubs), `recon/P5/ReconP5.lean` (exit 0, 1 sorry =
@@ -1763,7 +1763,7 @@ the three modules). Recorded facts: (1) the three local measure instance triples
 nothing leaks; (2) the probe's `-- SECTION` markers are dropped and its `/-! # A. W3a : … (P1) -/` headings kept
 (provenance); (3) several frozen statements stand on single lines longer than 100 characters because the recon
 brief stated the interface on one line and the fences were extracted from the probe verbatim (frozen text, not
-re-wrapped); (4) disk 5.6 GiB before and after. No tag (ladder §5). Workflow `wf_fba1e9f2-1e9`; records under
+re-wrapped); (4) disk 5.6 GiB before and after. No tag (ladder §5). The wave's workflow; records under
 `audit-tier9c/build-w3a/`.
 
 13 Sep 2026, Tier 9c wave W3b BUILT: `TheoremB/ClassFlowODE.lean` (897 lines, instances `co_*`, imports
@@ -1807,7 +1807,7 @@ pin prints some errors as `error(lean.unknownIdentifier):`, so `grep -c "error:"
 `error` or on the exit code); the quote-delimited gate regex reads 438 line-anchored and 434 greedy against the
 true 444. Kernel replay of the three W3a modules recorded meanwhile (`audit-tier9c/replay/SUMMARY.txt`:
 `lake env leanchecker` exit 0 with empty output for SliceExtract 36 s, ConvectionCoeff 6 s, ClassParseval 18 s);
-ClassFlowODE's replay follows at the tag. Disk 5.6 GiB. No tag (ladder §5). Workflow `wf_07986f09-74c`; records
+ClassFlowODE's replay follows at the tag. Disk 5.6 GiB. No tag (ladder §5). The wave's workflow; records
 under `audit-tier9c/build-w3b/`.
 
 13 Sep 2026, Tier 9c wave W3c BUILT, TIER 9c COMPLETE: `TheoremB/CommunityUnique.lean` (about 900 lines,
@@ -1867,7 +1867,7 @@ consumed by a capstone (the capstone calls `theorem_B_unique` directly, D4); (4)
 `fderiv_sub` is stated for `f - g`, not the lambda form. Kernel replay: the four earlier W3 modules recorded
 before this commit (`audit-tier9c/replay/SUMMARY.txt`, all exit 0 with empty output); `CommunityUnique`
 replayed after this commit, before the tag. Tag `t9-unique-green` laid on this commit after the replay (ladder
-§5). Workflow `wf_5f373c52-92e`; records under `audit-tier9c/build-w3c/`.
+§5). The wave's workflow; records under `audit-tier9c/build-w3c/`.
 
 ## 9. Post-tag addendum W3d (13 Sep 2026): the general-mean consistency identity and the smallness sibling
 
@@ -2094,5 +2094,5 @@ grouped at the end); (2) the probe's docstring line beginning with the word `lem
 ruler's declaration scan reads exactly 19 lines; (3) `lake build` replays 41 pre-existing linter warnings of
 frozen upstream modules and none on the new file; (4) the disk fell from 8.0 to 5.0 GiB over the day with the
 tree at 444 MB and the session directory at 43 MB, so the consumer is elsewhere on the machine. No tag (D23):
-`t9-unique-green` stays on `68e12d2`. Workflow `wf_f4fe796d-2a4`; records under `audit-tier9c/build-w3d/`;
+`t9-unique-green` stays on `68e12d2`. The wave's workflow; records under `audit-tier9c/build-w3d/`;
 the kernel replay of `GeneralMean` follows this commit and is recorded in the prose commit.

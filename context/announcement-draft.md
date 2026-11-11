@@ -1,11 +1,37 @@
 # DRAFT: A machine-checked small-data theory for 3D Navier-Stokes, from spectral to classical form
 
-Status: DRAFT for Konstantinos's review. Not published; publishing is his
-call alone. Tone targets a Zulip post (short form) with the bones of a short
-paper (long form). Every claim below is scoped to what the kernel accepted;
-nothing is claimed beyond it. Supersedes the M3-scoped draft of 27 Aug.
+Status: DRAFT, not published. Updated 11 Nov 2026. This is a fact sheet for a
+post (Zulip, LinkedIn or elsewhere) that the author writes himself, in his own
+words; it is not post text, and nothing in it is to be pasted as a message.
+Every claim below is scoped to what the kernel accepted; nothing is claimed
+beyond it. Supersedes the M3-scoped draft of 27 Aug.
 
-## Short form (Zulip)
+## Disclosure facts (for the author to word himself)
+
+- Author: Konstantinos Tsantakos, founder of AKINTECH Driven Ltd, not a
+  professional mathematician.
+- Who wrote what: the Lean text (statements and proofs) and the reader reports
+  were written by Claude models running as Claude Code agents; the campaign
+  design, tier ladder, frozen-statement discipline, wording rules, gates and
+  the decision to publish are the author's. Models: Claude (Anthropic), as the
+  commit trailers record (Fable 5, Fable 5.1, and Opus 5 for Tier 7).
+- Expert review: No human domain expert has reviewed the statements; the
+  community-class copy is byte-identical to upstream (the two definitions and
+  six structures copied from the upstream Navier-Stokes file are byte-identical
+  to it with comments stripped, except the namespace and the divergence
+  notation, made `local`, its `@[inherit_doc]` attribute dropped); review of
+  the statements is what we are asking for. The byte-identity is pinned: the copy matches the
+  upstream file content as of commit
+  b9fc95eb75b048b195f3d01af4315ad3437ab157 (11 Sep 2026); upstream has touched
+  that file since (commits bc1d2bc0 of 12 Sep 2026, read on 13 Sep 2026 as a move
+  without content change; 6fbb54f2 of 18 Sep 2026, header only, as read on
+  20 Sep 2026; and d9f6ffa8 of 29 Oct 2026, seen on 11 Nov 2026 and not
+  diffed), and the copy was not re-diffed.
+- Entry point for statements: the capstones are named in the README table,
+  frozen at tags and checked by `scripts/check_tags.sh`; a statement-only file
+  (`Statements.lean`) is planned for a later release, v0.1.1.
+
+## Long form (README-adjacent)
 
 We have kernel-checked, in Lean 4 over Mathlib (pin `15a89b24`, toolchain
 `v4.31.0-rc2`), a small-data theory for the 3D incompressible
@@ -32,38 +58,38 @@ for a universal `κ > 0`, on mean-zero, real, divergence-free data.
 
 What is proved, one line per layer:
 
-- **Existence and trapping** (`theorem_B`) — a flow of the FULL system on
+- **Existence and trapping** (`theorem_B`): a flow of the FULL system on
   every horizon: real and divergence-free throughout, with genuinely
   summable energy and enstrophy at every time (exported in the statement,
   so no `tsum` in it can be the junk value of a divergent series),
   satisfying the integral equation on the closed window and the ODE at
-  every interior time, and TRAPPED — energy and enstrophy never exceed
+  every interior time, and TRAPPED: energy and enstrophy never exceed
   their initial values and the strict smallness survives.
 - **Uniqueness, and one eternal flow** (`theorem_B_unique`,
-  `ns_full_global_flow`) — uniqueness is unconditional in the
+  `ns_full_global_flow`): uniqueness is unconditional in the
   enstrophy-bounded class: no smallness, no dissipation hypothesis, no
   reality assumed. The per-horizon witnesses splice into a single
   solution on `[0, ∞)`.
 - **A velocity field on the torus** (`theorem_B_torus`,
-  `theorem_B_torus_unique`) — the coefficient flow synthesized through
+  `theorem_B_torus_unique`): the coefficient flow synthesized through
   Mathlib's `mFourierBasis` into an `L²` field satisfying calibrated
   Navier-Stokes in band-limited weak form, unique in its class.
 - **Regularity, up to the classical form** (`theorem_B_sobolev`,
-  `theorem_B_smooth_classical`, `theorem_B_smooth_classical_eq`) — every
+  `theorem_B_smooth_classical`, `theorem_B_smooth_classical_eq`): every
   spectral Sobolev level propagates; and for data summable at EVERY
   level, the `ℤ³`-periodic lift is `C^p` in space for every `p`, `C¹` in
   time on `t > 0`, and satisfies, as ONE compiled statement,
 
       ∂ₜu = (ν/(2π)²)·Δu − (1/2π)(u·∇)u − ∇p
 
-  POINTWISE — the viscous term identified with the actual Laplacian, the
+  POINTWISE: the viscous term identified with the actual Laplacian, the
   nonlinearity with the actual `(u·∇)u`, and the pressure an honest `ℓ¹`
   field whose gradient series is its compiled fiber derivative
   (`hasDerivAt_pressure_insertNth`). The two coefficients are quoted
   together on purpose: this un-rescaled lift is standard Navier-Stokes at
   viscosity `ν/(2π)` in the clock `τ = 2πt`.
 - **Finite bandwidth and determining modes** (`theorem_B_bandwidth`,
-  `theorem_B_modes`, `ns_full_global_flow_modes`) — the eternal flow
+  `theorem_B_modes`, `ns_full_global_flow_modes`): the eternal flow
   keeps at most `Z₀/N²` of its energy outside the cube `‖k‖_∞ ≤ N`, for
   every `N` and forever; and two flows in the class whose low-mode defect
   (inside that cube) stays at most `δ` throughout a window synchronize
@@ -86,43 +112,51 @@ determining modes is Foias-Prodi 1967 in the rate form of
 Hayden-Olson-Titi 2011, and **no mathematical priority is claimed for
 any layer**. Nor is the method new: the axiom gate, frozen statements,
 builder/auditor role split and agent doctrine are adopted from the
-leray-hopf project. What is ours is the machine-checking of the
-composition, hedged as follows. To our knowledge (reconnaissance 26 Aug
-to 2 Sep 2026, the last pass a 41-agent prior-art audit; corrections
-welcome), `theorem_B` + `theorem_B_unique` + `ns_full_global_flow` are
-the first kernel-checked small-data GLOBAL well-posedness theorem for
-the full 3D Navier-Stokes Fourier-coefficient system on the 3-torus: a
-global strong (bounded-energy-and-enstrophy) solution, unique within the
+leray-hopf project. What is ours is the machine-checking of the composition: `theorem_B` +
+`theorem_B_unique` + `ns_full_global_flow` give, for the full 3D
+Navier-Stokes Fourier-coefficient system on the 3-torus, a global strong
+(bounded-energy-and-enstrophy) solution from small data, unique within the
 bounded-enstrophy class on every finite horizon with no smallness or
 dissipation hypothesis on the competitor, with a pointwise classical-form
 lift, every Sobolev level propagated, and a rate-form determining-modes
-theorem composed onto it. Two earlier machine-checked 3D Navier-Stokes
-developments are strictly separate and are cited below: the first
-machine-checked 3D NS EXISTENCE is leray-hopf's (weak, Leray-Hopf), and
-a machine-checked 3D NS UNIQUENESS (local-in-time, mild, on `ℝ³`)
-predates ours by ten days. The bare sentences "first machine-checked 3D
-NS uniqueness / existence in any proof assistant" are therefore FALSE
-and must not be used.
+theorem composed onto it. It sits beside leray-hopf's earlier weak existence
+and HeliCorgi's earlier local mild uniqueness; no mathematical priority is
+claimed for any layer. Two earlier machine-checked 3D Navier-Stokes
+developments are strictly separate and are cited below: a machine-checked
+3D NS EXISTENCE is leray-hopf's (weak, Leray-Hopf), and a machine-checked 3D
+NS UNIQUENESS (local-in-time, mild, on `ℝ³`) predates ours by ten days. The
+bare sentences "first machine-checked 3D NS uniqueness / existence in any
+proof assistant" are therefore FALSE and must not be used.
 
-Related machine-checked work (as located on 2 Sep 2026, two entries added
-9 Sep 2026; none re-built by us, kernel status as reported by each author):
+Related machine-checked work (located 2 and 9 Sep 2026, refreshed 20 Sep 2026;
+facts marked "as checked on 11 Nov 2026" were re-checked on that date; none
+re-built by us, kernel status as reported by each author):
 - **uda-lab/leray-hopf** (Tomoki Uda; Lean 4, same Mathlib pin
   `15a89b24`; Jul-Aug 2026): Leray-Hopf weak existence on `T³` and `ℝ³`,
   finite-horizon and global; kernel-only per its README; explicitly
   disclaims uniqueness and regularity. Our Galerkin/torus vocabulary and
   our verification doctrine follow its pattern.
 - **HeliCorgi/ns-mns2-flowmap-bridge** (Lean 4 + Mathlib; commit
-  `e8b71440`, 18/19 Aug 2026 — ten days before `theorem_B_unique`,
+  `e8b71440`, 18/19 Aug 2026, ten days before `theorem_B_unique`,
   877e2d7 of 28 Aug): local-in-time existence AND uniqueness of `H³`
   mild solutions on `ℝ³` within its Duhamel contract
-  (`IsMildSolutionOn.unique`, `r3EndpointSafeProjectedMildSolution_unique`),
-  standard-three-axiom audit file per its README; global regularity and
-  small-data global theory explicitly out of scope. Missed by our 26-29
-  Aug reconnaissance.
+  (`IsMildSolutionOn.unique`, `r3EndpointSafeProjectedMildSolution_unique`);
+  since 23 Aug 2026 the repository states the actual incompressible
+  equations for real divergence-free Schwartz data
+  (`r3AdmissibleSchwartzDatum_navierStokes`), and on 5 Sep 2026 added an
+  explicit periodic shear solution as a witness (PR #92), not a
+  well-posedness theorem; as of 20 Sep 2026: latest commit 9 Sep 2026, no
+  paper, no tags. Standard-three-axiom audit file per its README; global
+  regularity and small-data global theory explicitly out of scope. Missed by
+  our 26-29 Aug reconnaissance.
 - **Miller, Vlasov mean-field derivation** (arXiv 2607.08986, Jul 2026):
   global existence and uniqueness for the nonlinear Vlasov equation,
-  kernel-axiom-only — so "first machine-checked well-posedness of a
+  kernel-axiom-only, so "first machine-checked well-posedness of a
   nonlinear evolution PDE" is not ours either.
+- **Bedrossian, Landau damping for Vlasov-Poisson in Lean** (arXiv
+  2609.16801, v1, 15 Sep 2026, as checked on 11 Nov 2026): nonlinear Landau
+  damping on `T^d`, Gevrey `s > 1/3`, small backgrounds (as read on 20 Sep
+  2026); kernel status as reported by its author.
 - **Armstrong-Kempe, De Giorgi-Nash-Moser in Lean** (arXiv 2604.05984,
   Apr 2026): elliptic regularity, kernel-axiom-only; not NS, but the
   earlier PDE regularity formalization.
@@ -132,74 +166,111 @@ Related machine-checked work (as located on 2 Sep 2026, two entries added
   of the Euler, Boussinesq and incompressible-porous-media family. Not
   Navier-Stokes, not small data, and the opposite direction to ours
   (blow-up under forcing, not unforced global regularity); kernel status
-  as reported by its authors.
-- **OpenAI, NavierStokesAndEuler** (Lean 4; public 8 Sep 2026;
-  self-assessed certificate; located 9 Sep 2026): FORCED Navier-Stokes
-  blow-up presented as answering the Clay statements (C)/(D) in the
-  community Formal Conjectures wording, plus unforced Euler blow-up. The
-  authors' assessment is their own; no independent audit is known to us,
-  and we have not re-built it. Disjoint from this campaign in direction
-  and in data class. Its periodic solution class
-  (`NavierStokesExistenceAndSmoothnessPeriodic`) was reproduced verbatim
-  on 9 Sep 2026 and elaborates at our pin (probe exit 0, the (D)
-  statement itself left `sorry`); the rest state inhabits the class, so
-  it is not cheaply empty. Inhabiting its `f = 0` case with
-  `theorem_B_smooth_classical_eq` is NOT done: it needs the clock
-  `τ = 2πt` (their `nu` is our `ν/(2π)`), a real-part bridge for our
-  ℂ-valued lift, joint `C^∞` in `(x, t)` on `[0, ∞)` where we have `C^p`
-  in `x` at each `t` and `C¹` in `t` on `t > 0` only, and a `derivWithin`
-  at `t = 0`.
+  as reported by its authors. Repository tristanbuckmaster/fluid_lean (as
+  checked on 11 Nov 2026: one commit, 8 Sep 2026, directories `affinecore`,
+  `boussinesq-blowup`, `euler-blowup`); the IPM paper, arXiv 2609.16470 (v1,
+  15 Sep 2026, as checked on 11 Nov 2026), is described by its authors as
+  LLM-assisted and Lean formalized; a hypo-dissipative Navier-Stokes result
+  was announced as withheld pending its Lean check (as of 20 Sep 2026).
+- **OpenAI, NavierStokesAndEuler** (Lean 4; public 8 Sep 2026 (commit
+  8937a8f4; extended 10 Sep 2026 by commit f9e8bc5b, which, as read on 20 Sep
+  2026, adds a whole-space `R3/` layer with an `H³` local strong theory and
+  weak-strong uniqueness, assembles the paper's whole-space Theorem 1.1 as
+  one statement, and re-derives both breakdown statements from it, the
+  periodic breakdown statement's text being unchanged; as checked on 11 Nov
+  2026 the default branch shows these two commits); self-assessed
+  certificate; located 9 Sep 2026): FORCED Navier-Stokes blow-up presented
+  by its authors as answering alternatives (C) and (D) of the standard
+  problem statement, in the community Formal Conjectures wording, plus
+  unforced Euler blow-up. The authors' assessment is their own; we have not
+  re-built it. Third-party rebuilds and checker runs exist (as checked on 11
+  Nov 2026: swarm-ai-research/navier-stokes-lean-check,
+  rayman813/navierstokes-lean-independent-rebuild,
+  mobiusresearch/navier-stokes-theorem-1-1). Each is self-published and says
+  it checks the certificate, not the fit to the prose statement; the first
+  reports no nanoda replay, the other two report Comparator or nanoda
+  acceptance. The audit of 20 Sep 2026 also listed two further ones
+  (francescoantoniodeluca, 12 Sep; mary-octavia, 13 Sep), not re-checked on
+  11 Nov 2026. None is a peer review, and we have verified none of them.
+  Disjoint from this campaign in direction and in data class. Its periodic
+  solution class (`NavierStokesExistenceAndSmoothnessPeriodic`) was
+  reproduced verbatim on 9 Sep 2026 (against commit 8937a8f4; not repeated
+  on f9e8bc5b) and elaborates at our pin (probe exit 0, the (D) statement
+  itself left `sorry`); the rest state inhabits the class, so it is not
+  cheaply empty. Its `f = 0` case is inhabited by the eternal flow in OUR
+  COPY of the class (Tier 8b, `theorem_B_community_periodic`), over the
+  community's own data under a smallness hypothesis on the mean-free part of
+  the datum (Tier 9, `theorem_B_community_periodic_data`), and inside that
+  copy the velocity is unique for the same datum and `0 < ν'` (Tier 9c,
+  `community_unique_velocity`); nothing beyond that data class is claimed,
+  both upstream placeholder proofs are untouched, and the certificate has
+  not been replayed by us.
 - **navier-stokes.dev** (undated; 12 postulated axioms; no repository
   located): seen, not verifiable, not counted as prior art either way.
+- Seen, not verifiable by us, not counted as prior art either way (as of 20
+  Sep 2026): the self-described global-regularity or regularity-pillar Lean
+  repositories DavidFox998/navier-stokes (24 Aug 2026),
+  navindutta/navier-stokes-3d-bkm-lean4 (20 Aug 2026), one by BenFrohman
+  (17 Sep 2026, carries `sorry`) and aidilamrym-ops/navier-stokes-formalization
+  (20 Sep 2026); none was built here and none of their headline statements
+  was checked against a textbook statement.
 - Statement-only: google-deepmind/formal-conjectures PR #1457 (the
-  community's periodic Clay wording, merged May 2026) and
-  lean-dojo/LeanMillenniumPrizeProblems (sorry'd). Neither proves anything;
-  the former is the natural alignment target for
-  `theorem_B_smooth_classical_eq` and that probe has NOT been run.
+  community's periodic wording of the standard problem statement, merged May
+  2026) and lean-dojo's repository of sorry'd statements of the standard open
+  problems (Navier-Stokes file read at `fd52071` during the late-August 2026
+  reconnaissance). Neither proves anything;
+  the former's periodic solution class is inhabited at `f = 0` for small data
+  (Tiers 8b and 9) and unique there in velocity (Tier 9c); both upstream
+  placeholder proofs are untouched. As checked on 11 Nov 2026 (the attributes
+  were already so at commit b9fc95eb of 11 Sep 2026), the file marks both
+  breakdown statements `research solved` with a link to OpenAI's commit
+  8937a8f4, and keeps both existence-and-smoothness statements, including the
+  periodic one that `theorem_B_community_periodic_data` inhabits at zero force
+  for small mean-free data, `research open`.
 
 The proof stack, every commit gated by the deterministic axiom check.
 Independent adversarial audits were run before the tags through Tier 6
 wave 4; the Tier 6 classical layer and all of Tier 7 were audited only by
 their builders at tag time and independently audited POST-TAG on
-2 Sep 2026 — an audit that found two statement-shape blockers in Tier 7
+2 Sep 2026, an audit that found two statement-shape blockers in Tier 7
 and one compiled-assembly gap in Tier 6, all fixed the same day and
 recorded in the repository:
 
-1. **Tier 0** — ODE traps: forward invariance of `{κEZ < ν⁴}` by first-exit,
+1. **Tier 0**: ODE traps: forward invariance of `{κEZ < ν⁴}` by first-exit,
    and the Riccati comparison window.
-2. **Tier 1** — spectral estimates on `ℤ³` tsums: `Z² ≤ E·D`, a sharp Agmon
+2. **Tier 1**: spectral estimates on `ℤ³` tsums: `Z² ≤ E·D`, a sharp Agmon
    bound `S⁴ ≤ C·Z·D` via lattice shell counts, the ℓ¹×ℓ²×ℓ² trilinear
    majorant, and the master inequality `2B ≤ νD + (K/ν³)Z³`, closed by the
-   polynomial identity `27(p+q)⁴ − 256p³q = (p−3q)²(27p²+14pq+3q²)` — no
+   polynomial identity `27(p+q)⁴ − 256p³q = (p−3q)²(27p²+14pq+3q²)`: no
    real root appears in any statement.
-3. **Tier 2** — the conditional Theorem B composing 0×1.
-4. **The Galerkin layer (M4-M5)** — the balance hypothesis DISCHARGED for
+3. **Tier 2**: the conditional Theorem B composing 0×1.
+4. **The Galerkin layer (M4-M5)**: the balance hypothesis DISCHARGED for
    the concrete spectral Galerkin system on every finite symmetric box:
    energy pairing exactly zero, enstrophy pairing dominated with constant
    exactly 2, reality and divergence-freeness self-propagating from data at
-   `t = 0` alone; then global well-posedness of the trapped Galerkin flows —
+   `t = 0` alone; then global well-posedness of the trapped Galerkin flows:
    existence by uniform-step Picard-Lindelöf and seam-gluing induction
    (the trap re-secures the uniform bound at every seam), uniqueness by a
    defect-Gronwall, and one eternal flow per box serving all horizons.
-5. **Tier 3** — the Galerkin limit: box exhaustion with trap bounds uniform
+5. **Tier 3**: the Galerkin limit: box exhaustion with trap bounds uniform
    in the box, a product-space Arzela-Ascoli extraction (one subsequence for
    all modes), dominated convergence passing each mode's integral equation
    to the limit, and Fatou-style finite-subsum arguments carrying the trap
    through. The zero mode's equation holds in the limit by mechanism, not
    fiat: divergence-freeness survives the limit and annihilates the
    zero-mode convection.
-6. **Tier 4** — uniqueness by the finite-section energy method (the
+6. **Tier 4**: uniqueness by the finite-section energy method (the
    infinite sum is never differentiated) and the eternal flow, spliced
    from per-horizon witnesses with uniqueness erasing the seams.
-7. **Tier 5** — the function-space bridge: synthesis into `L²` on the
+7. **Tier 5**: the function-space bridge: synthesis into `L²` on the
    unit torus, the calibrated weak form, and uniqueness pulled back
    through coefficient extraction.
-8. **Tier 6** — regularity: per-level Sobolev propagation with no
+8. **Tier 6**: regularity: per-level Sobolev propagation with no
    induction on the level, then the periodic lift, its spatial `C^p` and
    time `C¹` regularity, the identification of every term of the
    equation with its classical counterpart, and their assembly into one
    compiled pointwise equation.
-9. **Tier 7** — the bandwidth layer: a uniform-in-time finite-mode
+9. **Tier 7**: the bandwidth layer: a uniform-in-time finite-mode
    approximation, ambient energy decay at least at rate `2ν`, and
    determining modes with a threshold of explicit form (a closed formula
    up to the lattice-kernel constant, not a printable integer).
@@ -211,6 +282,12 @@ recorded in the repository:
     flows, the eternal splice, and the breakdown-threshold corollaries.
     Every wave F0 to F4 read by two independent adversarial readers
     before its commit.
+11. **Tier 8b**: `C^∞` in time on the closed half-line, joint `C^∞` on the
+    closed slab, our copy of the community class inhabited at `f = 0`.
+12. **Tier 9**: the datum bridge and the community's statement shape over
+    real-space data, smallness on the mean-free part.
+13. **Tier 9c**: uniqueness inside our copy of the class at `f = 0`, the
+    pressure up to a function of time.
 
 ## The layers, in the order they landed
 
@@ -219,8 +296,8 @@ Each block was written when its tier went green and is left as written;
 the summary above is the current state.
 
 UPDATE (Tier 4, same day): both former non-claims are now CLAIMED and
-kernel-checked — 84 audited theorems total:
-- **`theorem_B_unique`** — uniqueness for the full system, UNCONDITIONAL
+kernel-checked (84 audited theorems total):
+- **`theorem_B_unique`**: uniqueness for the full system, UNCONDITIONAL
   in the enstrophy-bounded class: any two mode-continuous, divergence-free
   flows with summable energy/enstrophy series bounded by any budgets,
   satisfying the infinite-convolution integral equation from the same
@@ -232,7 +309,7 @@ kernel-checked — 84 audited theorems total:
   Young absorption into the dissipation, a Grönwall on the primitive, and
   tail sources that vanish along the box exhaustion precisely because of
   the summability certificates exported in `theorem_B`'s statement.
-- **`ns_full_global_flow`** — ONE eternal solution on `[0, ∞)`: real,
+- **`ns_full_global_flow`**: ONE eternal solution on `[0, ∞)`: real,
   divergence-free, mode-continuous, honestly summable, satisfying the
   integral equation at every `t ≥ 0` and the ODE at every `t > 0`,
   trapped forever; per-horizon witnesses spliced with uniqueness erasing
@@ -250,35 +327,35 @@ horizon, with no smallness on the competitor; see "What is and is not
 new" above.
 
 UPDATE (Tier 5, next day): the function-space non-claim is now largely
-CLAIMED — 101 audited theorems total:
-- **`theorem_B_torus`** — the coefficient flow synthesized (via Mathlib's
+CLAIMED (101 audited theorems total):
+- **`theorem_B_torus`**: the coefficient flow synthesized (via Mathlib's
   `mFourierBasis`) into a genuine velocity field on the UNIT 3-TORUS:
   global in time, L²-continuous components, a.e. real, spectrally
   divergence-free, mean-zero, with honestly summable enstrophy at every
   time (exported), satisfying the calibrated Navier-Stokes equation in
   band-limited weak form with the honest physical constants
-  (`−ν(2π)²‖k‖²` dissipation, `2π`-weighted convection — independently
+  (`−ν(2π)²‖k‖²` dissipation, `2π`-weighted convection, independently
   re-derived from the PDE by the audit), trapped forever; the smallness
   constant transfers as `κ_torus = κ/(2π)⁶`.
-- **`theorem_B_torus_unique`** — uniqueness in the torus class, pulled
+- **`theorem_B_torus_unique`**: uniqueness in the torus class, pulled
   back through coefficient extraction; the existence witness inhabits
   the uniqueness class by the exported statement alone. A highlight of
   the proof: the weak-to-mode recovery tests the weak identity against
   the defect vector ITSELF (admissible because its divergence vanishes),
   collapsing uniqueness to `⟪D, D⟫ = 0`.
 - Also proven (available, deliberately unwired from the capstone):
-  the product-coefficient identity — the Fourier coefficient of a
+  the product-coefficient identity: the Fourier coefficient of a
   pointwise product of synthesized fields is the coefficient
-  convolution — closed entirely inside L² by a twist trick.
+  convolution, closed entirely inside L² by a twist trick.
 
-UPDATE (Tier 6, 29 Aug 2026): the regularity half — 164 audited theorems.
-- **`theorem_B_sobolev`** / **`ns_full_global_flow_sobolev`** — every
+UPDATE (Tier 6, 29 Aug 2026): the regularity half (164 audited theorems).
+- **`theorem_B_sobolev`** / **`ns_full_global_flow_sobolev`**: every
   spectral Sobolev norm propagates along the flow: for each `m ≥ 1`, a
   datum with `sob m` finite keeps it finite, with
   `sob m (c t) ≤ sob m c₀ · (1 + exp(K_m·t))`, `K_m` depending only on
-  `(ν, m, E₀, Z₀)`. No induction on `m` — the global trap's `E₀, Z₀`
+  `(ν, m, E₀, Z₀)`. No induction on `m`: the global trap's `E₀, Z₀`
   replace all lower-order controls, so every level closes independently.
-- **`theorem_B_smooth`** / **`theorem_B_smooth_classical`** — the smooth
+- **`theorem_B_smooth`** / **`theorem_B_smooth_classical`**: the smooth
   layer. For data whose spectrum is summable at EVERY Sobolev level, the
   eternal flow's `ℤ³`-periodic lift is `C^p` in space for every `p`, is
   `C¹` in time on `t > 0`, and satisfies Navier-Stokes in CLASSICAL
@@ -301,7 +378,7 @@ UPDATE (Tier 6, 29 Aug 2026): the regularity half — 164 audited theorems.
   witness identified with the base flow through `theorem_B_unique`.
 
 Tier-6 scope, in the wording its own audit register requires:
-- Constants are **of explicit form** — closed formulas in `(ν, m)` and
+- Constants are **of explicit form**: closed formulas in `(ν, m)` and
   the energy/enstrophy budgets, up to a single convergent lattice-kernel
   sum `Σ‖k‖^(−7/2)`, exported as compiled existence statements. They are
   not printed numbers, and `K_m` grows like `2^(16m)`.
@@ -317,15 +394,16 @@ Tier-6 scope, in the wording its own audit register requires:
   normalisation.
 
 UPDATE (Tier 7, 29-30 Aug 2026; audited and corrected 2 Sep 2026):
-determining modes — 186 audited declarations, tag `t7-complete`.
-- **`theorem_B_bandwidth`** — along the eternal flow, the energy OUTSIDE
+determining modes (186 audited declarations at `t7-audited-green`, 180 at
+`t7-complete`).
+- **`theorem_B_bandwidth`**: along the eternal flow, the energy OUTSIDE
   the cube `‖k‖_∞ ≤ N` never exceeds `Z₀/N²`, at every time and for every
   `N > 0`. The flow stays within `Z₀/N²` in energy of its cube-`N`
   truncation, forever. (Audit record: as first tagged the statement
   quoted only three of the flow's seven clauses and was provable by the
-  constant witness `c t := c₀`; the four dropped clauses — always present
-  in the proof — were restored on 2 Sep and the tag re-laid.)
-- **`theorem_B_modes`** — determining modes with a threshold of explicit
+  constant witness `c t := c₀`; the four dropped clauses (always present
+  in the proof) were restored on 2 Sep and the tag re-laid.)
+- **`theorem_B_modes`**: determining modes with a threshold of explicit
   form. Two flows in the enstrophy-bounded class, **with different
   initial data**, whose low-mode defect (in the cube `‖k‖_∞ ≤ N`) stays
   at most `δ` THROUGHOUT the window, satisfy
@@ -338,13 +416,13 @@ determining modes — 186 audited declarations, tag `t7-complete`.
   flows, making the compiled constant formally per-pair). As `N` grows
   the floor tends to `δ`: the flow is recovered to the accuracy with
   which its low modes are known. `δ = 0` removes the floor and the defect
-  decays exponentially at rate `νN² − K` — it does not vanish, and
+  decays exponentially at rate `νN² − K`; it does not vanish, and
   distinct flows do satisfy `δ = 0` (a single-mode Stokes datum above `N`
   paired with the zero flow).
-- **`ns_full_global_flow_modes`** (2 Sep 2026) — the above composed onto
+- **`ns_full_global_flow_modes`** (2 Sep 2026): the above composed onto
   two eternal small-data flows from different data, with one `K` for all
   windows, mean-zero along each flow derived rather than assumed.
-- **`ns_full_global_flow_decay`** — the eternal flow's energy decays at
+- **`ns_full_global_flow_decay`**: the eternal flow's energy decays at
   least at rate `2ν`: `en(c t) ≤ en c₀ · e^(−2νt)`. Sharpness is true on
   paper (single-mode data attain it) and is not compiled.
 
@@ -356,7 +434,7 @@ statement, so no outward description can overstate the result without
 changing it.
 
 Tier-7 scope, and it is the important part: this is the Foias-Prodi
-determining-modes theorem — classical, unconditional in 2D, conditional
+determining-modes theorem: classical, unconditional in 2D, conditional
 in 3D. What is ours is that the small-data trap supplies the 3D
 condition for all time and the composition is compiled
 (`ns_full_global_flow_modes`), that the threshold is of explicit form,
@@ -375,9 +453,8 @@ proved, so there it is exactly the classical conditional result.
 
 UPDATE (Tier 8a, 9 Sep 2026): the box trap under a small force, in the
 same coefficient vocabulary, built as pure siblings of the unforced chain
-(no frozen statement edited): 226 audited declarations, tags
-`t8a-forced-trap-green`, `t8a-forced-B-green` (`t8a-complete` is to be
-laid on the F5 commit and was not yet laid when this was written).
+(no frozen statement edited): 226 audited declarations at `t8a-complete`
+(199 and 215 at `t8a-forced-trap-green` and `t8a-forced-B-green`).
 
 The object is the same system driven mode by mode by a spectral force
 `g`:
@@ -544,8 +621,8 @@ flow is `C^∞` in time on the CLOSED half-line, jointly `C^∞` in `(x, t)`
 on the closed slab `ℝ³ × [0, ∞)` together with its pressure, and, read
 back as a real velocity and pressure in the clock `τ = t/(2π)`, it
 inhabits OUR COPY of the community's periodic solution class at `f = 0`:
-294 audited declarations, tags `t8b-time-smooth-green`,
-`t8b-joint-smooth-green`, `t8b-community-green`. Files
+294 audited declarations at `t8b-community-green` (251 at
+`t8b-time-smooth-green`, 265 at `t8b-joint-smooth-green`). Files
 `TheoremB/TimeSmooth.lean`, `WithinSeries.lean`, `JointSmooth.lean`,
 `CommunityClass.lean`.
 
@@ -603,7 +680,7 @@ What is proved, one line per wave:
   first seven clauses of the pinned form. The real-part bridge and the
   clock change are textbook.
 
-The community class copied into `TheoremB.Community` is taken from the Navier-Stokes file of google-deepmind/formal-conjectures, whose last content change on the default branch is commit b9fc95eb75b048b195f3d01af4315ad3437ab157 of 11 September 2026 (the file was moved without any content change by commit bc1d2bc0df6edcbc6bfa43d0b4b1018ccdbdb627 on 12 September 2026, and the default-branch head read on 13 September 2026 was 5ba2dbfc100a82e12207a9d8e75a3b8782a0ed5c); that file carries the positive statement `navier_stokes_existence_and_smoothness_periodic` and the breakdown statement `navier_stokes_breakdown_periodic`, both names verified verbatim against the fetched file on 13 September 2026. Declaration by declaration, with comments and docstrings stripped, our copy of the two definitions and six structures is byte-identical to the fetched file except in the namespace (`NavierStokes` upstream, `TheoremB.Community` here) and the divergence notation (a global `@[inherit_doc] notation "∇⬝"` upstream, a `local notation` here); the upstream file is not imported into the gated tree, and both upstream placeholder proofs, the `sorry` bodies of `navier_stokes_existence_and_smoothness_periodic` and `navier_stokes_breakdown_periodic`, are untouched by us.
+The community class copied into `TheoremB.Community` is taken from the Navier-Stokes file of google-deepmind/formal-conjectures; the copy matches the upstream file content as of commit b9fc95eb75b048b195f3d01af4315ad3437ab157 (11 September 2026). As checked on 11 Nov 2026, upstream has touched that file since: commit bc1d2bc0df6edcbc6bfa43d0b4b1018ccdbdb627 of 12 September 2026 (read on 13 September 2026 as a move without any content change), commit 6fbb54f24ccc2e64dcfaffc28c58950e377110d2 of 18 September 2026 (which, as read on 20 September 2026, changed only the file header for the module system, with every definition, structure and both `sorry` bodies byte-identical), and commit d9f6ffa8dd7fc2b8b597dd1f7a824d27b12b88af of 29 October 2026 (a linter change that also adds a `linter.style.formal_proof_palomar false` option to the two breakdown statements); the copy was not re-diffed against the current file. That file carries the positive statement `navier_stokes_existence_and_smoothness_periodic` and the breakdown statement `navier_stokes_breakdown_periodic`, both names verified verbatim against the fetched file on 13 September 2026. Declaration by declaration, with comments and docstrings stripped, our copy of the two definitions and six structures is byte-identical to the file fetched on 13 September 2026 except in the namespace (`NavierStokes` upstream, `TheoremB.Community` here) and the divergence notation (a global `@[inherit_doc] notation "∇⬝"` upstream, a `local notation` here); the upstream file is not imported into the gated tree, and both upstream placeholder proofs, the `sorry` bodies of `navier_stokes_existence_and_smoothness_periodic` and `navier_stokes_breakdown_periodic`, are untouched by us.
 
 What this does and does not say about the upstream file. The upstream
 file carries two statements, both `sorry`: the positive statement
@@ -663,7 +740,7 @@ MEAN-FREE part of its coefficient field. 391 audited declarations at the
 tag `t9-complete` (339 at `t9-datum-bridge-green`), every one on exactly
 `{propext, Classical.choice, Quot.sound}`, none on `sorryAx`. Files
 `TheoremB/Descent.lean`, `DatumBridge.lean`, `Galilean.lean`,
-`CommunityData.lean`. With this section adopted, the short form reads 391
+`CommunityData.lean`. With this section adopted, the long form reads 391
 audited declarations and "Tiers 8b and 9".
 
 The adopted sentence: for every datum in the community's own periodic
@@ -771,7 +848,7 @@ reproduced by, or superseded by anything here.
 
 UPDATE (Tier 9c, 13 Sep 2026; ADOPTED by the user on 13 Sep 2026 as written,
 per rules 12 to 14 of the Tier 9c blueprint's audit register,
-`context/rung12-tier9c-blueprint.md` section 7; the short form now reads 484
+`context/rung12-tier9c-blueprint.md` section 7; the long form now reads 484
 audited declarations, "Tiers 8b, 9 and 9c" and the uniqueness clause): Tier 9 delivered existence in OUR
 COPY of the community's periodic solution class over the community's own
 data. Tier 9c closes the other direction inside that class: every member at
@@ -799,7 +876,7 @@ breakdown statement `navier_stokes_breakdown_periodic`; the positive
 statement `navier_stokes_existence_and_smoothness_periodic` and the
 breakdown statement are both untouched; the neighbours are HeliCorgi's
 local mild uniqueness on `ℝ³` and uda-lab/leray-hopf; nothing here is new
-mathematics. With this section adopted, the short form reads 484 audited
+mathematics. With this section adopted, the long form reads 484 audited
 declarations, "Tiers 8b, 9 and 9c", and carries, after "inhabiting our copy
 of the community's periodic solution class", the clause "in which, for the
 same datum and `0 < ν'`, the velocity is unique on `t ≥ 0` and the pressure
@@ -914,7 +991,7 @@ What is STILL not claimed, precisely:
   polynomial) divergence-free test fields, not arbitrary smooth tests
   (their density in L² is standard and cited, not formalized into the
   statement). Tier 6 does NOT lift this caveat: its classical pointwise
-  statement is about a different object — the `ℤ³`-periodic lift — and
+  statement is about a different object (the `ℤ³`-periodic lift) and
   holds only for data whose spectrum is summable at every Sobolev level,
   not for general trap-class data.
 - Identification with the leray-hopf weak solution classes (same
@@ -929,8 +1006,9 @@ What is STILL not claimed, precisely:
   for); nothing two-sided is claimed at the endpoint.
 
 Verification discipline: a deterministic gate accepts the build only if
-`#print axioms` for all 294 audited declarations (391 at `t9-complete`,
-13 Sep 2026; 474 at `t9-unique-green`, Tier 9c, the same day) reports at most
+`#print axioms` for all 484 audited declarations (294 at `t8b-community-green`,
+391 at `t9-complete`, 474 at `t9-unique-green`, 484 at the post-tag addendum
+`b402d9a`, the last three on 13 Sep 2026) reports at most
 `propext, Classical.choice, Quot.sound` and no `sorryAx`; statements
 frozen at declaration, every strengthening landing as a new sibling with
 the frozen statement re-verified byte-identical. Independent adversarial
@@ -948,7 +1026,7 @@ adversarial critiques of the blueprint before any build; Tier 9c (13 Sep
 the whole interface before the design. The audits drew blood at
 every stage, by design: M4 (a
 pressureless-class scoping, answered in-wave with the Leray layer);
-Tier 3 (the capstone discarding its own summability certificates — the
+Tier 3 (the capstone discarding its own summability certificates; the
 fix later powered Tier 4); Tier 4 and Tier 5 (the same composition-gap
 pattern, existence not exporting what its uniqueness class needs);
 Tier 6 (a `C¹`-in-time clause claimed by the goal but never proved, with
@@ -975,30 +1053,33 @@ community class inhabited at `f = 0`) → `t9-datum-bridge-green` →
 real-space data, under a smallness hypothesis on the mean-free part of
 the datum) → `t9-unique-green` (13 Sep 2026: Tier 9c, uniqueness inside
 our copy of the community class at `f = 0` for the same datum and `0 < ν'`,
-the pressure up to a function of time). Priority, in its
-only defensible form: to our knowledge (reconnaissance 26 Aug to 2 Sep
-2026) the first kernel-checked small-data GLOBAL well-posedness — strong
-class, unique in the bounded-enstrophy class on every finite horizon —
-for the full 3D Navier-Stokes coefficient system on the 3-torus, beside
-leray-hopf's earlier weak existence and HeliCorgi's earlier local mild
-uniqueness on `ℝ³`; corrections welcome. No mathematical priority is
-claimed for any layer, and none for the method. Before any outward
-claim: build HeliCorgi and run its axiom audit ourselves, and register
-the frozen capstones with Palomar. The kernel replay through the
+the pressure up to a function of time). Position, stated
+plainly: the composition (a strong solution class, unique in the bounded-enstrophy
+class on every finite horizon, for the full 3D Navier-Stokes coefficient system
+on the 3-torus) sits beside leray-hopf's earlier weak existence and
+HeliCorgi's earlier local mild uniqueness on `ℝ³` (reconnaissance 26 Aug to
+2 Sep 2026, refreshed 20 Sep 2026); corrections welcome. No mathematical
+priority is claimed for any layer, and none for the method. Not done, and said
+so: HeliCorgi has not been re-built here (its kernel status is as its README
+reports), and the frozen capstones are registered with no external registry. The kernel replay through the
 toolchain's `leanchecker` is done (12 Sep 2026: all 60 imported modules,
 exit 0, empty output, per-module table in
 `context/leanchecker-replay-2026-09-12.md`; the imports are not replayed,
 and the umbrella module, which declares nothing, exceeded this machine's
-memory). Priority currently rests on private git tags.
+memory). The dated commits and the git tags are the record.
 
-## Notes for the long form (not yet written)
+Before posting anywhere: search the live Zulip instance (the public archive
+stops at 28 Feb 2026) for Navier-Stokes, leray-hopf and NavierStokesAndEuler
+threads; this is a manual step for the author, with a logged-in account.
+
+## Notes (not yet used in the long form)
 
 - The convention-free majorant design: Tier 1 never fixes a Fourier
   normalization; all `2π` factors price into uniform constants at the
-  bridge. The concrete convection carries the `−i` prefactor — the audit
+  bridge. The concrete convection carries the `−i` prefactor: the audit
   verified the i-free normalization is unphysical (vanishes without
   div-freeness).
-- The two Lean-side load-bearing discoveries: (a) interval localization —
+- The two Lean-side load-bearing discoveries: (a) interval localization:
   ∀t-ODE forms are near-vacuous for constructed flows (backward blow-up),
   so the entire dynamical chain is stated on `Icc` with EventuallyEq
   transfer at interior points; (b) at this Mathlib pin, countable-product
@@ -1007,13 +1088,13 @@ memory). Priority currently rests on private git tags.
 - The ε/3 tail method: no summable uniform majorant exists for the
   convection limit (`Σ 1/|l|²` diverges over ℤ³), so plain dominated
   convergence/Tannery fails; the enstrophy tail bound `Σ_{|l|>M}‖c_l‖² ≤
-  Z/M²` — uniform along all Galerkin flows — is what closes every limit.
-- Credits: Konstantinos Tsantakos (command, architecture); Claude
-  (Anthropic — Fable 5 through Tier 6 and the 2 Sep audit and fixes,
-  Opus 5 for Tier 7) as the proving engine under an orchestrated
-  multi-agent workflow with adversarial verification; Mathlib community,
-  especially the
+  Z/M²`, uniform along all Galerkin flows, is what closes every limit.
+- Credits: Konstantinos Tsantakos, founder of AKINTECH Driven Ltd, not a
+  professional mathematician (campaign design, tier ladder, frozen-statement
+  discipline, wording rules, gates and the decision to publish); Claude
+  (Anthropic), as the commit trailers record (Fable 5, Fable 5.1, and Opus 5
+  for Tier 7), which wrote the Lean text (statements and proofs) and the
+  reader reports as Claude Code agents under an orchestrated multi-agent
+  workflow with adversarial verification; Mathlib community, especially the
   Ascoli, interval-integral FTC, and tsum layers this build stands on.
-- Venue thought: Lean Zulip #maths first; arXiv note viable now that the
-  result is unconditional; decide after Tier 4 (uniqueness) resolves or
-  stalls.
+- Venue: introduction in #new members, announcement in #Machine Learning for Theorem Proving, PR discussions in #mathlib; the decision is the author's.

@@ -1,7 +1,7 @@
 # Kernel replay through the toolchain's `leanchecker`: the five Tier 9c modules and the addendum module (13 Sep 2026)
 
 Run at the wave commits of Tier 9c, toolchain `leanprover/lean4:v4.31.0-rc2`, checker
-`~/.elan/toolchains/leanprover--lean4---v4.31.0-rc2/bin/leanchecker` (the binary that ships
+the toolchain's own `bin/leanchecker` (the binary that ships
 inside the toolchain; nothing cloned, built or installed), on the same 16 GiB machine as the
 12 and 13 Sep 2026 runs recorded in `leanchecker-replay-2026-09-12.md` and
 `leanchecker-replay-2026-09-13-tier9.md`. Command per module: `lake env leanchecker <module>`

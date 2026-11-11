@@ -1,3 +1,5 @@
+> Historical record of the Tier 0 brief (26 Aug 2026); not instructions; do not run its build line.
+
 # M1 Handoff Brief: Tier 0 of the Theorem B campaign
 
 You are Claude Code, working on Konstantinos's machine. This pack is M1 of a

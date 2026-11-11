@@ -2,7 +2,7 @@
 
 Status: TIER COMPLETE (29 Aug 2026, `t7-complete`, all seven waves
 gate-green) — and INDEPENDENTLY AUDITED POST-TAG on 2 Sep 2026 by a
-six-auditor fleet (record: `~/.claude/projects/…/audit-2026-09-02/`).
+six-auditor fleet (record: the session audit directory (outside the tree)).
 Verification this tier actually received BEFORE its tags: the axiom gate
 per wave, two compiled probes, one prose probe, and one builder
 self-audit — no independent reader. The post-tag audit found TWO
@@ -17,8 +17,8 @@ statements freeze at declaration; adversarial audit before tags — a rule
 this tier did NOT meet at tag time, which is why the audit is recorded
 here rather than assumed.
 
-Provenance: proposed as "Rung R" in `rth-nse-rosetta.md` (Millennium
-Expedition, Session 2 addendum), the single row of that table graded
+Provenance: proposed as "Rung R" in `rth-nse-rosetta.md` (the earlier
+expedition notes, session 2 addendum), the single row of that table graded
 Rung — work we can do ourselves in the campaign's honest regime. This
 blueprint is that row converted into a route, with two corrections to
 its wording that the source reading forced (see §2).

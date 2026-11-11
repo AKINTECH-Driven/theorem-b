@@ -32,6 +32,8 @@ The only non-clause inputs of the equation are `summable_norm_convFull`
 (PeriodicLift) and Mathlib; nothing about the flow's construction is used.
 The scope caveats of `TheoremBSmooth` (no analyticity, no `C^∞` in time,
 campaign normalisation of the constants) apply unchanged.
+[The `C^∞`-in-time caveat is superseded by `TheoremB/TimeSmooth.lean`; the
+others stand.]
 
 STATUS: claimed only insofar as scripts/check_axioms.sh reports GREEN on
 the target machine.

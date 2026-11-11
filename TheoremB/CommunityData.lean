@@ -110,6 +110,8 @@
     (`theorem_B_unique` consumes neither `RealField`, nor clause 6, nor the
     `κ` bound).  Uniqueness inside the community class in real-space
     vocabulary is a sized candidate (W3), not a delivered result.
+    [Delivered as Tier 9c the same day: `community_unique_velocity`,
+    `community_unique_pressure` in `TheoremB/CommunityUnique.lean`.]
   * `κ` is that of `theorem_B_community_periodic` (hence of
     `theorem_B_joint_smooth`), of explicit form and exported as a compiled
     existential; the `∃ κ` of each capstone is re-chosen by statement (the
@@ -141,7 +143,8 @@
     Alpöge and Buckmaster); none of it is composed with, reproduced by, or
     superseded by anything here.
   * PROPOSED announcement wording (rule 6 of the blueprint's section 7, Tier
-    9 instance; the user's call; quoted here, not asserted): "for every datum
+    9 instance; the user's call; quoted here, not asserted)
+    [Adopted by the user on 13 Sep 2026, commit dc3bd8f]: "for every datum
     in the community's own periodic initial-velocity condition whose
     mean-free coefficient part is small in the sense
     `κ · en (meanFree (coeff u₀)) · ens (meanFree (coeff u₀)) < (2πν')⁴`, OUR
