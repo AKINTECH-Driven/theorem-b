@@ -825,7 +825,7 @@ no analyticity; no numeric constant.
 
 [Supersession note, 13 Sep 2026, the adopted text above kept as adopted: the
 uniqueness half was built the same day as Tier 9c (the section below,
-PROPOSED wording); its two statements are now frozen in the tree, byte-identical
+also adopted on 13 Sep 2026); its two statements are now frozen in the tree, byte-identical
 to the candidates.]
 
 Textbook sources, named as references and not verified against the books themselves; the numbers below were checked on 13 Sep 2026 against a library table-of-contents scan and Google Books previews (record as under Tier 8b), and anything not seen there stays hedged as before: for the Fourier inversion of periodic functions with absolutely summable coefficients and the rapid decay of the coefficients of smooth functions, Grafakos, Classical Fourier Analysis (3rd ed., Springer GTM 249, 2014), Ch. 3 (Fourier Series), section 3.2.1 (Partial sums and Fourier inversion), Proposition 3.2.5 (Fourier inversion, p. 185), and section 3.3.2 (Decay of Fourier Coefficients of Smooth Functions, p. 195), Theorem 3.3.9 with Corollary 3.3.10 (pp. 196-197, decay for a function whose derivatives up to order s are integrable); for the Galilean invariance, Majda and Bertozzi, Vorticity and Incompressible Flow (CUP 2001), Ch. 1, section 1.2 (symmetry groups of the Euler and the Navier-Stokes equations), Proposition 1.1, p. 3 (the transformation v(x - ct, t) + c; cited on p. 8 as Galilean invariance); the opening chapter of any of the Navier-Stokes texts named under Tier 8b also states it, chapter numbers unverified.
@@ -871,7 +871,7 @@ every one on exactly `{propext, Classical.choice, Quot.sound}`, none on
 `ClassParseval.lean`, `ClassFlowODE.lean`, `CommunityUnique.lean`,
 `GeneralMean.lean`.
 
-The proposed sentence: inside OUR COPY of the community's periodic solution
+The adopted sentence: inside OUR COPY of the community's periodic solution
 class `NavierStokesExistenceAndSmoothnessPeriodic ν' u₀ 0 v p` with `0 < ν'`
 and `f = 0`, two members with the same datum `u₀` have the same velocity at
 every point and every `t ≥ 0` and pressures that differ by a function of
