@@ -120,18 +120,30 @@ grep -c '^#print axioms' AxiomCheck.lean
 
 must print 484, and both commands must print the same number.
 
-Cost. Measured fresh-clone rebuild, 20 Sep 2026 (Apple M4, 10 cores, 16 GiB): a clone of the
-tracked tree at `1146a08` (74 tracked Lean files) with `.lake/packages` symlinked to an
-already-cached Mathlib pin, so this measures the project's 70 modules plus the umbrella and the
-ledger, not the cache download. `lake build`: 8638 jobs, exit 0, zero errors, wall time 2294 s
-(38 min 14 s; user 454 s, sys 654 s). The machine was shared with seven audit agents for the
-whole run, so the wall time is an upper bound. The gate printed `GATE: GREEN` (484 entries after
-joining wrapped lines, none non-standard, no `sorryAx`; that run predates the `(484/484)`
-suffix). `.lake/build` was 422 MB; free disk fell from 5.3 GiB to 3.2 GiB during the run and
-returned to 7.4 GiB afterwards (build temporaries plus the concurrent agents' scratch, not
-outputs). Not measured: the cache download on a machine without the pin, and a Linux runner.
-Estimates, not measurements: the gate adds about 30 s on a built tree, and a full replay takes
-45 to 50 minutes.
+Cost. Two measured fresh-clone rebuilds on one machine (Apple M4, 10 cores, 16 GiB). Each is a
+clone of the tracked tree (74 tracked Lean files) with `.lake/packages` symlinked to an
+already-cached Mathlib pin, so `lake build` covers the project's 70 modules and the umbrella;
+the cache download is not included, and the gate then elaborates the ledger. Between the two
+commits the Lean sources differ in comments only, and the toolchain and Mathlib pin are the
+same. Both builds: 8638 jobs, exit 0, zero errors, 46 warning lines.
+
+- 20 Sep 2026, at `1146a08`. Wall time 2294 s (38 min 14 s; user 454 s, sys 654 s). The machine
+  was shared with seven audit agents for the whole run. The gate printed `GATE: GREEN` (484
+  entries after joining wrapped lines, none non-standard, no `sorryAx`; that run predates the
+  `(484/484)` suffix). `.lake/build` was 422 MiB; free disk fell from 5.3 GiB to 3.2 GiB during
+  the run and returned to 7.4 GiB afterwards (build temporaries plus the concurrent agents'
+  scratch, not outputs).
+- 12 Nov 2026, at `7da07fd`. Wall time 2703 s (45 min 3 s; user 438 s, sys 583 s). Other agent
+  sessions, on unrelated work, were active on the machine for part of the run; their resource
+  use was not measured. Run once straight after the build, the gate printed
+  `GATE: GREEN (484/484)` in 20 s and `scripts/check_tags.sh` printed `TAGS: GREEN`.
+  `.lake/build` was again 422 MiB.
+
+The second run took about 18% longer than the first and the cause was not investigated, so no
+claim is made that either wall time bounds what an idle machine would need. Read them as two
+samples. Not measured: an idle machine, the CPU, disk and memory load during either run, the
+gate time on 20 Sep, the cache download on a machine without the pin, and a Linux runner. An
+estimate, not a measurement: a full replay takes 45 to 50 minutes.
 
 Four declarations carry a scoped `set_option maxHeartbeats 1000000 in` (five times the default,
 one declaration each): `TheoremB/SobolevPairing.lean:110`, `TheoremB/Nonlinearity.lean:45` and

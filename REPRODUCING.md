@@ -80,13 +80,17 @@ Run from a fresh clone. Times are for the 10-core M4 unless marked.
 3. `lake exe cache get` fetches the Mathlib oleans (8,551 files, about 0.45 GB download, 7.9 GB
    unpacked; not timed). Last line: the cache tool's summary of unpacked files. Leave
    `MATHLIB_CACHE_USE_CLOUDFLARE` unset (section 5).
-4. `lake build`. Measured on 20 Sep 2026 in a fresh clone of the tracked tree at 1146a08
-   (`.lake/packages` reused from an already-cached Mathlib pin, so the Mathlib cache download
-   is not in this number): 8638 jobs, exit 0, zero errors, wall time 2294 s (38 min 14 s;
-   user 454 s, sys 654 s). The machine was shared with seven other jobs, so this is an upper
-   bound; an idle machine should be faster. A 4-core CI runner is estimated at 1 to 3 hours.
-5. `bash scripts/check_axioms.sh`. Last line: `GATE: GREEN (484/484)` (about 30 s on a built
-   tree). On a failed build the last line is `GATE: RED (lake build failed)`; any other RED
+4. `lake build`. Measured twice in a fresh clone of the tracked tree (`.lake/packages` reused
+   from an already-cached Mathlib pin, so the Mathlib cache download is not in these numbers),
+   both times 8638 jobs, exit 0, zero errors, 46 warning lines. On 20 Sep 2026 at 1146a08:
+   wall time 2294 s (38 min 14 s; user 454 s, sys 654 s), with seven audit agents sharing the
+   machine. On 12 Nov 2026 at 7da07fd: wall time 2703 s (45 min 3 s; user 438 s, sys 583 s),
+   with other agent sessions active for part of the run (resource use not measured). The
+   second run took about 18% longer and the cause was not investigated, so no claim is made
+   that either time bounds an idle-machine run. A 4-core CI runner is estimated at 1 to 3 hours.
+5. `bash scripts/check_axioms.sh`. Last line: `GATE: GREEN (484/484)` (20 s on 12 Nov 2026,
+   run once straight after the build). On a failed build the last line is
+   `GATE: RED (lake build failed)`; any other RED
    line names the cause. The gate joins output lines that Lean wrapped before counting, counts an entry for both output
    forms (`depends on axioms: [...]` and `does not depend on any axioms`), requires the audited names to be
    exactly the ledger's names and every axiom list to be closed, and exits 0 on GREEN, 1 on RED.
