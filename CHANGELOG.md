@@ -4,7 +4,7 @@ One line per tag, in creation order: date, tag, gate count where the README ladd
 one, and what the tag froze. History through 13 Sep 2026: 79 commits and 31 tags (17
 lightweight, 14 annotated, none signed). The gate counts are the README's.
 
-## v0.1.0 (unreleased)
+## v0.1.0 (2026-11-12)
 
 The publication commit. It adds:
 
