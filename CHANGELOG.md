@@ -7,10 +7,12 @@ lightweight, 14 annotated, none signed). The gate counts are the README's.
 ## After v0.1.0 (untagged)
 
 Changes made on `main` on 13 Nov 2026, after the `v0.1.0` tag. None of them touches a Lean
-source, a file under `scripts/` or a pin, and the tag stays at `506866f`.
+source, a file under `scripts/` or a pin, and the tag stays at `506866f`. Commits that change
+only this file are not listed; `9096d38` is one.
 
 - `3918e83`, the CI workflow only: lean-action's Reservoir eligibility check is off, and the cache cleanup, the axiom gate and the entry count now also run after an earlier step has failed (the job still ends red then);
-- `8808247`, documentation and workflow comments only: the README and `REPRODUCING.md` record what the four CI runs at `506866f` and `3918e83` measured, and the build times replace the estimate of 1 to 3 hours in `REPRODUCING.md`.
+- `8808247`, documentation and workflow comments only: the README and `REPRODUCING.md` record what the four CI runs at `506866f` and `3918e83` measured, and the build times replace the estimate of 1 to 3 hours in `REPRODUCING.md`;
+- `37f7ac7`, documentation and workflow comments only: the README and `REPRODUCING.md` record the first CI run of the kernel replay, at `9096d38`, with `REPLAY: GREEN (70 modules)`, and what that run does not show.
 
 Why the workflow changed: at `506866f` the two CI runs, one in each of two copies of this
 repository that were private at the time, built the project and then failed at the Reservoir
@@ -25,6 +27,33 @@ Correction in `8808247`: at the `v0.1.0` tag, a comment in the workflow and sect
 ledger `AxiomCheck.lean`. That is wrong. The tag keeps the wrong wording in both places;
 `main` has the corrected wording in both. The audit selects by module, and a local Lean check
 on 13 Nov 2026 found all 484 ledger names defined in modules of the `TheoremB` library.
+
+Kernel replay in CI: the replay job, which runs only on a tag push or when started by hand,
+first ran on 13 Nov 2026, in run 43467205427. It ran at `9096d38`, which differs from
+`506866f` in the workflow file, `CHANGELOG.md`, the README and `REPRODUCING.md` only. The job
+printed `REPLAY: GREEN (70 modules)`: each module imported by `TheoremB.lean` was replayed
+through the toolchain's `leanchecker` with exit 0 and an empty log. What that does not show:
+the imports, Mathlib included, and the umbrella module are not replayed; the checker prints
+nothing on success, so nothing counts the declarations checked; it is the toolchain's own
+checker; it is one run, on a GitHub-hosted Linux runner, with no check that must fail; and
+no test with a declaration that the checker must reject is on record. The README ("Kernel
+replay in CI") and `REPRODUCING.md` (sections 6 and 8, with the link to the run) have the
+record and these limits.
+
+Also recorded in `37f7ac7`: push run 43456108021 at `9096d38` failed at its first attempt in
+the Mathlib cache download and passed when the failed job was re-run. The replay job does not
+run on a push to `main`.
+
+Correction in `37f7ac7`: at the `v0.1.0` tag, step 7 of section 4 of `REPRODUCING.md` pairs
+the 2,357 s of the 12 Sep 2026 replay record with that record's 60 modules. That is wrong:
+the sum includes 73 s for the umbrella module's row, which was killed (exit 137), and the 60
+modules sum to 2,284 s. The tag keeps the wrong wording; `main` has the corrected figures in
+the same step.
+
+Narrowed in `37f7ac7`: at the tag, a comment in the README's replay commands says of the
+missing-module check `# 1: the checker is not a no-op`. On `main` it reads
+`# 1: a missing module is an error`, because that check shows only that a missing module is
+reported, not that a wrong proof would be (`REPRODUCING.md`, section 6, sixth point).
 
 ## v0.1.0 (2026-11-12)
 
