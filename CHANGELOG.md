@@ -4,6 +4,28 @@ One line per tag, in creation order: date, tag, gate count where the README ladd
 one, and what the tag froze. History through 13 Sep 2026: 79 commits and 31 tags (17
 lightweight, 14 annotated, none signed). The gate counts are the README's.
 
+## After v0.1.0 (untagged)
+
+Changes made on `main` on 13 Nov 2026, after the `v0.1.0` tag. None of them touches a Lean
+source, a file under `scripts/` or a pin, and the tag stays at `506866f`.
+
+- `3918e83`, the CI workflow only: lean-action's Reservoir eligibility check is off, and the cache cleanup, the axiom gate and the entry count now also run after an earlier step has failed (the job still ends red then);
+- `8808247`, documentation and workflow comments only: the README and `REPRODUCING.md` record what the four CI runs at `506866f` and `3918e83` measured, and the build times replace the estimate of 1 to 3 hours in `REPRODUCING.md`.
+
+Why the workflow changed: at `506866f` the two CI runs, one in each of two copies of this
+repository that were private at the time, built the project and then failed at the Reservoir
+check. It passes only for a public repository with at least 2 stars, an OSI-approved licence
+and a `lake-manifest.json`. As a failed step it skipped the cache cleanup, the axiom gate and
+the entry count, so the gate did not run in CI at the `v0.1.0` commit. At `3918e83`, which
+differs from `506866f` in the workflow file only, the two runs were green:
+`GATE: GREEN (484/484)`, entry count 484 of 484, `TAGS: GREEN`.
+
+Correction in `8808247`: at the `v0.1.0` tag, a comment in the workflow and section 8 of
+`REPRODUCING.md` say that lean-action's axiom audit covers 483 of the 484 entries of the
+ledger `AxiomCheck.lean`. That is wrong. The tag keeps the wrong wording in both places;
+`main` has the corrected wording in both. The audit selects by module, and a local Lean check
+on 13 Nov 2026 found all 484 ledger names defined in modules of the `TheoremB` library.
+
 ## v0.1.0 (2026-11-12)
 
 The publication commit. It adds:
