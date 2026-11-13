@@ -44,18 +44,28 @@ jobs:
           # ledger entries; LHRestate.mem_L2Sigma_iff is outside it. The next steps are the
           # load-bearing check.
           axiom-audit: true
-          check-reservoir-eligibility: true
+          # Off: this check passes only for a public repository with at least 2 stars, an
+          # OSI-approved licence and a lake-manifest.json. On 13 Nov 2026 this repository was
+          # private with no stars, so the check failed and, as a failed step, skipped the
+          # steps after it.
+          check-reservoir-eligibility: false
 
+      # The next three steps also run after an earlier step has failed, so a failure above does
+      # not hide the project's own gate. They are skipped only if the run is cancelled, and the
+      # job still ends red after a failed step.
       - name: Drop the .ltar download cache after unpacking (disk)
+        if: ${{ !cancelled() }}
         run: rm -rf ~/.cache/mathlib && df -h /
 
       - name: Axiom gate
+        if: ${{ !cancelled() }}
         run: |
           bash scripts/check_axioms.sh | tee gate.log
           test "${PIPESTATUS[0]}" = "0"
           grep -q '^GATE: GREEN' gate.log
 
       - name: Entry count on the bracket pattern (join wrapped lines; never a quote-delimited regex)
+        if: ${{ !cancelled() }}
         run: |
           EXPECTED=$(grep -c '^#print axioms' AxiomCheck.lean)
           FOUND=$(awk '/\[/ && !/\]/ {buf=$0; next} buf!="" {buf=buf" "$0; if (index($0,"]")) {print buf; buf=""}; next} {print}' gate.log | grep -c 'depends on axioms: \[')
