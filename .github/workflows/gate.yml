@@ -40,9 +40,10 @@ jobs:
           build: true
           test: false
           lint: false
-          # axiom-audit-root defaults to the library name TheoremB, which covers 483 of the 484
-          # ledger entries; LHRestate.mem_L2Sigma_iff is outside it. The next steps are the
-          # load-bearing check.
+          # axiom-audit-root defaults to the library name TheoremB. The audit selects by module:
+          # every constant defined in a module of the library (2038 in CI on 13 Nov 2026). A
+          # local check found all 484 ledger names among them. The next steps check the ledger
+          # itself, by count and by name.
           axiom-audit: true
           # Off: this check passes only for a public repository with at least 2 stars, an
           # OSI-approved licence and a lake-manifest.json. On 13 Nov 2026 this repository was

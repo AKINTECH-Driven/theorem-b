@@ -62,13 +62,21 @@ curl -sI "https://lakecache.blob.core.windows.net/mathlib4/f/<name>.ltar" | head
 
 ## 3. Requirements
 
-- OS: exercised on macOS arm64 (Apple M4, 10 cores, 16 GiB). Linux and the GitHub-hosted
-  runner are untested at the time of writing (the first CI run is the first Linux record).
-- RAM: 16 GB is the only class on record for `lake build`, the gate and the per-module replay.
+- OS: exercised on macOS arm64 (Apple M4, 10 cores, 16 GiB). On Linux the build, the gate, the
+  entry count and the tag check ran in CI on 13 Nov 2026, on GitHub-hosted `ubuntu-latest`
+  runners (section 8; the gate and the entry count at `3918e83` only, not at the release
+  commit); the per-module replay has not run on Linux.
+- RAM: 16 GB is the only class on record locally for `lake build`, the gate and the
+  per-module replay. The CI runs do not record the runner's memory; GitHub's documentation
+  lists 8 GB for the standard runners of private repositories, which both copies were then.
 - Disk: 12 GB measured, 20 GB recommended. Measured parts: toolchain 2.6 GB, Mathlib checkout
   with oleans 6.8 GB, other packages 0.7 GB, `.lake/build` of this library 0.44 GB, the
-  downloaded `.ltar` cache 0.45 GB.
-- Tools: `git`, `curl`, `bash` (macOS 3.2 and Linux 5 both work for the scripts), `elan`.
+  downloaded `.ltar` cache 0.45 GB. In the two green CI runs (root volume 72G) `df -h`
+  showed 32G and 34G free after the workflow's removal of preinstalled tools and before
+  the build, and 21G and 23G after the build, the axiom audit and the removal of the
+  `.ltar` cache. Free space before the removal of preinstalled tools was not recorded.
+- Tools: `git`, `curl`, `bash` (macOS 3.2 locally; in CI the gate and tag scripts ran under the
+  runners' bash, version not recorded; the replay script has not run on Linux), `elan`.
 
 ## 4. Steps
 
@@ -78,8 +86,12 @@ Run from a fresh clone. Times are for the 10-core M4 unless marked.
 2. Pin self-check: `cat lean-toolchain` prints `leanprover/lean4:v4.31.0-rc2`, and
    `grep '"rev": "15a89b2468bc01f1a6230d6e49ef5efc5286e502"' lake-manifest.json` finds a line.
 3. `lake exe cache get` fetches the Mathlib oleans (8,551 files, about 0.45 GB download, 7.9 GB
-   unpacked; not timed). Last line: the cache tool's summary of unpacked files. Leave
-   `MATHLIB_CACHE_USE_CLOUDFLARE` unset (section 5).
+   unpacked; not timed locally). In CI on 13 Nov 2026 the whole step took 118 s to 147 s on a
+   fresh runner, of which fetching and unpacking took 50 s to 86 s; 8,550 of the 8,551
+   files were unpacked. The tool warned that some were not found in the cache and does not
+   name them; in all four build logs the only Mathlib module compiled is the umbrella module
+   `Mathlib` (16 s to 24 s). Last line: the cache tool's summary of unpacked files.
+   Leave `MATHLIB_CACHE_USE_CLOUDFLARE` unset (section 5).
 4. `lake build`. Measured twice in a fresh clone of the tracked tree (`.lake/packages` reused
    from an already-cached Mathlib pin, so the Mathlib cache download is not in these numbers),
    both times 8638 jobs, exit 0, zero errors, 46 warning lines. On 20 Sep 2026 at 1146a08:
@@ -87,9 +99,11 @@ Run from a fresh clone. Times are for the 10-core M4 unless marked.
    machine. On 12 Nov 2026 at 7da07fd: wall time 2703 s (45 min 3 s; user 438 s, sys 583 s),
    with other agent sessions active for part of the run (resource use not measured). The
    second run took about 18% longer and the cause was not investigated, so no claim is made
-   that either time bounds an idle-machine run. A 4-core CI runner is estimated at 1 to 3 hours.
+   that either time bounds an idle-machine run. In CI on 13 Nov 2026, on GitHub-hosted Linux
+   runners, `lake build` took between 8 min 57 s and 13 min 56 s in four runs (section 8).
 5. `bash scripts/check_axioms.sh`. Last line: `GATE: GREEN (484/484)` (20 s on 12 Nov 2026,
-   run once straight after the build). On a failed build the last line is
+   run once straight after the build; 17 s to 18 s in the two green CI runs of
+   13 Nov 2026). On a failed build the last line is
    `GATE: RED (lake build failed)`; any other RED
    line names the cause. The gate joins output lines that Lean wrapped before counting, counts an entry for both output
    forms (`depends on axioms: [...]` and `does not depend on any axioms`), requires the audited names to be
@@ -161,8 +175,8 @@ Tier 9c):
 - The umbrella-module replay limit above.
 - First compiles measured during the campaign: the largest recent modules took 36 to 46 s each.
   Kernel replay of the six Tier 9c modules took 275 s in total with a wave build running
-  alongside. Estimates for a clean build and the replay are marked as estimates in section 4;
-  the first CI run should replace them.
+  alongside. The clean-build estimate for CI has been replaced by the measurements of
+  13 Nov 2026 in sections 4 and 8; the replay time in section 4 is still an estimate.
 - The history through 13 Sep 2026 has 79 commits and 31 tags (17 lightweight, 14 annotated,
   none signed). Those older tags are verified by content (step 8), not by signature. Future
   tags should be signed with `git tag -s`; that is an action outside the tree.
@@ -174,9 +188,28 @@ Tier 9c):
   `context/leanchecker-replay-2026-09-13-tier9c.md`.
 - The workflow `.github/workflows/gate.yml` runs the build, the gate and the entry count on
   every push to `main`, every tag and every pull request, together with lean-action's own
-  axiom audit (library root `TheoremB`, 483 of 484 entries) and Reservoir-eligibility check,
-  the replay on tags and on demand, and the tag check. The URL of the first green run and the gate log of the release commit
-  are to be added here after the first push.
+  axiom audit (library root `TheoremB`), the replay on tags and on demand, and the tag check.
+  Since `3918e83` lean-action's Reservoir eligibility check is switched off, and the cache
+  cleanup, gate and entry-count steps also run after an earlier step has failed.
+- CI record, 13 Nov 2026: four runs on GitHub-hosted `ubuntu-latest` runners, in two copies of
+  this repository that were private at the time. At the release commit `506866f` two runs
+  built the project (`lake build` in 12 min 32 s and 10 min 26 s, 8638 jobs, zero errors) and then
+  failed at the Reservoir check, so the gate did not run at that commit in CI. At `3918e83`,
+  which differs from it in the workflow file only, two runs were green (`lake build` in
+  13 min 56 s and 8 min 57 s). In both, the axiom audit reported 2038 declarations under
+  `TheoremB`, all within the allowlist. The tool audits every constant defined in a module of
+  the library; the CI log lists no names, and a local Lean check on 13 Nov 2026 found all
+  484 ledger names defined in modules of the library and 2038 constants defined there.
+  The gate printed `GATE: GREEN (484/484)`, the entry count read 484 of 484, and the tag
+  check printed `TAGS: GREEN`. The green run in this repository:
+  https://github.com/AKINTECH-Driven/theorem-b/actions/runs/43415676726
+  (GitHub keeps run logs for a limited time, 90 days by default). The replay job was skipped
+  in all four runs, which were all pushes to `main`; no run had been started by a tag or by
+  hand in either copy when the run lists were read on 13 Nov 2026.
+- Correction: at `506866f` the workflow comment said that the audit covered 483 of the 484
+  ledger entries and missed `LHRestate.mem_L2Sigma_iff`, and this section repeated the count
+  of 483. That was wrong: the audit selects by module, and that declaration is defined in
+  `TheoremB/LerayHopfVocab.lean`.
 
 ## 9. Reporting a failure
 

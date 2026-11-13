@@ -75,9 +75,12 @@ behind current Mathlib.
 
 ## Build and gate
 
-Requirements: `bash`, `git`, `curl`, [`elan`](https://github.com/leanprover/elan), 16 GB RAM,
-about 12 GB of free disk (20 GB recommended). macOS arm64 is the only platform exercised;
-Linux is untested.
+Requirements: `bash`, `git`, `curl`, [`elan`](https://github.com/leanprover/elan), 16 GB RAM
+(the only class measured; the CI runs do not record the runner's memory), about 12 GB of free
+disk (20 GB recommended). The campaign ran on macOS arm64. On Linux the build, the gate, the
+entry count and the tag check have run only in CI, on GitHub-hosted runners (13 Nov 2026; the
+gate and the entry count at `3918e83` only, not at the `v0.1.0` commit; see Cost below); the
+kernel replay has not run on Linux.
 
 The toolchain is selected by `lean-toolchain`: the first `lake` call after installing elan
 installs `v4.31.0-rc2` automatically. Never run `lake update`: it rewrites `lake-manifest.json`
@@ -87,7 +90,7 @@ unset (the mirror did not hold this pin when checked on 20 Sep 2026).
 
 Fetch the Mathlib cache with `lake exe cache get`: this is the recommended path and the only
 one used here (its size for this pin, as recorded on 20 Sep 2026: 8,551 files, about 0.45 GB
-download, 7.9 GB unpacked; the download itself was not timed).
+download, 7.9 GB unpacked; the download itself was not timed locally; for CI see Cost below).
 A from-source Mathlib build at this pin was never attempted and its cost is unmeasured.
 
 ```sh
@@ -141,9 +144,43 @@ same. Both builds: 8638 jobs, exit 0, zero errors, 46 warning lines.
 
 The second run took about 18% longer than the first and the cause was not investigated, so no
 claim is made that either wall time bounds what an idle machine would need. Read them as two
-samples. Not measured: an idle machine, the CPU, disk and memory load during either run, the
-gate time on 20 Sep, the cache download on a machine without the pin, and a Linux runner. An
+samples. Not measured locally: an idle machine, the CPU, disk and memory load during either
+run, the gate time on 20 Sep, and the cache download on a machine without the pin. An
 estimate, not a measurement: a full replay takes 45 to 50 minutes.
+
+CI, 13 Nov 2026. The workflow ran four times on GitHub-hosted `ubuntu-latest` runners: twice
+at `506866f` (the `v0.1.0` commit) and twice at `3918e83`, once each in two copies of this
+repository that were private at the time. All four builds completed (8638 jobs, zero errors).
+`lake build` took between 8 min 57 s and 13 min 56 s. Before it, the whole `lake exe cache get`
+step took 118 s to 147 s on the fresh runner: 54 s to 71 s to clone the packages and
+build the cache tool, then 50 s to 86 s to fetch and unpack 8,550 of the 8,551 files. The
+tool warned that some files were not found in the cache and does not name them; in all four
+build logs the only Mathlib module compiled is the umbrella module `Mathlib` (16 s to
+24 s).
+
+- At `506866f` both runs then failed at lean-action's Reservoir eligibility check. Both logs name
+  a private repository and fewer than 2 stars; one of the two also says that the repository
+  has no valid SPDX licence (the cause is not recorded; the tracked `LICENSE` is Apache-2.0).
+  The check passes only for a public repository with at least 2 stars, an OSI-approved
+  licence and a `lake-manifest.json`. Later steps without a condition of their own are
+  skipped after a failed step, so lean-action's own axiom audit and the workflow's cache
+  cleanup, gate and entry count did not run. `3918e83` switches that check off and lets those
+  three workflow steps run after an earlier failure; it differs from `506866f` in the workflow
+  file only.
+- At `3918e83` both runs were green. lean-action's axiom audit reported 2038 declarations
+  under `TheoremB`, all within the allowlist `[propext, Classical.choice, Quot.sound]`. The
+  tool audits every constant defined in a module of the library, whatever its kind. The CI
+  log lists no names; a local Lean check on 13 Nov 2026 found all 484 ledger names defined
+  in modules of the library, and 2038 constants defined there, the CI count. The gate
+  printed `GATE: GREEN (484/484)` in 17 s to 18 s, the entry count read 484 of 484, and
+  the tag check printed `TAGS: GREEN`.
+
+Not measured in CI: the runners' CPU and memory. The runs do not record them; GitHub's
+documentation lists 2 cores and 8 GB for the standard runners of private repositories, which
+both copies were at the time. Also not measured: a repeat on one runner image (the two green
+runs used `ubuntu-24.04` and `ubuntu-26.04`). The kernel replay job runs only on a tag push or
+on demand. It was skipped in all four runs, which were all pushes to `main`, and no run had
+been started by a tag or by hand in either copy when the run lists were read on 13 Nov 2026.
 
 Four declarations carry a scoped `set_option maxHeartbeats 1000000 in` (five times the default,
 one declaration each): `TheoremB/SobolevPairing.lean:110`, `TheoremB/Nonlinearity.lean:45` and
