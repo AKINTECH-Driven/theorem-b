@@ -78,9 +78,9 @@ behind current Mathlib.
 Requirements: `bash`, `git`, `curl`, [`elan`](https://github.com/leanprover/elan), 16 GB RAM
 (the only class measured; the CI runs do not record the runner's memory), about 12 GB of free
 disk (20 GB recommended). The campaign ran on macOS arm64. On Linux the build, the gate, the
-entry count and the tag check have run only in CI, on GitHub-hosted runners (13 Nov 2026; the
-gate and the entry count at `3918e83` only, not at the `v0.1.0` commit; see Cost below); the
-kernel replay has not run on Linux.
+entry count, the tag check and the kernel replay have run only in CI, on GitHub-hosted runners
+(see Cost below). As of 13 Nov 2026 the gate and the entry count have run there from `3918e83`
+on, not at the `v0.1.0` commit, and the kernel replay once, at `9096d38`.
 
 The toolchain is selected by `lean-toolchain`: the first `lake` call after installing elan
 installs `v4.31.0-rc2` automatically. Never run `lake update`: it rewrites `lake-manifest.json`
@@ -146,11 +146,15 @@ The second run took about 18% longer than the first and the cause was not invest
 claim is made that either wall time bounds what an idle machine would need. Read them as two
 samples. Not measured locally: an idle machine, the CPU, disk and memory load during either
 run, the gate time on 20 Sep, and the cache download on a machine without the pin. An
-estimate, not a measurement: a full replay takes 45 to 50 minutes.
+estimate for the 16 GiB, 10-core Mac of the 12 Sep replay record, not a measurement: a full
+replay takes 45 to 50 minutes, and no local run of all 70 modules is on record. In one CI run,
+on a runner whose CPU and memory are not recorded, the replay step for the 70 modules took
+9 min 45 s (see "Kernel replay in CI" below). The two figures come from different machines.
 
-CI, 13 Nov 2026. The workflow ran four times on GitHub-hosted `ubuntu-latest` runners: twice
-at `506866f` (the `v0.1.0` commit) and twice at `3918e83`, once each in two copies of this
-repository that were private at the time. All four builds completed (8638 jobs, zero errors).
+CI, 13 Nov 2026. The first four runs of the workflow, on GitHub-hosted `ubuntu-latest`
+runners, were two at `506866f` (the `v0.1.0` commit) and two at `3918e83`, once each in two
+copies of this repository that were private at the time. All four builds completed (8638 jobs,
+zero errors).
 `lake build` took between 8 min 57 s and 13 min 56 s. Before it, the whole `lake exe cache get`
 step took 118 s to 147 s on the fresh runner: 54 s to 71 s to clone the packages and
 build the cache tool, then 50 s to 86 s to fetch and unpack 8,550 of the 8,551 files. The
@@ -175,12 +179,42 @@ build logs the only Mathlib module compiled is the umbrella module `Mathlib` (16
   printed `GATE: GREEN (484/484)` in 17 s to 18 s, the entry count read 484 of 484, and
   the tag check printed `TAGS: GREEN`.
 
-Not measured in CI: the runners' CPU and memory. The runs do not record them; GitHub's
-documentation lists 2 cores and 8 GB for the standard runners of private repositories, which
-both copies were at the time. Also not measured: a repeat on one runner image (the two green
-runs used `ubuntu-24.04` and `ubuntu-26.04`). The kernel replay job runs only on a tag push or
-on demand. It was skipped in all four runs, which were all pushes to `main`, and no run had
-been started by a tag or by hand in either copy when the run lists were read on 13 Nov 2026.
+Not measured in these four runs: the runners' CPU and memory. The runs do not record them;
+GitHub's documentation lists 2 cores and 8 GB for the standard runners of private
+repositories, which both copies were at the time. Also not measured: a repeat on one runner
+image (the two green runs, at `3918e83`, used `ubuntu-24.04` and `ubuntu-26.04`). The kernel
+replay job runs only on a tag push or on demand. It was skipped in all four runs, which were
+all pushes to `main`.
+
+Kernel replay in CI, 13 Nov 2026. Run 43467205427, started by hand on `main` at `9096d38`, ran
+all three jobs green on `ubuntu-24.04` runners. It ran in the copy of this repository that was
+public by then (link in `REPRODUCING.md`, section 8), so the figures for private repositories
+above need not apply; the run records neither the runner's CPU nor its memory. `9096d38`
+differs from the `v0.1.0` commit in the workflow file, `CHANGELOG.md`, this file and
+`REPRODUCING.md` only, so the Lean sources replayed are those of the release. The replay job
+built the library itself (8638 jobs) and then ran `scripts/replay_leanchecker.sh`, which
+printed `REPLAY: GREEN (70 modules)`: every module imported by `TheoremB.lean` with exit 0
+and an empty log, 6 s to 10 s per module, 584 s summed; the step took 9 min 45 s. It is the
+first replay on record on Linux and the first on record to cover all 70 modules in one run.
+What it does not show: `leanchecker` prints nothing on success, so the logs are empty and
+nothing counts the declarations checked. The run has no failing control: the only negative
+check on record is local, a bogus module name that makes the checker exit 1 (13 Sep 2026
+records), and no test with a declaration that the checker must reject is on record, in CI or
+locally. The per-module times are nearly flat, 8 s or 9 s for 68 of the 70 modules, including
+the five that took 104 s to 135 s in the local records. Those local times are not known
+to be an idle-machine baseline: the Tier 9c record, which has the 125 s one, notes a build
+running alongside its replays, and the 12 Sep record, which has the other four, does not
+state the machine's load. The machines differ, and the cause of the difference was not
+investigated. The limits of the local replays hold here too: the imports (Mathlib included)
+are not replayed, the umbrella module is not replayed (the script skips it by default) and
+the checker is the toolchain's own (`REPRODUCING.md`, section 6).
+
+Other CI runs. As the run lists stood on 13 Nov 2026, every run after the first four, other
+than the replay run, was a push to `main`. Those runs are not described here, with one
+exception: at `9096d38` a push run failed at its first attempt in the Mathlib cache download
+(18 of 8,551 files failed to transfer) and passed when the failed job was re-run. The
+cause was not investigated. In the failed attempt the gate and the entry count still ran and
+passed.
 
 Four declarations carry a scoped `set_option maxHeartbeats 1000000 in` (five times the default,
 one declaration each): `TheoremB/SobolevPairing.lean:110`, `TheoremB/Nonlinearity.lean:45` and
@@ -193,7 +227,7 @@ succeeded:
 ```sh
 bash scripts/replay_leanchecker.sh             # 70 modules; TSV + one log per module in .lake/leanchecker/
 lake env leanchecker TheoremB.CommunityUnique  # one module: exit 0 and empty output = pass
-lake env leanchecker TheoremB.NoSuchModule; echo $?   # 1: the checker is not a no-op
+lake env leanchecker TheoremB.NoSuchModule; echo $?   # 1: a missing module is an error
 ```
 
 The script exits 2 early if the toolchain has no `leanchecker`. It skips the umbrella module
@@ -680,7 +714,9 @@ No mathematical priority is claimed for any layer, and none for the method.
   `context/leanchecker-replay-2026-09-12.md`; the umbrella module, which declares
   nothing, could not be loaded on a 16 GiB machine); registration of the frozen
   capstones is pending; the dated git tags are the record. A reproducer running
-  `scripts/replay_leanchecker.sh` today replays 70 modules, not the 60 of the 12 Sep record.
+  `scripts/replay_leanchecker.sh` today replays 70 modules, not the 60 of the 12 Sep record;
+  on 13 Nov 2026 it replayed all 70 in CI at `9096d38` (exit 0, empty output; see "Kernel replay
+  in CI" above).
 
 Repository tags, in order (31 tags through 13 Sep 2026): `m1-green`, `m2-wave1-green`, `m2-complete`, `m3-conditional-green`,
 `m4-wave1..4-green`, `m5-wave1/2-green`, `m5-complete`, `t3-theorem-b-green`,

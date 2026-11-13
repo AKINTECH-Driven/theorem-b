@@ -80,7 +80,8 @@ jobs:
           path: gate.log
 
   replay:
-    # kernel replay of every module through the toolchain's leanchecker; about an hour; on demand and on tags
+    # kernel replay of every module through the toolchain's leanchecker; on demand and on tags.
+    # The job took about 20 minutes in CI on 13 Nov 2026 (build included).
     if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
     needs: build-and-gate
     runs-on: ubuntu-latest

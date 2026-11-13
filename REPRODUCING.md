@@ -64,19 +64,21 @@ curl -sI "https://lakecache.blob.core.windows.net/mathlib4/f/<name>.ltar" | head
 
 - OS: exercised on macOS arm64 (Apple M4, 10 cores, 16 GiB). On Linux the build, the gate, the
   entry count and the tag check ran in CI on 13 Nov 2026, on GitHub-hosted `ubuntu-latest`
-  runners (section 8; the gate and the entry count at `3918e83` only, not at the release
-  commit); the per-module replay has not run on Linux.
+  runners (section 8; the gate and the entry count from `3918e83` on, not at the release
+  commit). As of 13 Nov 2026 the per-module replay has run on Linux once, in CI at `9096d38`
+  (section 8).
 - RAM: 16 GB is the only class on record locally for `lake build`, the gate and the
   per-module replay. The CI runs do not record the runner's memory; GitHub's documentation
-  lists 8 GB for the standard runners of private repositories, which both copies were then.
+  lists 8 GB for the standard runners of private repositories, which both copies were in the
+  first four runs. The replay run (section 8) was in the public copy.
 - Disk: 12 GB measured, 20 GB recommended. Measured parts: toolchain 2.6 GB, Mathlib checkout
   with oleans 6.8 GB, other packages 0.7 GB, `.lake/build` of this library 0.44 GB, the
-  downloaded `.ltar` cache 0.45 GB. In the two green CI runs (root volume 72G) `df -h`
+  downloaded `.ltar` cache 0.45 GB. In the two green CI runs at `3918e83` (root volume 72G) `df -h`
   showed 32G and 34G free after the workflow's removal of preinstalled tools and before
   the build, and 21G and 23G after the build, the axiom audit and the removal of the
   `.ltar` cache. Free space before the removal of preinstalled tools was not recorded.
-- Tools: `git`, `curl`, `bash` (macOS 3.2 locally; in CI the gate and tag scripts ran under the
-  runners' bash, version not recorded; the replay script has not run on Linux), `elan`.
+- Tools: `git`, `curl`, `bash` (macOS 3.2 locally; in CI the gate, tag and replay scripts ran
+  under the runners' bash, version not recorded), `elan`.
 
 ## 4. Steps
 
@@ -86,7 +88,7 @@ Run from a fresh clone. Times are for the 10-core M4 unless marked.
 2. Pin self-check: `cat lean-toolchain` prints `leanprover/lean4:v4.31.0-rc2`, and
    `grep '"rev": "15a89b2468bc01f1a6230d6e49ef5efc5286e502"' lake-manifest.json` finds a line.
 3. `lake exe cache get` fetches the Mathlib oleans (8,551 files, about 0.45 GB download, 7.9 GB
-   unpacked; not timed locally). In CI on 13 Nov 2026 the whole step took 118 s to 147 s on a
+   unpacked; not timed locally). In the first four CI runs the step took 118 s to 147 s on a
    fresh runner, of which fetching and unpacking took 50 s to 86 s; 8,550 of the 8,551
    files were unpacked. The tool warned that some were not found in the cache and does not
    name them; in all four build logs the only Mathlib module compiled is the umbrella module
@@ -100,10 +102,11 @@ Run from a fresh clone. Times are for the 10-core M4 unless marked.
    with other agent sessions active for part of the run (resource use not measured). The
    second run took about 18% longer and the cause was not investigated, so no claim is made
    that either time bounds an idle-machine run. In CI on 13 Nov 2026, on GitHub-hosted Linux
-   runners, `lake build` took between 8 min 57 s and 13 min 56 s in four runs (section 8).
+   runners, `lake build` took between 8 min 57 s and 13 min 56 s in the first four runs
+   (section 8).
 5. `bash scripts/check_axioms.sh`. Last line: `GATE: GREEN (484/484)` (20 s on 12 Nov 2026,
-   run once straight after the build; 17 s to 18 s in the two green CI runs of
-   13 Nov 2026). On a failed build the last line is
+   run once straight after the build; 17 s to 18 s in the two green CI runs at
+   `3918e83`). On a failed build the last line is
    `GATE: RED (lake build failed)`; any other RED
    line names the cause. The gate joins output lines that Lean wrapped before counting, counts an entry for both output
    forms (`depends on axioms: [...]` and `does not depend on any axioms`), requires the audited names to be
@@ -112,9 +115,12 @@ Run from a fresh clone. Times are for the 10-core M4 unless marked.
    `grep -c '^#print axioms' AxiomCheck.lean` prints `484`. Do not count with a
    quote-delimited regular expression on the output: wrapped entries are missed that way.
 7. `bash scripts/replay_leanchecker.sh`. Last line: `REPLAY: GREEN (70 modules)`. The 12 Sep
-   record took about 39 minutes of wall clock for 60 modules (2,357 s summed); the 70-module
-   run is estimated at 45 to 50 minutes. One TSV line and one log per module go to
-   `.lake/leanchecker/`. If the toolchain has no `leanchecker` the script exits 2 at once.
+   record took about 39 minutes of wall clock (2,357 s summed: 2,284 s for its 60 modules
+   and 73 s for the umbrella module's row, exit 137); a 70-module run on that machine is
+   estimated at 45 to 50 minutes, and none is on record. In one CI run on 13 Nov 2026 the 70
+   modules took 584 s summed, 6 s to 10 s each, on a runner whose CPU and memory are not
+   recorded (section 8). One TSV line and one log per module go to `.lake/leanchecker/`. If
+   the toolchain has no `leanchecker` the script exits 2 at once.
 8. `bash scripts/check_tags.sh`. Last line: `TAGS: GREEN`. Needs every tag present locally
    (`git fetch --tags`).
 
@@ -151,8 +157,8 @@ CI that means `fetch-depth: 0`. The gate counts it compares against are the READ
 
 ## 6. What the replay does and does not establish
 
-Copied in substance from the three replay records in `context/` (12 Sep, 13 Sep Tier 9, 13 Sep
-Tier 9c):
+The first five points are copied in substance from the three replay records in `context/`
+(12 Sep, 13 Sep Tier 9, 13 Sep Tier 9c); the sixth is about the CI replay of 13 Nov 2026:
 
 - `lake env leanchecker <module>` re-checks every declaration of that module with the Lean
   kernel, starting from the environment supplied by the module's imports. Success is silent:
@@ -166,6 +172,18 @@ Tier 9c):
 - The records were produced on one 16 GiB Mac. The 12 Sep record was checked by a second agent;
   the two 13 Sep records were run by the orchestrating session, not by an independent verifier.
   The 12 Sep record covers 60 modules; today's script covers 70.
+- The CI replay (section 8) ran the same script on a GitHub-hosted Linux runner, CPU and memory
+  not recorded, over all 70 modules at `9096d38`. Points two to four apply to it unchanged; of
+  the first point, the bogus-module check was made locally only, not with the Linux checker,
+  and it shows that a missing module is reported, not that a wrong proof would be. The CI
+  replay adds no control of its own: no module that must fail was run in CI, and no test with
+  a declaration that the checker must reject is on record, in CI or locally. Its per-module
+  times are nearly flat (6 s to 10 s), also for the five modules that took 104 s to 135 s in
+  the local records. Those local times are not known to be an idle-machine baseline: the
+  Tier 9c record, which has the 125 s one, notes a build running alongside its replays, and
+  the 12 Sep record, which has the other four, does not state the machine's load. The
+  machines differ and the cause of the difference was not investigated; the times are not
+  offered as evidence of how much checking was done.
 
 ## 7. Known costs
 
@@ -176,7 +194,8 @@ Tier 9c):
 - First compiles measured during the campaign: the largest recent modules took 36 to 46 s each.
   Kernel replay of the six Tier 9c modules took 275 s in total with a wave build running
   alongside. The clean-build estimate for CI has been replaced by the measurements of
-  13 Nov 2026 in sections 4 and 8; the replay time in section 4 is still an estimate.
+  13 Nov 2026 in sections 4 and 8; the local replay time in section 4 is still an estimate,
+  and the CI replay time is one measurement (section 8).
 - The history through 13 Sep 2026 has 79 commits and 31 tags (17 lightweight, 14 annotated,
   none signed). Those older tags are verified by content (step 8), not by signature. Future
   tags should be signed with `git tag -s`; that is an action outside the tree.
@@ -204,8 +223,34 @@ Tier 9c):
   check printed `TAGS: GREEN`. The green run in this repository:
   https://github.com/AKINTECH-Driven/theorem-b/actions/runs/43415676726
   (GitHub keeps run logs for a limited time, 90 days by default). The replay job was skipped
-  in all four runs, which were all pushes to `main`; no run had been started by a tag or by
-  hand in either copy when the run lists were read on 13 Nov 2026.
+  in all four runs, which were all pushes to `main`. They were the first four runs of the
+  workflow. As the run lists stood on 13 Nov 2026, the later runs were pushes to `main` and
+  one run started by hand; of these only the two in the next points are recorded here.
+- Kernel replay in CI, 13 Nov 2026: run 43467205427, started by hand (`workflow_dispatch`) on
+  `main` at `9096d38` in this repository, which was public by then; all three jobs green on
+  `ubuntu-24.04` runners (image 20261111.370.1). `9096d38` differs from the release commit in
+  the workflow file, `CHANGELOG.md`, `README.md` and this file only. The run records neither
+  the runner's CPU nor its memory; the build-and-gate job's `df -h` showed a 145G root volume,
+  against 72G in the two green runs at `3918e83`. The replay job built the library itself
+  (8638 jobs, `lake build` in 6 min 51 s) and then ran `scripts/replay_leanchecker.sh`, which
+  printed `modules: 70 failed: 0` and `REPLAY: GREEN (70 modules)`. Its artifact
+  `leanchecker-replay` holds `replay.tsv` with 70 rows, one for each module imported by
+  `TheoremB.lean` at that commit, every one with exit 0 and an empty log; 6 s to 10 s per
+  module, 584 s summed; the step took 9 min 45 s and the job 19 min 35 s. It is the first
+  replay on record on Linux and the first on record to cover all 70 modules in one run;
+  section 6 says what it does not show. In the same run the build-and-gate job
+  (`lake build` in 6 min 43 s) printed `GATE: GREEN (484/484)`, the entry count read 484 of
+  484, the axiom audit reported 2038 declarations, and the tag check printed `TAGS: GREEN`.
+  These are the figures of one run.
+  https://github.com/AKINTECH-Driven/theorem-b/actions/runs/43467205427
+  (run logs are kept for a limited time, as noted above; the artifact expires on
+  11 Feb 2027; the per-module table is not in this repository).
+- A failed attempt, 13 Nov 2026: push run 43456108021 at `9096d38` failed at its first
+  attempt in the Mathlib cache download: 18 of 8,551 files failed to transfer and the
+  cache tool stopped. lean-action then skipped its build and its axiom audit. The gate step
+  built the library itself and printed `GATE: GREEN (484/484)`, the entry count read 484 of
+  484, and the job ended red. A re-run of the failed job was green. The cause of the failed
+  transfers was not investigated.
 - Correction: at `506866f` the workflow comment said that the audit covered 483 of the 484
   ledger entries and missed `LHRestate.mem_L2Sigma_iff`, and this section repeated the count
   of 483. That was wrong: the audit selects by module, and that declaration is defined in
